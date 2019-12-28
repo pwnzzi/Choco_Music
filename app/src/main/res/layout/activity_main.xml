@@ -12,13 +12,13 @@
         android:weightSum="8"
         android:orientation="vertical">
 
-        <androidx.viewpager.widget.ViewPager
+        <com.example.choco_music.adapters.SwipeViewPager
             android:layout_weight="7"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:id="@+id/viewpager">
 
-        </androidx.viewpager.widget.ViewPager>
+        </com.example.choco_music.adapters.SwipeViewPager>
 
 
         <com.google.android.material.tabs.TabLayout

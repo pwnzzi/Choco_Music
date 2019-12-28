@@ -5,6 +5,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 import com.example.choco_music.R;
+import com.example.choco_music.adapters.SwipeViewPager;
 import com.example.choco_music.adapters.ViewPagerAdpater;
 import com.google.android.material.tabs.TabLayout;
 
@@ -12,7 +13,7 @@ import static com.example.choco_music.R.id.viewpager;
 
 public class MainActivity extends AppCompatActivity {
 
-    ViewPager viewPager;
+    SwipeViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager= findViewById(viewpager);
         ViewPagerAdpater viewPagerAdpater= new ViewPagerAdpater(getSupportFragmentManager());
+        viewPager.setPagingEnabled(false);
 
         viewPager.setAdapter(viewPagerAdpater);
 
