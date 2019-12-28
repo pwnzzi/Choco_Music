@@ -1,9 +1,11 @@
 package com.example.choco_music.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
 import com.example.choco_music.R;
+import com.example.choco_music.activities.Coversong_chart;
+import com.example.choco_music.activities.Originalsong_chart;
 import com.example.choco_music.adapters.ChartAdapter;
 import com.example.choco_music.adapters.PagerSnapWithSpanCountHelper;
 import com.example.choco_music.adapters.VerticalAdapter;
@@ -28,7 +32,7 @@ public class Chart_Fragment extends Fragment {
     private RecyclerView CoverSong_View,OriginalSong_View;
     private ChartAdapter mAdapter;
     private LinearLayoutManager Cover_LayoutManager,Original_LayoutManager;
-
+    private Button Cover_btn, Originall_btn;
     private int MAX_ITEM_COUNT = 50;
 
 
@@ -37,14 +41,41 @@ public class Chart_Fragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.chart_fragment,null,false);
 
+        // Button binding
+        Cover_btn =(Button) view.findViewById(R.id.cover_btn);
+        Originall_btn=(Button)view.findViewById(R.id.original_btn);
 
+        // Recyclerview binding
         CoverSong_View = (RecyclerView)view.findViewById(R.id.CoverSong_list);
         OriginalSong_View=(RecyclerView)view.findViewById(R.id.OriginalSong_list);
-        PagerSnapWithSpanCountHelper snapHelper = new PagerSnapWithSpanCountHelper(3);
-        PagerSnapWithSpanCountHelper snapHelper2 = new PagerSnapWithSpanCountHelper(3);
+        PagerSnapWithSpanCountHelper snapHelper = new PagerSnapWithSpanCountHelper(5);
+        PagerSnapWithSpanCountHelper snapHelper2 = new PagerSnapWithSpanCountHelper(5);
 
         snapHelper.attachToRecyclerView(CoverSong_View);
         snapHelper2.attachToRecyclerView(OriginalSong_View);
+
+        //Button Event
+        Cover_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getContext(), Coversong_chart.class);
+
+                startActivity(intent);
+
+            }
+        });
+        Originall_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getContext(), Originalsong_chart.class);
+
+                startActivity(intent);
+
+
+            }
+        });
 
         //init Data
 
@@ -57,8 +88,8 @@ public class Chart_Fragment extends Fragment {
         }
 
         //init LayoutManager
-        Cover_LayoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.HORIZONTAL, false);
-        Original_LayoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.HORIZONTAL, false);
+        Cover_LayoutManager = new GridLayoutManager(getContext(), 5, GridLayoutManager.HORIZONTAL, false);
+        Original_LayoutManager = new GridLayoutManager(getContext(), 5, GridLayoutManager.HORIZONTAL, false);
 
         Cover_LayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
         Original_LayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);

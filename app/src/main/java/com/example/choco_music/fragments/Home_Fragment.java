@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.SnapHelper;
 import com.example.choco_music.R;
 import com.example.choco_music.adapters.VerticalAdapter;
 import com.example.choco_music.model.VerticalData;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.ArrayList;
 
@@ -26,26 +28,34 @@ public class Home_Fragment extends Fragment {
     private RecyclerView mVerticalView;
     private VerticalAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
+    private LinearLayout layoutBottomSheet;
 
     private int MAX_ITEM_COUNT = 50;
+
+    BottomSheetBehavior sheetBehavior;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.home_fragment,null,false);
 
-        //RecyclerVier binding
+
+        layoutBottomSheet = view.findViewById(R.id.bottom_sheet);
+        sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
 
         music_evaluate_btn=(Button)view.findViewById(R.id.music_evaluate_btn);
 
         music_evaluate_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
+                if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                } else {
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
             }
         });
-
+        //RecyclerVier binding
         mVerticalView = (RecyclerView)view.findViewById(R.id.vertivcal_list);
         SnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(mVerticalView);
@@ -77,10 +87,6 @@ public class Home_Fragment extends Fragment {
 
         // set Adapter
         mVerticalView.setAdapter(mAdapter);
-
-
-
-
 
         return view;
 
