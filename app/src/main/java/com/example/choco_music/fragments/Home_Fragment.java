@@ -1,10 +1,12 @@
 package com.example.choco_music.fragments;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -40,6 +42,7 @@ public class Home_Fragment extends Fragment {
         View view= inflater.inflate(R.layout.home_fragment,null,false);
 
 
+
         layoutBottomSheet = view.findViewById(R.id.bottom_sheet);
         sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
 
@@ -66,7 +69,7 @@ public class Home_Fragment extends Fragment {
 
         int i=0;
         while(i< MAX_ITEM_COUNT){
-            data.add(new VerticalData(R.mipmap.ic_launcher,i+"번째 데이터"));
+            data.add(new VerticalData(R.drawable.elbum_img,i+"번째 커버곡"));
             i++;
         }
 

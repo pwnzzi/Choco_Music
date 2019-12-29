@@ -83,7 +83,7 @@ public class Chart_Fragment extends Fragment {
 
         int i=0;
         while(i< MAX_ITEM_COUNT){
-            data.add(new ChartData(R.mipmap.ic_launcher,i+"번째 데이터"));
+            data.add(new ChartData(R.drawable.elbum_img,i+"번째 곡"));
             i++;
         }
 

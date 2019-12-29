@@ -3,21 +3,39 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" android:weightSum="10">
+    android:id="@+id/home_fragment_layout"
+    android:scaleType="fitXY"
+    android:background="@drawable/elbum_img"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/vertivcal_list"
-        android:layout_weight="8"/>
-
-    <Button
-        android:id="@+id/music_evaluate_btn"
-        android:layout_gravity="center"
-        android:layout_weight="2"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="오늘의 곡을 평가 하십시오"/>
+        android:id="@+id/vertivcal_list"
+        />
+
+        <Button
+            android:id="@+id/music_evaluate_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/round_btn"
+            android:text="오늘의 곡을 평가하세요"
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textSize="15sp"
+            style="@style/TextStyle"
+            android:textColor="#ffffff" />
+
+    </LinearLayout>
 
     <include layout="@layout/bottom_sheet" />
 

@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
+import android.view.View;
+
 import com.example.choco_music.R;
 import com.example.choco_music.adapters.SwipeViewPager;
 import com.example.choco_music.adapters.ViewPagerAdpater;
@@ -29,16 +31,27 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout=findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
 
-        tabLayout.getTabAt(0).setText("HOME");
-        tabLayout.getTabAt(1).setText("CHART");
-        tabLayout.getTabAt(2).setText("SEARCH");
-        tabLayout.getTabAt(3).setText("PLAYLIST");
+        tabLayout.getTabAt(0).setIcon(R.drawable.home_tab);
+        tabLayout.getTabAt(1).setIcon(R.drawable.chart_tab);
+        tabLayout.getTabAt(2).setIcon(R.drawable.search_tab);
+        tabLayout.getTabAt(3).setIcon(R.drawable.playlist_tab);
 
+      /*  View view1 = getLayoutInflater().inflate(R.layout.view_home_tab, null);
+        view1.findViewById(R.id.icon).setBackgroundResource(R.drawable.home_tab);
+        tabLayout.getTabAt(0).setCustomView(view1);
 
+        View view2 = getLayoutInflater().inflate(R.layout.view_home_tab, null);
+        view2.findViewById(R.id.icon).setBackgroundResource(R.drawable.chart_tab);
+        tabLayout.getTabAt(1).setCustomView(view2);
 
+        View view3 = getLayoutInflater().inflate(R.layout.view_home_tab, null);
+        view3.findViewById(R.id.icon).setBackgroundResource(R.drawable.search_tab);
+        tabLayout.getTabAt(2).setCustomView(view3);
 
-
-
+        View view4 = getLayoutInflater().inflate(R.layout.view_home_tab, null);
+        view4.findViewById(R.id.icon).setBackgroundResource(R.drawable.playlist_tab);
+        tabLayout.getTabAt(3).setCustomView(view4);
+*/
 
 
     }
