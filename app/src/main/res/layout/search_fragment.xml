@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"/>
 
         <Button
-            android:background="@drawable/search_tab"
+            android:background="@drawable/search_tab_unselected"
             android:layout_weight="0.3"
             android:layout_width="0dp"
             android:layout_height="match_parent"/>
@@ -59,9 +59,19 @@
 
 
         <TextView
-            android:layout_weight="3"
+            android:layout_weight="2"
             android:layout_width="0dp"
             android:layout_height="match_parent"/>
+
+        <ImageView
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/front_tab"/>
+
+
 
         <ImageView
             android:paddingTop="15dp"
@@ -70,9 +80,18 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_triangle_right"
+            app:srcCompat="@drawable/play_btn"
             Android:ignore="VectorDrawableCompat"
             android:tint="#ffffff" />
+
+        <ImageView
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/back_btn"/>
+
     </LinearLayout>
 
 </LinearLayout>

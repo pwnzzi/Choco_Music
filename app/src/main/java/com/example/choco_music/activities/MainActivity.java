@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout.getTabAt(0).setIcon(R.drawable.home_tab_icon);
         tabLayout.getTabAt(1).setIcon(R.drawable.chart_tab_icon);
-        tabLayout.getTabAt(2).setIcon(R.drawable.search_tab);
-        tabLayout.getTabAt(3).setIcon(R.drawable.playlist_tab);
+        tabLayout.getTabAt(2).setIcon(R.drawable.search_tab_icon);
+        tabLayout.getTabAt(3).setIcon(R.drawable.playlist_tab_icon);
 
 
 

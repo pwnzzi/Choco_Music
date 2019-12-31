@@ -1,31 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:Android="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#171717"
+    android:weightSum="10"
 
     >
 
 
+        <LinearLayout
+            android:layout_weight="0.6"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:weightSum="10"
+            android:background="@drawable/chart_round_bar"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp">
 
 
-        <Button
-            android:layout_marginTop="200dp"
-            android:layout_gravity="center"
-            android:id="@+id/button2"
+                <LinearLayout
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/TextStyle6"
+                            android:textSize="17dp"
+                            android:textColor="#ff9600"
+                            android:layout_marginLeft="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="초코뮤직"/>
+
+                        <TextView
+
+                            android:textSize="17dp"
+                            style="@style/TextStyle6"
+                            android:textColor="#ffffff"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="님의 좋아요"/>
+
+                </LinearLayout>
+
+        </LinearLayout>
+
+
+
+
+
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_weight="2.4"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/button1"
-            android:text="Stop Music From URL" />
+            android:layout_height="0dp">
 
-        <Button
-            android:layout_gravity="center"
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
 
-            android:text="Start Music From URL" />
+                <Button
+                    android:layout_gravity="center"
+                    android:id="@+id/button2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/button1"
+                    android:text="Stop Music From URL" />
+
+                <Button
+                    android:layout_gravity="center"
+                    android:id="@+id/button1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+
+                    android:text="Start Music From URL" />
+
+
+
+        </LinearLayout>
+
+
+        <ScrollView
+            android:layout_weight="6"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+        </ScrollView>
+
+        <LinearLayout
+            android:background="#1e1e1e"
+            android:weightSum="6"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+
+                <TextView
+                    android:layout_weight="2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
+
+                <ImageView
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/front_tab"/>
+
+
+
+                <ImageView
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/play_btn"
+                    Android:ignore="VectorDrawableCompat"
+                    android:tint="#ffffff" />
+
+                <ImageView
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/back_btn"/>
+
+        </LinearLayout>
+
 
 
 
