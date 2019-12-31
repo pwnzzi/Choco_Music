@@ -20,36 +20,36 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+
+            <FrameLayout
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:background="@drawable/chart_round_bar"
-                android:weightSum="10"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp">
 
 
+
                 <LinearLayout
+
                     android:layout_marginLeft="10dp"
                     android:layout_gravity="center"
-                    android:layout_weight="8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
 
                     <TextView
+                        android:textColor="#adff00"
                         style="@style/TextStyle6"
                         android:textSize="17dp"
-                        android:textColor="#adff00"
-                        android:layout_marginLeft="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="커버곡"/>
 
                     <TextView
-
                         android:textSize="17dp"
                         style="@style/TextStyle6"
                         android:textColor="#ffffff"
@@ -58,19 +58,23 @@
                         android:layout_height="wrap_content"
                         android:text="Top 100"/>
 
+
                 </LinearLayout>
 
 
-
                 <Button
+                    android:layout_gravity="end"
                     android:id="@+id/cover_btn"
-                    android:layout_weight="2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="더보기"/>
+                    android:layout_weight="1"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/more_cover"/>
 
 
-            </LinearLayout>
+            </FrameLayout>
+
+
+
 
 
             <androidx.recyclerview.widget.RecyclerView
@@ -80,13 +84,12 @@
 
                 />
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="10"
                 android:background="@drawable/chart_round_bar"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp">
@@ -94,11 +97,12 @@
 
 
                 <LinearLayout
+
                     android:layout_marginLeft="10dp"
                     android:layout_gravity="center"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="8">
+                    >
 
                     <TextView
                         android:textColor="#ff272f"
@@ -122,14 +126,15 @@
 
 
                 <Button
+                    android:layout_gravity="end"
                     android:id="@+id/original_btn"
-                    android:layout_weight="2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="더보기"/>
+                    android:layout_weight="1"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/more_original"/>
 
 
-            </LinearLayout>
+            </FrameLayout>
 
 
             <androidx.recyclerview.widget.RecyclerView
@@ -144,18 +149,29 @@
 
 
     </ScrollView>
+
     <LinearLayout
         android:background="#1e1e1e"
-        android:layout_weight="1"
+        android:weightSum="6"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:weightSum="6"
-        android:orientation="horizontal">
+        android:layout_weight="1">
+
 
         <TextView
-            android:layout_weight="3"
+            android:layout_weight="2"
             android:layout_width="0dp"
             android:layout_height="match_parent"/>
+
+        <ImageView
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/front_tab"/>
+
+
 
         <ImageView
             android:paddingTop="15dp"
@@ -164,9 +180,17 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_triangle_right"
+            app:srcCompat="@drawable/play_btn"
             Android:ignore="VectorDrawableCompat"
             android:tint="#ffffff" />
+
+        <ImageView
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/back_btn"/>
 
     </LinearLayout>
 
