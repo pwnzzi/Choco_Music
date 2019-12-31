@@ -9,31 +9,48 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:weightSum="10"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:clipToPadding="false"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:layout_weight="3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/vertivcal_list"
         />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_weight="4"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
 
-        <Button
-            android:id="@+id/music_evaluate_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/round_btn"
-            android:text="오늘의 곡을 평가하세요"
-            android:paddingRight="20dp"
-            android:paddingLeft="20dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:textSize="15sp"
-            style="@style/TextStyle"
-            android:textColor="#ffffff" />
+            <Button
+                android:id="@+id/music_evaluate_btn"
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/round_btn"
+                android:paddingLeft="20dp"
+                android:paddingTop="10dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="10dp"
+                android:text="오늘의 곡을 평가하세요"
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_weight="3"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"/>
 
     </LinearLayout>
 

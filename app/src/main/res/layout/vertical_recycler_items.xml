@@ -23,11 +23,12 @@
             android:text="커버곡"
             android:textSize="17dp"
             style="@style/TextStyle3"
-            android:layout_marginBottom="20dp"
             android:background="@drawable/round_songtype"
             android:layout_gravity="center"/>
 
         <TextView
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:textSize="15sp"
             style="@style/TextStyle4"
             android:layout_gravity="center"
@@ -38,14 +39,57 @@
             android:layout_toRightOf="@+id/vertical_icon"
             android:text="~번째"/>
 
-
-        <ImageView
-
+        <TextView
+            android:layout_marginBottom="5dp"
+            android:textSize="15sp"
+            style="@style/TextStyle4"
+            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/vertical_icon"
-            android:src="@drawable/elbum_img"
-            />
+            android:id="@+id/vertical_description1"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/vertical_icon"
+            android:text="가수"/>
+
+
+
+
+
+
+        <FrameLayout
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:adjustViewBounds="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/vertical_icon"
+                android:src="@drawable/elbum_img"
+                />
+
+            <Button
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="bottom"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:background="@drawable/heart"/>
+
+        </FrameLayout>
+
+        <TextView
+            android:layout_marginTop="5dp"
+            android:textSize="15sp"
+            style="@style/TextStyle4"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/vertical_description2"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/vertical_icon"
+            android:text="혹 사랑이란게 만질수 있는 거라면 저 하늘색 구름"/>
+
 
     </LinearLayout>
 

@@ -1,7 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:Android="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:weightSum="10"
     android:background="#171717">
+
+    <LinearLayout
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/chart_round_bar"
+        android:layout_weight="0.6"
+        android:weightSum="3"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="20dp">
+
+        <EditText
+            android:layout_weight="2.7"
+            style="@style/TextStyle6"
+            android:textSize="20dp"
+            android:textColor="#ffffff"
+            android:text="검색어를 입력해 주세요"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:background="@drawable/search_tab"
+            android:layout_weight="0.3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+
+    <ScrollView
+        android:layout_weight="8.4"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
+
+    </ScrollView>
+
+    <LinearLayout
+        android:background="#1e1e1e"
+        android:weightSum="6"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+
+        <TextView
+            android:layout_weight="3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_triangle_right"
+            Android:ignore="VectorDrawableCompat"
+            android:tint="#ffffff" />
+    </LinearLayout>
 
 </LinearLayout>

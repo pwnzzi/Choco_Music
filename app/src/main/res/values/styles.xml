@@ -18,6 +18,13 @@
         <item name="android:lineSpacingExtra">9.7sp</item>
         <item name="android:textColor">#f56e47</item>
     </style>
+
+    <style name="TextStyle02">
+
+        <item name="android:textSize">5.3sp</item>
+        <item name="android:lineSpacingExtra">-0.3sp</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
     <style name="TextStyle2">
         <item name="android:gravity">center_horizontal</item>
         <item name="android:textSize">5.3sp</item>
@@ -51,6 +58,18 @@
         <item name="android:textSize">6sp</item>
         <item name="android:lineSpacingExtra">-1sp</item>
         <item name="android:textColor">#ffffff</item>
+    </style>
+
+    <style name="TextStyle7">
+        <item name="android:textSize">5.3sp</item>
+        <item name="android:lineSpacingExtra">-0.3sp</item>
+        <item name="android:textColor">#fe9500</item>
+    </style>
+
+    <style name="Base.Widget.Design.TabLayout." parent="android:Widget">
+        <item name="tabBackground">@drawable/tab_background</item>
+        <item name="tabIndicatorColor">#ff00ff</item>
+        <item name="tabIndicatorHeight">2dp</item>
     </style>
 
 

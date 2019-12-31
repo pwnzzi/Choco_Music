@@ -1,11 +1,9 @@
 package com.example.choco_music.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-
 import com.example.choco_music.R;
 import com.example.choco_music.adapters.SwipeViewPager;
 import com.example.choco_music.adapters.ViewPagerAdpater;
@@ -22,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent intent = new Intent(this, LoadingActivity.class);
+        startActivity(intent);
+
         viewPager= findViewById(viewpager);
         ViewPagerAdpater viewPagerAdpater= new ViewPagerAdpater(getSupportFragmentManager());
         viewPager.setPagingEnabled(false);
@@ -31,10 +32,12 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout=findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
 
-        tabLayout.getTabAt(0).setIcon(R.drawable.home_tab);
-        tabLayout.getTabAt(1).setIcon(R.drawable.chart_tab);
+        tabLayout.getTabAt(0).setIcon(R.drawable.home_tab_icon);
+        tabLayout.getTabAt(1).setIcon(R.drawable.chart_tab_icon);
         tabLayout.getTabAt(2).setIcon(R.drawable.search_tab);
         tabLayout.getTabAt(3).setIcon(R.drawable.playlist_tab);
+
+
 
       /*  View view1 = getLayoutInflater().inflate(R.layout.view_home_tab, null);
         view1.findViewById(R.id.icon).setBackgroundResource(R.drawable.home_tab);
