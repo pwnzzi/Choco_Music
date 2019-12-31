@@ -31,6 +31,7 @@ public class Home_Fragment extends Fragment {
     private VerticalAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private LinearLayout layoutBottomSheet;
+    private Button cancelButton;
 
     private int MAX_ITEM_COUNT = 50;
 
@@ -40,8 +41,6 @@ public class Home_Fragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.home_fragment,null,false);
-
-
 
         layoutBottomSheet = view.findViewById(R.id.bottom_sheet);
         sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
@@ -64,7 +63,6 @@ public class Home_Fragment extends Fragment {
         snapHelper.attachToRecyclerView(mVerticalView);
 
         //init Data
-
         ArrayList<VerticalData> data = new ArrayList<>();
 
         int i=0;
@@ -73,10 +71,17 @@ public class Home_Fragment extends Fragment {
             i++;
         }
 
+        cancelButton = view.findViewById(R.id.sheet_cancel);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
+
         //init LayoutManager
 
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
 
         // setLayoutManager

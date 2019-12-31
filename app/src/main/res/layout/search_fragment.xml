@@ -13,26 +13,29 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/chart_round_bar"
-        android:layout_weight="0.6"
-        android:weightSum="3"
+        android:layout_weight="1"
+        android:weightSum="1"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="20dp">
+        android:layout_height="wrap_content">
 
         <EditText
-            android:layout_weight="2.7"
+            android:layout_weight="1"
             style="@style/TextStyle6"
             android:textSize="20dp"
             android:textColor="#ffffff"
-            android:text="검색어를 입력해 주세요"
+            android:hint="검색어를 입력해 주세요"
+            android:background="@null"
+            android:textColorHint="#ffffff"
+            android:layout_marginLeft="20dp"
+            android:gravity="left"
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
 
         <Button
             android:background="@drawable/search_tab"
-            android:layout_weight="0.3"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"/>
+            android:layout_width="50dp"
+            android:layout_height="50dp"/>
 
     </LinearLayout>
 
