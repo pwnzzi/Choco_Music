@@ -12,7 +12,8 @@
         android:weightSum="10"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/black_gradient">
 
     <androidx.recyclerview.widget.RecyclerView
         android:clipToPadding="false"

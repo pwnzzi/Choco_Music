@@ -1,5 +1,7 @@
 package com.example.choco_music.fragments;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
@@ -19,6 +22,7 @@ import androidx.recyclerview.widget.SnapHelper;
 
 import com.example.choco_music.R;
 import com.example.choco_music.adapters.VerticalAdapter;
+import com.example.choco_music.model.Blur;
 import com.example.choco_music.model.VerticalData;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
@@ -31,6 +35,7 @@ public class Home_Fragment extends Fragment {
     private VerticalAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private LinearLayout layoutBottomSheet;
+    private CoordinatorLayout background;
     private Button cancelButton;
 
     private int MAX_ITEM_COUNT = 50;
@@ -61,6 +66,12 @@ public class Home_Fragment extends Fragment {
         mVerticalView = (RecyclerView)view.findViewById(R.id.vertivcal_list);
         SnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(mVerticalView);
+
+        background = view.findViewById(R.id.home_fragment_layout);
+        Drawable drawable = getResources().getDrawable(R.drawable.elbum_img);
+        Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
+        Blur blur = new Blur(getContext(), background, bitmap,10, getActivity());
+        blur.run();
 
         //init Data
         ArrayList<VerticalData> data = new ArrayList<>();
@@ -96,6 +107,7 @@ public class Home_Fragment extends Fragment {
         mVerticalView.setAdapter(mAdapter);
 
         return view;
+
 
     }
 }
