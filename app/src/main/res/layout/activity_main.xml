@@ -9,31 +9,26 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="10"
+        android:weightSum="1"
         android:orientation="vertical">
 
         <com.example.choco_music.adapters.SwipeViewPager
-            android:layout_weight="9"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:id="@+id/viewpager">
-
-        </com.example.choco_music.adapters.SwipeViewPager>
-
-
-        <com.google.android.material.tabs.TabLayout
-
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:id="@+id/viewpager">
+        </com.example.choco_music.adapters.SwipeViewPager>
+
+        <include layout="@layout/playing_bar" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:layout_weight="0"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:id="@+id/tablayout"
             android:layout_below="@id/viewpager"
             app:tabBackground="@drawable/tab_background"
-            app:tabIndicatorHeight="0dp"
-
-            >
-
-
+            app:tabIndicatorHeight="0dp">
 
         </com.google.android.material.tabs.TabLayout>
 

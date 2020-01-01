@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#171717"
-    android:weightSum="10"
-
+    android:weightSum="9"
     >
 
 
@@ -44,30 +43,20 @@
                             android:text="초코뮤직"/>
 
                         <TextView
-
                             android:textSize="17dp"
                             style="@style/TextStyle6"
                             android:textColor="#ffffff"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="님의 좋아요"/>
-
                 </LinearLayout>
-
         </LinearLayout>
-
-
-
-
-
-
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_weight="2.4"
             android:layout_width="wrap_content"
             android:layout_height="0dp">
-
 
                 <Button
                     android:layout_gravity="center"
@@ -83,11 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
-
                     android:text="Start Music From URL" />
-
-
-
         </LinearLayout>
 
 
@@ -99,54 +84,6 @@
                 <ListView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
-
         </ScrollView>
-
-        <LinearLayout
-            android:background="#1e1e1e"
-            android:weightSum="6"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-
-
-                <TextView
-                    android:layout_weight="2"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"/>
-
-                <ImageView
-                    android:paddingTop="15dp"
-                    android:paddingBottom="15dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:src="@drawable/front_tab"/>
-
-
-
-                <ImageView
-                    android:paddingTop="15dp"
-                    android:paddingBottom="15dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/play_btn"
-                    Android:ignore="VectorDrawableCompat"
-                    android:tint="#ffffff" />
-
-                <ImageView
-                    android:paddingTop="15dp"
-                    android:paddingBottom="15dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:src="@drawable/back_btn"/>
-
-        </LinearLayout>
-
-
-
 
 </LinearLayout>

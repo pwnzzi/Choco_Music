@@ -80,7 +80,6 @@ public class Home_Fragment extends Fragment {
         });
 
         //init LayoutManager
-
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
 
