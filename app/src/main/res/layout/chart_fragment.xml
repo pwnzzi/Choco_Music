@@ -4,15 +4,13 @@
     xmlns:Android="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:weightSum="9"
     android:layout_height="match_parent"
     android:background="#171717">
 
 
     <ScrollView
-        android:layout_weight="9"
         android:layout_width="match_parent"
-        android:layout_height="0dp">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_marginTop="30dp"
@@ -28,7 +26,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:background="@drawable/chart_round_bar"
-                android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp">
 
 
@@ -66,8 +63,8 @@
                     android:layout_gravity="end"
                     android:id="@+id/cover_btn"
                     android:layout_weight="1"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:background="@drawable/more_cover"/>
 
 
@@ -117,8 +114,8 @@
                     android:layout_gravity="end"
                     android:id="@+id/original_btn"
                     android:layout_weight="1"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:background="@drawable/more_original"/>
             </FrameLayout>
 
