@@ -241,32 +241,32 @@
                 android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/star"/>
+                android:src="@drawable/star_unselected"/>
 
 
             <ImageView
                 android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/star"/>
+                android:src="@drawable/star_unselected"/>
 
             <ImageView
                 android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/star"/>
+                android:src="@drawable/star_unselected"/>
 
             <ImageView
                 android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/star"/>
+                android:src="@drawable/star_unselected"/>
 
             <ImageView
                 android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/star"/>
+                android:src="@drawable/star_unselected"/>
 
 
 

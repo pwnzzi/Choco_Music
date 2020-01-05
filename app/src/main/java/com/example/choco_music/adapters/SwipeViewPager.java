@@ -48,5 +48,15 @@ public class SwipeViewPager extends ViewPager {
         this.enabled = enabled;
     }
 
+    @Override
+    public void setCurrentItem(int item, boolean smoothScroll) {
+        super.setCurrentItem(item, false);
+    }
+
+    @Override
+    public void setCurrentItem(int item) {
+        super.setCurrentItem(item, false);
+    }
+
 
 }
