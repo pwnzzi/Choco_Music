@@ -1,6 +1,5 @@
 package com.example.choco_music.fragments;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -31,18 +30,21 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.ArrayList;
 
-public class Home_Fragment extends Fragment {
+public class Home_Fragment extends Fragment implements View.OnClickListener{
 
     private RecyclerView mVerticalView;
     private VerticalAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private LinearLayout layoutBottomSheet;
     private CoordinatorLayout background;
-    private Button cancelButton,btn_tag_1,btn_tag_2,btn_tag_3,btn_tag_4,btn_tag_5,btn_tag_6,btn_tag_7,btn_tag_8,btn_tag_9,btn_tag_10,music_evaluate_btn,confirmButton;
+    private Button btn_tag_1,btn_tag_2,btn_tag_3,btn_tag_4,btn_tag_5,btn_tag_6,btn_tag_7,btn_tag_8,btn_tag_9,btn_tag_10,music_evaluate_btn,confirmButton;
     private  Boolean isRunning = false, click_1 = true,click_2= true,click_3= true,click_4 = true,click_5 = true,click_6 = true,click_7 = true,click_8 = true,click_9 = true,click_10 = true;
     public MediaPlayer mediaPlayer;
     private ImageView music_play_btn;
     private View view;
+    private Button cancelButton;
+    private ArrayList<ImageView> stars;
+    private int currentStar = 5;
 
     private int MAX_ITEM_COUNT = 50;
 
@@ -80,13 +82,10 @@ public class Home_Fragment extends Fragment {
         music_evaluate_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-                    sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                } else {
-                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                }
+                sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             }
         });
+
         //RecyclerVier binding
         mVerticalView = (RecyclerView)view.findViewById(R.id.vertivcal_list);
         SnapHelper snapHelper = new PagerSnapHelper();
@@ -124,6 +123,15 @@ public class Home_Fragment extends Fragment {
             }
         });
 
+        stars = new ArrayList<>();
+        stars.add((ImageView) view.findViewById(R.id.star_1));
+        stars.add((ImageView) view.findViewById(R.id.star_2));
+        stars.add((ImageView) view.findViewById(R.id.star_3));
+        stars.add((ImageView) view.findViewById(R.id.star_4));
+        stars.add((ImageView) view.findViewById(R.id.star_5));
+        for(i = 0; i < 5; ++i)
+            stars.get(i).setOnClickListener(this);
+
         //init LayoutManager
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
@@ -142,6 +150,12 @@ public class Home_Fragment extends Fragment {
 
         return view;
 
+ /*if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+
+                } else {
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }*/
+    }
 
     }
     private void btn_tag(){
@@ -297,5 +311,30 @@ public class Home_Fragment extends Fragment {
 
 
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.star_1:
+                currentStar = 1;
+                break;
+            case R.id.star_2:
+                currentStar = 2;
+                break;
+            case R.id.star_3:
+                currentStar = 3;
+                break;
+            case R.id.star_4:
+                currentStar = 4;
+                break;
+            case R.id.star_5:
+                currentStar = 5;
+                break;
+        }
+        for(int i=0; i<5; ++i)
+            stars.get(i).setImageResource(R.drawable.star_unselected);
+        for(int i=0; i<currentStar; ++i)
+            stars.get(i).setImageResource(R.drawable.star_selected);
     }
 }
+
+
