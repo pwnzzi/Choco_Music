@@ -11,14 +11,15 @@
     app:behavior_peekHeight="56dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
     <LinearLayout
-        android:background="#1e1e1e"
+        android:background="#171717"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:orientation="vertical"
         android:layout_gravity="center_vertical"
         >
 
         <ImageView
+            android:id="@+id/home_fragment_play_btn"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
             android:layout_gravity="center"
@@ -82,6 +83,7 @@
             >
 
             <Button
+                android:id="@+id/btn_tag_1"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/button_border"
                 android:textSize="15dp"
@@ -91,6 +93,7 @@
                 android:text="#감미로운"/>
 
             <Button
+                android:id="@+id/btn_tag_2"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/button_border"
                 android:textSize="15dp"
@@ -100,6 +103,7 @@
                 android:text="#은유적인"/>
 
             <Button
+                android:id="@+id/btn_tag_3"
                 android:background="@drawable/button_border"
                 android:textSize="15dp"
                 style="@style/TextStyle02"
@@ -119,6 +123,7 @@
             >
 
             <Button
+                android:id="@+id/btn_tag_4"
                 android:layout_weight="1"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/button_border"
@@ -129,6 +134,7 @@
                 android:text="#잔잔한"/>
 
             <Button
+                android:id="@+id/btn_tag_5"
                 android:layout_weight="1"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/button_border"
@@ -139,6 +145,7 @@
                 android:text="#가을"/>
 
             <Button
+                android:id="@+id/btn_tag_6"
                 android:layout_weight="1"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/button_border"
@@ -150,6 +157,7 @@
 
 
             <Button
+                android:id="@+id/btn_tag_7"
                 android:layout_weight="1"
                 android:background="@drawable/button_border"
                 android:textSize="15dp"
@@ -171,6 +179,7 @@
             >
 
             <Button
+                android:id="@+id/btn_tag_8"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/button_border"
                 android:textSize="15dp"
@@ -180,6 +189,7 @@
                 android:text="#담백한"/>
 
             <Button
+                android:id="@+id/btn_tag_9"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/button_border"
                 android:textSize="15dp"
@@ -189,6 +199,7 @@
                 android:text="#감성적인"/>
 
             <Button
+                android:id="@+id/btn_tag_10"
                 android:background="@drawable/button_border"
                 android:textSize="15dp"
                 style="@style/TextStyle02"

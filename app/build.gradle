@@ -30,6 +30,9 @@ dependencies {
     implementation 'com.android.support:design:29.0.0'
     //noinspection GradleCompatible
     implementation 'com.android.support:recyclerview-v7:24.2.1'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+
+
 
 
 

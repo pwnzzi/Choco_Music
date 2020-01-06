@@ -1,8 +1,11 @@
 package com.example.choco_music.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,6 +21,8 @@ import androidx.recyclerview.widget.SnapHelper;
 
 import com.example.choco_music.R;
 import com.example.choco_music.activities.Coversong_chart;
+import com.example.choco_music.activities.MainActivity;
+import com.example.choco_music.activities.MusicPlay_activity;
 import com.example.choco_music.activities.Originalsong_chart;
 import com.example.choco_music.adapters.ChartAdapter;
 import com.example.choco_music.adapters.PagerSnapWithSpanCountHelper;
@@ -77,6 +82,27 @@ public class Chart_Fragment extends Fragment {
             }
         });
 
+        //recycler view clikc event
+        CoverSong_View.addOnItemTouchListener(new RecyclerTouchListener(getContext(), CoverSong_View, new ClickListener() {
+                    @Override
+                    public void onClick(View view, int position) {
+
+                        Intent intent = new Intent(getContext(), MusicPlay_activity.class);
+
+
+                        startActivity(intent);
+
+                    }
+
+                    @Override
+                    public void onLongClick(View view, int position) {
+
+                    }
+                }));
+
+
+
+
         //init Data
 
         ArrayList<ChartData> data = new ArrayList<>();
@@ -109,5 +135,52 @@ public class Chart_Fragment extends Fragment {
         OriginalSong_View.setAdapter(mAdapter);
 
         return view;
+    }
+
+    public interface ClickListener {
+        void onClick(View view, int position);
+
+        void onLongClick(View view, int position);
+    }
+
+    public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
+
+        private GestureDetector gestureDetector;
+        private Chart_Fragment.ClickListener clickListener;
+
+        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final Chart_Fragment.ClickListener clickListener) {
+            this.clickListener = clickListener;
+            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return true;
+                }
+
+                @Override
+                public void onLongPress(MotionEvent e) {
+                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+                    if (child != null && clickListener != null) {
+                        clickListener.onLongClick(child, recyclerView.getChildAdapterPosition(child));
+                    }
+                }
+            });
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+            View child = rv.findChildViewUnder(e.getX(), e.getY());
+            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
+                clickListener.onClick(child, rv.getChildAdapterPosition(child));
+            }
+            return false;
+        }
+
+        @Override
+        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+        }
     }
 }

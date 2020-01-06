@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:Android="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="10">
+
+    <LinearLayout
+        android:id="@+id/musicplay_activity_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="7"
+        android:orientation="vertical"
+        android:background="@drawable/elbum_img">
+
+        <ImageView
+            android:id="@+id/play_layout_finish"
+            android:layout_gravity="right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/back_layout_btn"/>
+
+        <LinearLayout
+            android:weightSum="10"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_weight="1"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="커버곡"
+                style="@style/TextStyle3"
+                android:background="@drawable/round_songtype"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                style="@style/TextStyle4"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/vertical_description"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/vertical_icon"
+                android:text="노래제목"/>
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_marginBottom="5dp"
+                style="@style/TextStyle4"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/vertical_description1"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/vertical_icon"
+                android:text="가수"/>
+
+            <FrameLayout
+                android:layout_weight="6"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:adjustViewBounds="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/vertical_icon"
+                    android:src="@drawable/elbum_img"
+                    android:padding="1dp"
+                    android:scaleType="centerCrop"
+                    android:cropToPadding="true"
+                    android:background="@drawable/border_cover"
+                    />
+
+                <Button
+                    android:layout_marginLeft="5dp"
+                    android:layout_gravity="bottom"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:background="@drawable/heart_unselected"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:src="@drawable/ic_triangle_cover"
+                    />
+
+            </FrameLayout>
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_marginTop="5dp"
+                style="@style/TextStyle4"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/vertical_description2"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/vertical_icon"
+                android:text="혹 사랑이란게 만질수 있는 거라면 저 하늘색 구름"/>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+
+            android:id="@+id/linear_running_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+
+            <ImageView
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:id="@+id/music_pause"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/playing_btn"/>
+
+
+
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:weightSum="5"
+            android:background="#171717"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            >
+
+            <ImageView
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/replay"
+                />
+
+
+            <ImageView
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/front_tab"/>
+
+
+
+            <ImageView
+                android:id="@+id/music_play"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/play_btn"
+                Android:ignore="VectorDrawableCompat"
+                android:tint="#ffffff" />
+
+            <ImageView
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/back_btn"/>
+
+            <ImageView
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/shuffle"
+                />
+
+
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+
+
+    <LinearLayout
+        android:background="#171717"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:background="#1e1e1e"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:weightSum="5"
+        android:layout_weight="1">
+
+        <ImageView
+            android:src="@drawable/adjust_btn"
+            android:layout_weight="1"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:layout_weight="3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/play_layout_list"
+            android:layout_weight="1"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_music_list"/>
+
+
+
+
+    </LinearLayout>
+
+
+
+
+
+
+
+</LinearLayout>
