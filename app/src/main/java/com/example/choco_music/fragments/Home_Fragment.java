@@ -157,44 +157,43 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                 }*/
     }
 
-    }
-    private void btn_tag(){
 
-        btn_tag_1=(Button)view.findViewById(R.id.btn_tag_1);
-        btn_tag_2=(Button)view.findViewById(R.id.btn_tag_2);
-        btn_tag_3=(Button)view.findViewById(R.id.btn_tag_3);
-        btn_tag_4=(Button)view.findViewById(R.id.btn_tag_4);
-        btn_tag_5=(Button)view.findViewById(R.id.btn_tag_5);
-        btn_tag_6=(Button)view.findViewById(R.id.btn_tag_6);
-        btn_tag_7=(Button)view.findViewById(R.id.btn_tag_7);
-        btn_tag_8=(Button)view.findViewById(R.id.btn_tag_8);
-        btn_tag_9=(Button)view.findViewById(R.id.btn_tag_9);
-        btn_tag_10=(Button)view.findViewById(R.id.btn_tag_10);
+    private void btn_tag() {
+
+        btn_tag_1 = (Button) view.findViewById(R.id.btn_tag_1);
+        btn_tag_2 = (Button) view.findViewById(R.id.btn_tag_2);
+        btn_tag_3 = (Button) view.findViewById(R.id.btn_tag_3);
+        btn_tag_4 = (Button) view.findViewById(R.id.btn_tag_4);
+        btn_tag_5 = (Button) view.findViewById(R.id.btn_tag_5);
+        btn_tag_6 = (Button) view.findViewById(R.id.btn_tag_6);
+        btn_tag_7 = (Button) view.findViewById(R.id.btn_tag_7);
+        btn_tag_8 = (Button) view.findViewById(R.id.btn_tag_8);
+        btn_tag_9 = (Button) view.findViewById(R.id.btn_tag_9);
+        btn_tag_10 = (Button) view.findViewById(R.id.btn_tag_10);
 
 
-
-            btn_tag_1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(click_1){
-                        btn_tag_1.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
-                        click_1 = false;
-                    }else{
-                        btn_tag_1.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
-                        click_1 = true;
-                    }
-
+        btn_tag_1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (click_1) {
+                    btn_tag_1.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
+                    click_1 = false;
+                } else {
+                    btn_tag_1.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
+                    click_1 = true;
                 }
-            });
+
+            }
+        });
         btn_tag_2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(click_2){
+                if (click_2) {
                     btn_tag_2.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
                     click_2 = false;
-                }else{
+                } else {
                     btn_tag_2.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
-                    click_2= true;
+                    click_2 = true;
                 }
 
             }
@@ -202,10 +201,10 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         btn_tag_3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(click_3){
+                if (click_3) {
                     btn_tag_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
                     click_3 = false;
-                }else{
+                } else {
                     btn_tag_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
                     click_3 = true;
                 }
@@ -215,12 +214,12 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         btn_tag_4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(click_4){
+                if (click_4) {
                     btn_tag_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
                     click_4 = false;
-                }else{
+                } else {
                     btn_tag_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
-                    click_4= true;
+                    click_4 = true;
                 }
 
             }
@@ -228,10 +227,10 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         btn_tag_5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(click_5){
+                if (click_5) {
                     btn_tag_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
                     click_5 = false;
-                }else{
+                } else {
                     btn_tag_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
                     click_5 = true;
                 }
@@ -241,10 +240,10 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         btn_tag_6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(click_6){
+                if (click_6) {
                     btn_tag_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
                     click_6 = false;
-                }else{
+                } else {
                     btn_tag_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
                     click_6 = true;
                 }
@@ -254,10 +253,10 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         btn_tag_7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(click_7){
+                if (click_7) {
                     btn_tag_7.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
                     click_7 = false;
-                }else{
+                } else {
                     btn_tag_7.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
                     click_7 = true;
                 }
@@ -267,10 +266,10 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         btn_tag_8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(click_8){
+                if (click_8) {
                     btn_tag_8.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
                     click_8 = false;
-                }else{
+                } else {
                     btn_tag_8.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
                     click_8 = true;
                 }
@@ -280,10 +279,10 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         btn_tag_9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(click_9){
+                if (click_9) {
                     btn_tag_9.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
                     click_9 = false;
-                }else{
+                } else {
                     btn_tag_9.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
                     click_9 = true;
                 }
@@ -293,23 +292,17 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         btn_tag_10.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(click_10){
+                if (click_10) {
                     btn_tag_10.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
                     click_10 = false;
-                }else{
+                } else {
                     btn_tag_10.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
                     click_10 = true;
                 }
 
             }
         });
-
-
-
-
-
-
-
+    }
 
     @Override
     public void onClick(View view) {
@@ -335,6 +328,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         for(int i=0; i<currentStar; ++i)
             stars.get(i).setImageResource(R.drawable.star_selected);
     }
+
 }
 
 
