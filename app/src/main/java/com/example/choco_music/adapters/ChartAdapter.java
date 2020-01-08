@@ -1,5 +1,7 @@
 package com.example.choco_music.adapters;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.choco_music.Holder.Chart_ViewHolder;
 import com.example.choco_music.R;
+import com.example.choco_music.activities.MusicPlay_activity;
 import com.example.choco_music.model.ChartData;
 import com.example.choco_music.model.VerticalData;
 
@@ -16,12 +19,13 @@ import java.util.ArrayList;
 
 public class ChartAdapter extends RecyclerView.Adapter<Chart_ViewHolder>  {
 
+
+
     private ArrayList<ChartData> chartDatas ;
 
     public void setData(ArrayList<ChartData> list){
         chartDatas = list;
     }
-
 
     @NonNull
     @Override
@@ -29,7 +33,15 @@ public class ChartAdapter extends RecyclerView.Adapter<Chart_ViewHolder>  {
 
         //사용할 아이템 뷰를 생성해준다.
 
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.chart_recycler_items,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chart_recycler_items,parent,false);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), MusicPlay_activity.class);
+                view.getContext().startActivity(intent);
+                ((Activity)view.getContext()).overridePendingTransition(R.anim.anim_slide_in_bottom, R.anim.anim_slide_out_top);
+            }
+        });
         Chart_ViewHolder holder = new Chart_ViewHolder(view);
         return holder;
 

@@ -76,6 +76,7 @@
 
         <LinearLayout
             android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -89,7 +90,7 @@
                 android:textSize="15dp"
                 style="@style/TextStyle02"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:text="#감미로운"/>
 
             <Button
@@ -99,7 +100,7 @@
                 android:textSize="15dp"
                 style="@style/TextStyle02"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:text="#은유적인"/>
 
             <Button
@@ -108,7 +109,7 @@
                 android:textSize="15dp"
                 style="@style/TextStyle02"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:text="#어쿠스틱"/>
 
 
@@ -117,6 +118,7 @@
 
         <LinearLayout
             android:weightSum="4"
+            android:layout_marginLeft="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -130,7 +132,7 @@
                 android:textSize="15dp"
                 style="@style/TextStyle02"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:text="#잔잔한"/>
 
             <Button
@@ -141,7 +143,7 @@
                 android:textSize="15dp"
                 style="@style/TextStyle02"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:text="#가을"/>
 
             <Button
@@ -152,7 +154,7 @@
                 android:textSize="15dp"
                 style="@style/TextStyle02"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:text="#조용한"/>
 
 
@@ -163,7 +165,7 @@
                 android:textSize="15dp"
                 style="@style/TextStyle02"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:text="#느린"/>
 
 
@@ -172,9 +174,10 @@
 
         <LinearLayout
             android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:orientation="horizontal"
             >
 
@@ -185,7 +188,7 @@
                 android:textSize="15dp"
                 style="@style/TextStyle02"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:text="#담백한"/>
 
             <Button
@@ -195,7 +198,7 @@
                 android:textSize="15dp"
                 style="@style/TextStyle02"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:text="#감성적인"/>
 
             <Button
@@ -204,14 +207,10 @@
                 android:textSize="15dp"
                 style="@style/TextStyle02"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:text="#미디엄템포"/>
 
-
-
         </LinearLayout>
-
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -248,46 +247,44 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <ImageView
                 android:id="@+id/star_1"
-                android:layout_marginLeft="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/star_unselected"/>
-
+                android:layout_marginLeft="10dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/star_selected"/>
 
             <ImageView
                 android:id="@+id/star_2"
-                android:layout_marginLeft="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/star_unselected"/>
+                android:layout_marginLeft="15dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/star_selected"/>
 
             <ImageView
                 android:id="@+id/star_3"
-                android:layout_marginLeft="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/star_unselected"/>
+                android:layout_marginLeft="15dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/star_selected"/>
 
             <ImageView
                 android:id="@+id/star_4"
-                android:layout_marginLeft="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/star_unselected"/>
+                android:layout_marginLeft="15dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/star_selected"/>
 
             <ImageView
                 android:id="@+id/star_5"
-                android:layout_marginLeft="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/star_unselected"/>
-
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="20dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/star_selected"/>
 
         </LinearLayout>
-
-
 
     <LinearLayout
         android:layout_marginBottom="20dp"
