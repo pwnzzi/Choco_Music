@@ -59,49 +59,6 @@ public class Chart_Fragment extends Fragment {
         snapHelper.attachToRecyclerView(CoverSong_View);
         snapHelper2.attachToRecyclerView(OriginalSong_View);
 
-        //Button Event
-        Cover_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(getContext(), Coversong_chart.class);
-
-                startActivity(intent);
-
-            }
-        });
-        Originall_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(getContext(), Originalsong_chart.class);
-
-                startActivity(intent);
-
-
-            }
-        });
-
-        //recycler view clikc event
-        CoverSong_View.addOnItemTouchListener(new RecyclerTouchListener(getContext(), CoverSong_View, new ClickListener() {
-                    @Override
-                    public void onClick(View view, int position) {
-
-                        Intent intent = new Intent(getContext(), MusicPlay_activity.class);
-
-
-                        startActivity(intent);
-
-                    }
-
-                    @Override
-                    public void onLongClick(View view, int position) {
-
-                    }
-                }));
-
-
-
 
         //init Data
 

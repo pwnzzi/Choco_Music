@@ -2,6 +2,7 @@ package com.example.choco_music.fragments;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
@@ -37,8 +38,10 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     private LinearLayoutManager mLayoutManager;
     private LinearLayout layoutBottomSheet;
     private CoordinatorLayout background;
-    private Button btn_tag_1,btn_tag_2,btn_tag_3,btn_tag_4,btn_tag_5,btn_tag_6,btn_tag_7,btn_tag_8,btn_tag_9,btn_tag_10,music_evaluate_btn,confirmButton;
-    private  Boolean isRunning = false, click_1 = true,click_2= true,click_3= true,click_4 = true,click_5 = true,click_6 = true,click_7 = true,click_8 = true,click_9 = true,click_10 = true;
+    private ArrayList<Button> btn_tags;
+    private Button music_evaluate_btn, confirmButton;
+    private  Boolean isRunning = false;
+    private ArrayList<Boolean> clicks;
     public MediaPlayer mediaPlayer;
     private ImageView music_play_btn;
     private View view;
@@ -159,174 +162,76 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
 
 
     private void btn_tag() {
+        btn_tags = new ArrayList<>();
+        clicks = new ArrayList<>();
+        btn_tags.add((Button) view.findViewById(R.id.btn_tag_1));
+        btn_tags.add((Button) view.findViewById(R.id.btn_tag_2));
+        btn_tags.add((Button) view.findViewById(R.id.btn_tag_3));
+        btn_tags.add((Button) view.findViewById(R.id.btn_tag_4));
+        btn_tags.add((Button) view.findViewById(R.id.btn_tag_5));
+        btn_tags.add((Button) view.findViewById(R.id.btn_tag_6));
+        btn_tags.add((Button) view.findViewById(R.id.btn_tag_7));
+        btn_tags.add((Button) view.findViewById(R.id.btn_tag_8));
+        btn_tags.add((Button) view.findViewById(R.id.btn_tag_9));
+        btn_tags.add((Button) view.findViewById(R.id.btn_tag_10));
 
-        btn_tag_1 = (Button) view.findViewById(R.id.btn_tag_1);
-        btn_tag_2 = (Button) view.findViewById(R.id.btn_tag_2);
-        btn_tag_3 = (Button) view.findViewById(R.id.btn_tag_3);
-        btn_tag_4 = (Button) view.findViewById(R.id.btn_tag_4);
-        btn_tag_5 = (Button) view.findViewById(R.id.btn_tag_5);
-        btn_tag_6 = (Button) view.findViewById(R.id.btn_tag_6);
-        btn_tag_7 = (Button) view.findViewById(R.id.btn_tag_7);
-        btn_tag_8 = (Button) view.findViewById(R.id.btn_tag_8);
-        btn_tag_9 = (Button) view.findViewById(R.id.btn_tag_9);
-        btn_tag_10 = (Button) view.findViewById(R.id.btn_tag_10);
-
-
-        btn_tag_1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (click_1) {
-                    btn_tag_1.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
-                    click_1 = false;
-                } else {
-                    btn_tag_1.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
-                    click_1 = true;
-                }
-
-            }
-        });
-        btn_tag_2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (click_2) {
-                    btn_tag_2.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
-                    click_2 = false;
-                } else {
-                    btn_tag_2.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
-                    click_2 = true;
-                }
-
-            }
-        });
-        btn_tag_3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (click_3) {
-                    btn_tag_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
-                    click_3 = false;
-                } else {
-                    btn_tag_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
-                    click_3 = true;
-                }
-
-            }
-        });
-        btn_tag_4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (click_4) {
-                    btn_tag_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
-                    click_4 = false;
-                } else {
-                    btn_tag_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
-                    click_4 = true;
-                }
-
-            }
-        });
-        btn_tag_5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (click_5) {
-                    btn_tag_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
-                    click_5 = false;
-                } else {
-                    btn_tag_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
-                    click_5 = true;
-                }
-
-            }
-        });
-        btn_tag_6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (click_6) {
-                    btn_tag_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
-                    click_6 = false;
-                } else {
-                    btn_tag_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
-                    click_6 = true;
-                }
-
-            }
-        });
-        btn_tag_7.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (click_7) {
-                    btn_tag_7.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
-                    click_7 = false;
-                } else {
-                    btn_tag_7.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
-                    click_7 = true;
-                }
-
-            }
-        });
-        btn_tag_8.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (click_8) {
-                    btn_tag_8.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
-                    click_8 = false;
-                } else {
-                    btn_tag_8.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
-                    click_8 = true;
-                }
-
-            }
-        });
-        btn_tag_9.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (click_9) {
-                    btn_tag_9.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
-                    click_9 = false;
-                } else {
-                    btn_tag_9.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
-                    click_9 = true;
-                }
-
-            }
-        });
-        btn_tag_10.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (click_10) {
-                    btn_tag_10.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
-                    click_10 = false;
-                } else {
-                    btn_tag_10.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
-                    click_10 = true;
-                }
-
-            }
-        });
+        for(int i=0; i!=10; ++i){
+            btn_tags.get(i).setOnClickListener(this);
+            clicks.add(true);
+        }
     }
 
     @Override
     public void onClick(View view) {
+        int btns = 0;
         switch (view.getId()){
             case R.id.star_1:
-                currentStar = 1;
-                break;
+                currentStar = 1; break;
             case R.id.star_2:
-                currentStar = 2;
-                break;
+                currentStar = 2; break;
             case R.id.star_3:
-                currentStar = 3;
-                break;
+                currentStar = 3; break;
             case R.id.star_4:
-                currentStar = 4;
-                break;
+                currentStar = 4; break;
             case R.id.star_5:
-                currentStar = 5;
-                break;
+                currentStar = 5; break;
+            case R.id.btn_tag_1:
+                btns = 1; break;
+            case R.id.btn_tag_2:
+                btns = 2; break;
+            case R.id.btn_tag_3:
+                btns = 3; break;
+            case R.id.btn_tag_4:
+                btns = 4; break;
+            case R.id.btn_tag_5:
+                btns = 5; break;
+            case R.id.btn_tag_6:
+                btns = 6; break;
+            case R.id.btn_tag_7:
+                btns = 7; break;
+            case R.id.btn_tag_8:
+                btns = 8; break;
+            case R.id.btn_tag_9:
+                btns = 9; break;
+            case R.id.btn_tag_10:
+                btns = 10; break;
         }
-        for(int i=0; i<5; ++i)
+
+        for(int i = 0; i < 5; ++i)
             stars.get(i).setImageResource(R.drawable.star_unselected);
-        for(int i=0; i<currentStar; ++i)
+        for(int i = 0; i<currentStar; ++i)
             stars.get(i).setImageResource(R.drawable.star_selected);
+        if(btns != 0) {
+            btns--;
+            if(clicks.get(btns))  {
+                btn_tags.get(btns).setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
+                btn_tags.get(btns).setTextColor(Color.rgb(0,0,0));
+            } else {
+                btn_tags.get(btns).setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
+                btn_tags.get(btns).setTextColor(Color.rgb(255,255,255));
+            }
+            clicks.set(btns, !clicks.get(btns));
+        }
     }
 
 }
