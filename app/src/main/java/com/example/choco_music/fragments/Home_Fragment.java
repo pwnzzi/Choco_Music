@@ -1,12 +1,16 @@
 package com.example.choco_music.fragments;
 
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,13 +27,21 @@ import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
+import com.example.choco_music.Interface.RetrofitExService;
 import com.example.choco_music.R;
 import com.example.choco_music.adapters.VerticalAdapter;
 import com.example.choco_music.model.Blur;
 import com.example.choco_music.model.VerticalData;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Home_Fragment extends Fragment implements View.OnClickListener{
 
@@ -48,8 +60,15 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     private Button cancelButton;
     private ArrayList<ImageView> stars;
     private int currentStar = 5;
-
+    private boolean playPause;
+    private boolean initalStage = true;
+    private String url;
+    private String[] url_list=null;
     private int MAX_ITEM_COUNT = 50;
+    private ProgressDialog progressDialog;
+    private int position;
+    private int position1;
+
 
     BottomSheetBehavior sheetBehavior;
 
@@ -58,15 +77,29 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view= inflater.inflate(R.layout.home_fragment,null,false);
 
+        //서버 통신을 위한 레스트로핏 적용
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(RetrofitExService.URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        RetrofitExService retrofitExService = retrofit.create(RetrofitExService.class);
+
+
+        //init LayoutManager
+        mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
+
+
+
         //태그 버튼 적용
-        btn_tag();
+      //  btn_tag();
 
         layoutBottomSheet = view.findViewById(R.id.bottom_sheet);
         sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
         music_evaluate_btn=(Button)view.findViewById(R.id.music_evaluate_btn);
         music_play_btn=(ImageView)view.findViewById(R.id.home_fragment_play_btn);
 
-        music_play_btn.setOnClickListener(new ImageView.OnClickListener() {
+     /*   music_play_btn.setOnClickListener(new ImageView.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(isRunning){
@@ -80,7 +113,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                 }
                 isRunning = !isRunning;
             }
-        });
+        });*/
 
         music_evaluate_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +127,8 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         SnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(mVerticalView);
 
+
+        // 홈 배경화면에 앨범 이미지 어둡게 세팅
         background = view.findViewById(R.id.home_fragment_layout);
         Drawable drawable = getResources().getDrawable(R.drawable.elbum_img);
         Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
@@ -101,14 +136,53 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         blur.run();
 
         //init Data
-        ArrayList<VerticalData> data = new ArrayList<>();
+        //final ArrayList<VerticalData> data = new ArrayList<>();
+        final ArrayList<String> filerul_data = new ArrayList<>();
 
-        int i=0;
-        while(i< MAX_ITEM_COUNT){
-            data.add(new VerticalData(R.drawable.elbum_img,i+"번째 커버곡"));
-            i++;
-        }
 
+
+        // 데이터베이스에 데이터 받아오기
+        retrofitExService.getData2(1).enqueue(new Callback<ArrayList<VerticalData>>() {
+            @Override
+            public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
+                if (response.isSuccessful()) {
+                    ArrayList<VerticalData> datas = response.body();
+
+
+                    if (datas != null) {
+                        for (int i = 0; i < datas.size(); i++) {
+                            Log.d("data" + i, datas.get(i).getTitle() + "");
+                            Log.d("data" + i, datas.get(i).getId() + "");
+                            Log.d("data" + i, datas.get(i).getLyricist() + "");
+                            Log.d("data" + i, datas.get(i).getVocal() + "");
+                            Log.d("data" + i, datas.get(i).getBucketName() + "");
+                            Log.d("data" + i, datas.get(i).getComment() + "");
+                            Log.d("data" + i, datas.get(i).getLyrics() + "");
+                            Log.d("data" + i, datas.get(i).getGenre() + "");
+                            Log.d("data" + i, datas.get(i).getFilerul() + "");
+                            //곡 url을 저장한다.
+                       //     url_list[i]=datas.get(i).getFilerul();
+
+                        }
+                        Log.d("getData2 end", "======================================");
+                    }
+               //     filerul_data.add(datas.get(i).getFilerul());
+                    // setLayoutManager
+                    mVerticalView.setLayoutManager(mLayoutManager);
+                    // init Adapter
+                    mAdapter = new VerticalAdapter();
+                    // set Data
+                    mAdapter.setData(datas);
+                    // set Adapter
+                    mVerticalView.setAdapter(mAdapter);
+                }
+            }
+            @Override
+            public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
+
+            }
+        });
+        // 취소, 완료 버튼
         cancelButton = view.findViewById(R.id.sheet_cancel);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,6 +191,17 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                 cancelButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_evaluate_homefragment));
             }
         });
+        // 리사이클러 뷰가 스크롤 될때 현재 위치를 받아오기 위해서 사용하는 코드
+        mVerticalView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(newState == RecyclerView.SCROLL_STATE_IDLE){
+                    position = getCurrentItem();
+                }
+            }
+        });
+
 
         confirmButton = view.findViewById(R.id.sheet_confirm);
         confirmButton.setOnClickListener(new View.OnClickListener() {
@@ -125,32 +210,49 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                 confirmButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_evaluate_homefragment));
             }
         });
-
+        // 별
         stars = new ArrayList<>();
         stars.add((ImageView) view.findViewById(R.id.star_1));
         stars.add((ImageView) view.findViewById(R.id.star_2));
         stars.add((ImageView) view.findViewById(R.id.star_3));
         stars.add((ImageView) view.findViewById(R.id.star_4));
         stars.add((ImageView) view.findViewById(R.id.star_5));
-        for(i = 0; i < 5; ++i)
+        for(int i = 0; i < 5; ++i)
             stars.get(i).setOnClickListener(this);
 
-        //init LayoutManager
-        mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        progressDialog = new ProgressDialog(getContext());
+        music_play_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //데이터 베이스에서 받아온 데이터를 리사이클러뷰의 위치에 따라 url을 받아온다.
+              //  String url=filerul_data.get(position1+1);
+                System.out.println(position);
+                System.out.println("----------------------------------------------------------------------------------------------------");
 
-        // setLayoutManager
-        mVerticalView.setLayoutManager(mLayoutManager);
-
-        // init Adapter
-        mAdapter = new VerticalAdapter();
-
-        // set Data
-        mAdapter.setData(data);
-
-        // set Adapter
-        mVerticalView.setAdapter(mAdapter);
-
+                if(!playPause){
+               //     buttonStart.setText("Pause Streaming");
+                    music_play_btn.setImageResource(R.drawable.playing_btn);
+                    if(initalStage){
+                        new Player().execute("https://chocomusic.s3.ap-northeast-2.amazonaws.com/SongOwn/%EC%96%B4%EC%A0%9C%EC%B2%98%EB%9F%BC.mp3");
+                  //      new Player().execute(url);
+                    }else {
+                        if (!mediaPlayer.isPlaying()) {
+                            mediaPlayer.start();
+                        }
+                    }
+                    playPause = true;
+                }else {
+                //    buttonStart.setText("Launch Streaming");
+                    music_play_btn.setImageResource(R.drawable.ic_triangle_right);
+                    if (mediaPlayer.isPlaying()) {
+                        mediaPlayer.pause();
+                    }
+                    playPause = false;
+                }
+            }
+        });
         return view;
 
  /*if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
@@ -159,6 +261,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                     sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 }*/
     }
+
 
 
     private void btn_tag() {
@@ -175,112 +278,11 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         btn_tags.add((Button) view.findViewById(R.id.btn_tag_9));
         btn_tags.add((Button) view.findViewById(R.id.btn_tag_10));
 
-        for(int i=0; i!=10; ++i){
+        for (int i = 0; i != 10; ++i) {
             btn_tags.get(i).setOnClickListener(this);
             clicks.add(true);
         }
     }
-
-            }
-        });
-        btn_tag_4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(click_4){
-                    btn_tag_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
-                    click_4 = false;
-                }else{
-                    btn_tag_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
-                    click_4= true;
-                }
-
-            }
-        });
-        btn_tag_5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(click_5){
-                    btn_tag_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
-                    click_5 = false;
-                }else{
-                    btn_tag_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
-                    click_5 = true;
-                }
-
-            }
-        });
-        btn_tag_6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(click_6){
-                    btn_tag_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
-                    click_6 = false;
-                }else{
-                    btn_tag_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
-                    click_6 = true;
-                }
-
-            }
-        });
-        btn_tag_7.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(click_7){
-                    btn_tag_7.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
-                    click_7 = false;
-                }else{
-                    btn_tag_7.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
-                    click_7 = true;
-                }
-
-            }
-        });
-        btn_tag_8.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(click_8){
-                    btn_tag_8.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
-                    click_8 = false;
-                }else{
-                    btn_tag_8.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
-                    click_8 = true;
-                }
-
-            }
-        });
-        btn_tag_9.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(click_9){
-                    btn_tag_9.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
-                    click_9 = false;
-                }else{
-                    btn_tag_9.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
-                    click_9 = true;
-                }
-
-            }
-        });
-        btn_tag_10.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(click_10){
-                    btn_tag_10.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
-                    click_10 = false;
-                }else{
-                    btn_tag_10.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
-                    click_10 = true;
-                }
-
-            }
-        });
-
-
-
-
-
-
-
 
     @Override
     public void onClick(View view) {
@@ -320,18 +322,72 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
 
         for(int i = 0; i < 5; ++i)
             stars.get(i).setImageResource(R.drawable.star_unselected);
-        for(int i = 0; i<currentStar; ++i)
+        for(int i=0; i<currentStar; ++i)
             stars.get(i).setImageResource(R.drawable.star_selected);
-        if(btns != 0) {
-            btns--;
-            if(clicks.get(btns))  {
-                btn_tags.get(btns).setBackgroundDrawable(getResources().getDrawable(R.drawable.button_state_focused));
-                btn_tags.get(btns).setTextColor(Color.rgb(0,0,0));
-            } else {
-                btn_tags.get(btns).setBackgroundDrawable(getResources().getDrawable(R.drawable.button_border));
-                btn_tags.get(btns).setTextColor(Color.rgb(255,255,255));
+    }
+
+    private int getCurrentItem(){
+        return ((LinearLayoutManager)mVerticalView.getLayoutManager())
+                .findFirstVisibleItemPosition();
+    }
+///////////////////////////////////////////////////////////////////////////////////////////////////
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(mediaPlayer != null){
+            mediaPlayer.reset();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
+
+    //음악 플레이어
+
+    class Player extends AsyncTask<String, Void, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.setMessage("Buffering...");
+            progressDialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+            Boolean prepared = false;
+
+            try {
+                mediaPlayer.setDataSource(strings[0]);
+                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mediaPlayer) {
+                        initalStage = true;
+                        playPause = false;
+                        music_play_btn.setImageResource(R.drawable.ic_triangle_right);
+                        mediaPlayer.stop();
+                        mediaPlayer.reset();
+                    }
+                });
+
+                mediaPlayer.prepare();
+                prepared = true;
+            } catch (IOException e) {
+                Log.e("MyAudioStreamingApp",e.getMessage());
+                prepared = false;
+                e.printStackTrace();
             }
-            clicks.set(btns, !clicks.get(btns));
+            return prepared;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            if(progressDialog.isShowing()){
+                progressDialog.cancel();
+            }
+
+            mediaPlayer.start();
+            initalStage = false;
         }
     }
 

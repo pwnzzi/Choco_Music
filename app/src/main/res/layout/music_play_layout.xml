@@ -53,7 +53,6 @@
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/vertical_description"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/vertical_icon"
                 android:text="노래제목"/>
@@ -65,7 +64,6 @@
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/vertical_description1"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/vertical_icon"
                 android:text="가수"/>

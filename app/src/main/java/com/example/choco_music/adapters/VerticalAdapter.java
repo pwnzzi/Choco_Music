@@ -28,6 +28,7 @@ public class VerticalAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
 
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.vertical_recycler_items,parent,false);
         VerticalViewHolder holder = new VerticalViewHolder(view);
+
         return holder;
     }
 
@@ -36,12 +37,14 @@ public class VerticalAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
 
         VerticalData data = verticalDatas.get(position);
 
-        holder.description.setText(data.getText());
-        holder.icon.setImageResource(data.getImg());
+        holder.vocal.setText(data.getVocal());
+        holder.title.setText(data.getTitle());
+
     }
 // https://android-blog.dev/19?category=677940 출처
     @Override
     public int getItemCount() {
         return verticalDatas.size();
     }
+
 }

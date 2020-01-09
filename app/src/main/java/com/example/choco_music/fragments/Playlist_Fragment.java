@@ -26,18 +26,19 @@ import java.util.ArrayList;
 
 public class Playlist_Fragment extends Fragment {
 
-    RecyclerView audiolistView;
-    private ArrayList<VerticalData> fileList= new ArrayList<>();//스트리밍 전체 리스트
-    private RecyclerView.Adapter listViewAdapter;
-    private RecyclerView.LayoutManager layoutManager;
+    //RecyclerView audiolistView;
+    //private ArrayList<VerticalData> fileList= new ArrayList<>();//스트리밍 전체 리스트
+    //private RecyclerView.Adapter listViewAdapter;
+    //private RecyclerView.LayoutManager layoutManager;
     private Button buttonStop, buttonStart;
     private boolean playPause;
     private ProgressDialog progressDialog;
     private boolean initalStage = true;
     String url= "https://chocomusic.s3.ap-northeast-2.amazonaws.com/%EC%95%BC%EC%83%9D%ED%99%94.mp3";
+    String url1="https://chocomusic.s3.ap-northeast-2.amazonaws.com/SongOwn/%EC%95%BC%EC%83%9D%ED%99%94.mp3";
     private MediaPlayer mediaPlayer;
-    private static PowerManager.WakeLock wakeLock;
-    Context mContext;
+    //private static PowerManager.WakeLock wakeLock;
+    //Context mContext;
 
     @Nullable
     @Override
@@ -56,7 +57,7 @@ public class Playlist_Fragment extends Fragment {
                 if(!playPause){
                     buttonStart.setText("Pause Streaming");
                     if(initalStage){
-                        new Player().execute(url);
+                        new Player().execute(url1);
                     }else {
                         if (!mediaPlayer.isPlaying()) {
                             mediaPlayer.start();

@@ -2,64 +2,68 @@ package com.example.choco_music.model;
 
 public class VerticalData {
 
-    private int img;
-    private String text;
-    private String fileName;
-    private String isFile;
-    private String filePath;
-    private String curPath;
 
-    public VerticalData(int img, String text){
-        this.img = img;
-        this.text = text;
-        this.fileName = fileName;
-        this.filePath = filePath;
-        this.curPath = curPath;
-        this.isFile = isFile;
+    private String title;
+    private  String vocal;
+    private  int id;
+    private  String genre;
+    private  String lyrics;
+    private  String comment;
+    private  String bucketName;
+    private  String lyricist;
+    private String fileurl;
+
+
+
+    public VerticalData(int img, String title, String vocal){
+
+        this.title = title;
+        this.title = vocal;
+
 
 
     }
 
-    public String getText(){
-        return this.text;
+    public String getTitle(){
+        return this.title;
     }
 
-    public int getImg(){
-        return this.img;
+    public String getVocal(){
+        return this.vocal;
+    }
+
+    public String getFilerul(){return this.fileurl;}
+
+
+    public String getLyricist() {
+        return lyricist;
     }
 
 
-    public String getFileName() {
-        return fileName;
+    public String getGenre() {
+        return genre;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public String getLyrics() {
+        return lyrics;
     }
 
-    public String getFilePath() {
-        return filePath;
+    public String getComment() {
+        return comment;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+    public String getBucketName() {
+        return bucketName;
     }
 
-    public String getCurPath() {
-        return curPath;
+
+
+    public int getId() {
+        return id;
     }
 
-    public void setCurPath(String curPath) {
-        this.curPath = curPath;
-    }
 
-    public String getIsFile() {
-        return isFile;
-    }
 
-    public void setIsFile(String isFile) {
-        this.isFile = isFile;
-    }
 
 
 }

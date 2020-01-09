@@ -28,9 +28,12 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     implementation 'com.android.support:design:29.0.0'
-    //noinspection GradleCompatible
+    //noinspection GradleCompatible 리사이클러뷰
     implementation 'com.android.support:recyclerview-v7:24.2.1'
     implementation 'com.squareup.picasso:picasso:2.5.2'
+    // 서버통신을 위한 레스트로핏 동기화
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
 
 
 

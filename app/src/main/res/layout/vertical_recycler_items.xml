@@ -34,7 +34,7 @@
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/vertical_description"
+            android:id="@+id/title"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/vertical_icon"
             android:text="~번째"/>
@@ -46,7 +46,7 @@
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/vertical_description1"
+            android:id="@+id/vocal"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/vertical_icon"
             android:text="가수"/>
@@ -93,7 +93,7 @@
             android:id="@+id/vertical_description2"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/vertical_icon"
-            android:text="혹 사랑이란게 만질수 있는 거라면 저 하늘색 구름"/>
+            />
 
 
     </LinearLayout>
