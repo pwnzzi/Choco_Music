@@ -90,33 +90,31 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
 
 
         //태그 버튼 적용
-        //  btn_tag();
+        btn_tag();
 
         layoutBottomSheet = view.findViewById(R.id.bottom_sheet);
         sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
         music_evaluate_btn = (Button) view.findViewById(R.id.music_evaluate_btn);
         music_play_btn = (ImageView) view.findViewById(R.id.home_fragment_play_btn);
 
-     /*   music_play_btn.setOnClickListener(new ImageView.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(isRunning){
-                    mediaPlayer.stop();
-                    music_play_btn.setImageResource(R.drawable.ic_triangle_right);
-                } else {
-                    mediaPlayer = MediaPlayer.create(getContext(), R.raw.test);
-                    music_play_btn.setImageResource(R.drawable.playing_btn);
-
-                    mediaPlayer.start();
-                }
-                isRunning = !isRunning;
-            }
-        });*/
-
         music_evaluate_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            }
+        });
+
+        // bottom sheet dragable
+        sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
             }
         });
 
@@ -191,11 +189,21 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                 initalStage = true;
                 music_play_btn.setImageResource(R.drawable.ic_triangle_right);
                 playPause = false;
-                if(mediaPlayer != null)
+                if (mediaPlayer != null)
                     mediaPlayer.reset();
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     position = getCurrentItem();
                 }
+
+                for(int i=0; i!=5; ++i)
+                    stars.get(i).setImageResource(R.drawable.star_selected);
+                currentStar = 5;
+                for(int i=0; i!=10; ++i){
+                    clicks.set(i, false);
+                    btn_tags.get(i).setBackgroundResource(R.drawable.button_border);
+                }
+
+
             }
         });
 
@@ -249,15 +257,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             }
         });
         return view;
-
- /*if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-
-                } else {
-                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                }*/
     }
-
-
 
     private void btn_tag() {
         btn_tags = new ArrayList<>();
@@ -275,7 +275,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
 
         for (int i = 0; i != 10; ++i) {
             btn_tags.get(i).setOnClickListener(this);
-            clicks.add(true);
+            clicks.add(false);
         }
     }
 
@@ -314,7 +314,16 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             case R.id.btn_tag_10:
                 btns = 10; break;
         }
+        if(btns != 0){
+            btns--;
+            if(clicks.get(btns))
+                btn_tags.get(btns).setBackgroundResource(R.drawable.button_border);
+            else
+                btn_tags.get(btns).setBackgroundResource(R.drawable.button_state_focused);
+            clicks.set(btns, !clicks.get(btns));
 
+        }
+        btns = 0;
         for(int i = 0; i < 5; ++i)
             stars.get(i).setImageResource(R.drawable.star_unselected);
         for(int i=0; i<currentStar; ++i)
