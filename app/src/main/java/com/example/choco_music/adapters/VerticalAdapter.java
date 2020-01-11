@@ -1,6 +1,6 @@
 package com.example.choco_music.adapters;
 
-import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,10 +39,19 @@ public class VerticalAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
 
         holder.vocal.setText(data.getVocal());
         holder.title.setText(data.getTitle());
+        if(data.getGenre().equals("자작곡")) {
+            holder.genre.setBackgroundResource(R.drawable.round_songtype_orig);
+            holder.genre.setText("자작곡");
+            holder.genre.setTextColor(Color.rgb(255,255,255));
+            holder.border.setBackgroundResource(R.drawable.border_cover_orig);
+            holder.tri.setImageResource(R.drawable.ic_triangle_original);
+        }
 
     }
 // https://android-blog.dev/19?category=677940 출처
     @Override
-    public int getItemCount() { return verticalDatas.size(); }
+    public int getItemCount() {
+        return verticalDatas.size();
+    }
 
 }
