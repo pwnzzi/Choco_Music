@@ -72,7 +72,7 @@
                 android:layout_gravity="bottom"
                 android:layout_width="55dp"
                 android:layout_height="55dp"
-                android:background="@drawable/heart_unselected"/>
+                android:background="@drawable/heart_unselected_album"/>
 
             <ImageView
                 android:layout_width="wrap_content"

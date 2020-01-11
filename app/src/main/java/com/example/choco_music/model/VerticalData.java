@@ -13,14 +13,10 @@ public class VerticalData {
     private  String lyricist;
     private String fileurl;
 
-
-
     public VerticalData(int img, String title, String vocal){
 
         this.title = title;
         this.title = vocal;
-
-
 
     }
 
@@ -34,11 +30,9 @@ public class VerticalData {
 
     public String getFilerul(){return this.fileurl;}
 
-
     public String getLyricist() {
         return lyricist;
     }
-
 
     public String getGenre() {
         return genre;
@@ -55,8 +49,6 @@ public class VerticalData {
     public String getBucketName() {
         return bucketName;
     }
-
-
 
     public int getId() {
         return id;

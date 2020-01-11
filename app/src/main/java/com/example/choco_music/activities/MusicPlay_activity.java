@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-
 import com.example.choco_music.R;
 import com.example.choco_music.model.Blur;
 

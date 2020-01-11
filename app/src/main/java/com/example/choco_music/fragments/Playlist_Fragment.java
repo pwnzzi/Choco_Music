@@ -57,7 +57,7 @@ public class Playlist_Fragment extends Fragment {
                 if(!playPause){
                     buttonStart.setText("Pause Streaming");
                     if(initalStage){
-                        new Player().execute(url1);
+                        new Player().execute("https://chocomusic.s3.ap-northeast-2.amazonaws.com/SongOwn/%EC%95%BC%EC%83%9D%ED%99%94.mp3");
                     }else {
                         if (!mediaPlayer.isPlaying()) {
                             mediaPlayer.start();

@@ -1,5 +1,6 @@
 package com.example.choco_music.fragments;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -62,12 +63,13 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     private int currentStar = 5;
     private boolean playPause;
     private boolean initalStage = true;
-    private String url;
+    //private String url;
     private String[] url_list=null;
     private int MAX_ITEM_COUNT = 50;
     private ProgressDialog progressDialog;
     private int position;
     private int position1;
+    ArrayList<VerticalData> datas;
 
 
     BottomSheetBehavior sheetBehavior;
@@ -137,7 +139,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
 
         //init Data
         //final ArrayList<VerticalData> data = new ArrayList<>();
-        final ArrayList<String> filerul_data = new ArrayList<>();
+      //  final ArrayList<String> filerul_data = new ArrayList<>();
 
 
 
@@ -146,7 +148,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             @Override
             public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
                 if (response.isSuccessful()) {
-                    ArrayList<VerticalData> datas = response.body();
+                     datas = response.body();
 
 
                     if (datas != null) {
@@ -161,12 +163,12 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                             Log.d("data" + i, datas.get(i).getGenre() + "");
                             Log.d("data" + i, datas.get(i).getFilerul() + "");
                             //곡 url을 저장한다.
-                       //     url_list[i]=datas.get(i).getFilerul();
+//                            url_list[i]=datas.get(i).getFilerul();
 
                         }
                         Log.d("getData2 end", "======================================");
                     }
-               //     filerul_data.add(datas.get(i).getFilerul());
+                  //  filerul_data.add(datas.get(i).getFilerul());
                     // setLayoutManager
                     mVerticalView.setLayoutManager(mLayoutManager);
                     // init Adapter
@@ -196,6 +198,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+                initalStage=true;
                 if(newState == RecyclerView.SCROLL_STATE_IDLE){
                     position = getCurrentItem();
                 }
@@ -227,16 +230,15 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             @Override
             public void onClick(View v) {
                 //데이터 베이스에서 받아온 데이터를 리사이클러뷰의 위치에 따라 url을 받아온다.
-              //  String url=filerul_data.get(position1+1);
-                System.out.println(position);
-                System.out.println("----------------------------------------------------------------------------------------------------");
-
                 if(!playPause){
                //     buttonStart.setText("Pause Streaming");
                     music_play_btn.setImageResource(R.drawable.playing_btn);
                     if(initalStage){
-                        new Player().execute("https://chocomusic.s3.ap-northeast-2.amazonaws.com/SongOwn/%EC%96%B4%EC%A0%9C%EC%B2%98%EB%9F%BC.mp3");
-                  //      new Player().execute(url);
+
+                     //   System.out.println(datas.get(position).getFilerul());
+                        String uri =datas.get(position).getFilerul();
+                        new Player().execute(uri);
+
                     }else {
                         if (!mediaPlayer.isPlaying()) {
                             mediaPlayer.start();
@@ -262,6 +264,15 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                 }*/
     }
 
+ /*   public void initStreaming(final String uri){
+        if(mediaPlayer != null && mediaPlayer.isPlaying()){
+            initalStage = true;
+            playPause = false;
+            music_play_btn.setImageResource(R.drawable.playing_btn);
+            mediaPlayer.stop();
+            mediaPlayer.reset();
+        }
+    }*/
 
 
     private void btn_tag() {
@@ -384,12 +395,23 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             super.onPostExecute(aBoolean);
             if(progressDialog.isShowing()){
                 progressDialog.cancel();
+
             }
 
             mediaPlayer.start();
             initalStage = false;
         }
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+    }
+
 
 }
 
