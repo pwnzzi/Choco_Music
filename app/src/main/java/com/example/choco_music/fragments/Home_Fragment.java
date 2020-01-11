@@ -191,7 +191,8 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                 initalStage = true;
                 music_play_btn.setImageResource(R.drawable.ic_triangle_right);
                 playPause = false;
-                mediaPlayer.reset();
+                if(mediaPlayer != null)
+                    mediaPlayer.reset();
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     position = getCurrentItem();
                 }

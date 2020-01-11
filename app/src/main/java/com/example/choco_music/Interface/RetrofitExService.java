@@ -10,7 +10,7 @@ import retrofit2.http.Query;
 
 public interface RetrofitExService {
 
-    String URL = "http://ec2-13-125-156-43.ap-northeast-2.compute.amazonaws.com:8080/";
+    String URL = "http://ec2-15-164-222-230.ap-northeast-2.compute.amazonaws.com:8080/";
 
 
     @GET("song/own/")
