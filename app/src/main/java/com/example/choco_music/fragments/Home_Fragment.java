@@ -1,9 +1,12 @@
 package com.example.choco_music.fragments;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
@@ -11,9 +14,11 @@ import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -88,7 +93,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
 
-
         //태그 버튼 적용
         btn_tag();
 
@@ -120,8 +124,9 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
 
         //RecyclerVier binding
         mVerticalView = (RecyclerView) view.findViewById(R.id.vertivcal_list);
-        SnapHelper snapHelper = new PagerSnapHelper();
+        final SnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(mVerticalView);
+        mVerticalView.addItemDecoration(new OffsetItemDecoration(getContext()));
 
 
         // 홈 배경화면에 앨범 이미지 어둡게 세팅
@@ -192,7 +197,9 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                 if (mediaPlayer != null)
                     mediaPlayer.reset();
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    position = getCurrentItem();
+                    View centerView = snapHelper.findSnapView(mLayoutManager);
+                    int pos = mLayoutManager.getPosition(centerView);
+                    Log.e("Snapped Item Position:",""+pos);
                 }
 
                 for(int i=0; i!=5; ++i)
@@ -388,6 +395,49 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             progressDialog.dismiss();
             mediaPlayer.start();
             initalStage = false;
+        }
+    }
+
+    public class OffsetItemDecoration extends RecyclerView.ItemDecoration {
+
+        private Context ctx;
+
+        public OffsetItemDecoration(Context ctx) {
+
+            this.ctx = ctx;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+
+            super.getItemOffsets(outRect, view, parent, state);
+            int offset = (int) (getScreenWidth() / (float) (2)) - view.getLayoutParams().width / 2;
+            ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+            if (parent.getChildAdapterPosition(view) == 0) {
+                ((ViewGroup.MarginLayoutParams) view.getLayoutParams()).leftMargin = 0;
+                setupOutRect(outRect, offset, true);
+            } else if (parent.getChildAdapterPosition(view) == state.getItemCount() - 1) {
+                ((ViewGroup.MarginLayoutParams) view.getLayoutParams()).rightMargin = 0;
+                setupOutRect(outRect, offset, false);
+            }
+        }
+
+        private void setupOutRect(Rect rect, int offset, boolean start) {
+
+            if (start) {
+                rect.left = offset;
+            } else {
+                rect.right = offset;
+            }
+        }
+
+        private int getScreenWidth() {
+
+            WindowManager wm = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
+            Display display = wm.getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            return size.x;
         }
     }
 
