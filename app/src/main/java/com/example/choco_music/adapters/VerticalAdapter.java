@@ -1,5 +1,6 @@
 package com.example.choco_music.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,6 @@ import java.util.ArrayList;
 
 public class VerticalAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
     private ArrayList<VerticalData> verticalDatas;
-
 
     public void setData(ArrayList<VerticalData> list){
         verticalDatas = list;
@@ -43,8 +43,6 @@ public class VerticalAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
     }
 // https://android-blog.dev/19?category=677940 출처
     @Override
-    public int getItemCount() {
-        return verticalDatas.size();
-    }
+    public int getItemCount() { return verticalDatas.size(); }
 
 }

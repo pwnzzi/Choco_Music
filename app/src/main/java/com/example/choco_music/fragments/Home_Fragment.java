@@ -1,5 +1,6 @@
 package com.example.choco_music.fragments;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -52,7 +53,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     private CoordinatorLayout background;
     private ArrayList<Button> btn_tags;
     private Button music_evaluate_btn, confirmButton;
-    private  Boolean isRunning = false;
     private ArrayList<Boolean> clicks;
     public MediaPlayer mediaPlayer;
     private ImageView music_play_btn;
@@ -62,12 +62,11 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     private int currentStar = 5;
     private boolean playPause;
     private boolean initalStage = true;
-    //private String url;
     private String[] url_list=null;
     private int MAX_ITEM_COUNT = 50;
-    private ProgressDialog progressDialog;
+    private AlertDialog progressDialog;
     private int position;
-    ArrayList<VerticalData> datas;
+    ArrayList<VerticalData> datas = new ArrayList<VerticalData>();
 
     BottomSheetBehavior sheetBehavior;
 
@@ -75,6 +74,19 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.home_fragment, null, false);
+
+
+
+        mVerticalView = (RecyclerView) view.findViewById(R.id.vertivcal_list);
+        SnapHelper snapHelper = new PagerSnapHelper();
+        snapHelper.attachToRecyclerView(mVerticalView);
+        //init LayoutManager
+        mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
+
+
+
+
 
         //서버 통신을 위한 레스트로핏 적용
         Retrofit retrofit = new Retrofit.Builder()
@@ -84,9 +96,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         RetrofitExService retrofitExService = retrofit.create(RetrofitExService.class);
 
 
-        //init LayoutManager
-        mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
+
 
 
         //태그 버튼 적용
@@ -96,6 +106,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
         music_evaluate_btn = (Button) view.findViewById(R.id.music_evaluate_btn);
         music_play_btn = (ImageView) view.findViewById(R.id.home_fragment_play_btn);
+
 
      /*   music_play_btn.setOnClickListener(new ImageView.OnClickListener() {
             @Override
@@ -121,9 +132,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         });
 
         //RecyclerVier binding
-        mVerticalView = (RecyclerView) view.findViewById(R.id.vertivcal_list);
-        SnapHelper snapHelper = new PagerSnapHelper();
-        snapHelper.attachToRecyclerView(mVerticalView);
+
 
 
         // 홈 배경화면에 앨범 이미지 어둡게 세팅
@@ -134,7 +143,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         blur.run();
 
         // 데이터베이스에 데이터 받아오기
-        retrofitExService.getData2(1).enqueue(new Callback<ArrayList<VerticalData>>() {
+        retrofitExService.getData2().enqueue(new Callback<ArrayList<VerticalData>>() {
             @Override
             public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
                 if (response.isSuccessful()) {
@@ -154,26 +163,40 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                             //곡 url을 저장한다.
                             //     url_list[i]=datas.get(i).getFilerul();
 
+
                         }
                         Log.d("getData2 end", "======================================");
                     }
                     //     filerul_data.add(datas.get(i).getFilerul());
+
                     // setLayoutManager
                     mVerticalView.setLayoutManager(mLayoutManager);
                     // init Adapter
+                    mVerticalView.setHasFixedSize(true);
                     mAdapter = new VerticalAdapter();
                     // set Data
                     mAdapter.setData(datas);
                     // set Adapter
                     mVerticalView.setAdapter(mAdapter);
+
+
+
+
                 }
             }
 
             @Override
             public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
-
+                t.printStackTrace();
             }
         });
+
+
+
+
+
+
+
         // 취소, 완료 버튼
         cancelButton = view.findViewById(R.id.sheet_cancel);
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -195,6 +218,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                     mediaPlayer.reset();
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     position = getCurrentItem();
+                    System.out.println("----------------------------------------"+position);
                 }
             }
         });

@@ -1,13 +1,27 @@
 package com.example.choco_music.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+
 import com.example.choco_music.R;
 import com.example.choco_music.adapters.SwipeViewPager;
+import com.example.choco_music.adapters.VerticalAdapter;
 import com.example.choco_music.adapters.ViewPagerAdpater;
+import com.example.choco_music.model.VerticalData;
 import com.google.android.material.tabs.TabLayout;
 
 import static com.example.choco_music.R.id.viewpager;

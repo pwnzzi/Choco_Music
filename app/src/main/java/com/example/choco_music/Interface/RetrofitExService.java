@@ -13,8 +13,11 @@ public interface RetrofitExService {
     String URL = "http://ec2-15-164-222-230.ap-northeast-2.compute.amazonaws.com:8080/";
 
 
+ //   @GET("song/own/")
+ //   Call<ArrayList<VerticalData>> getData2(@Query("id") int id);
+
     @GET("song/own/")
-    Call<ArrayList<VerticalData>> getData2(@Query("id") int id);
+    Call<ArrayList<VerticalData>> getData2();
 
     @GET("elbum/own/")
     Call<ArrayList<VerticalData>> elbumData(@Query("id") int id);
