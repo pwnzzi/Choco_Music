@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.choco_music.R;
 
 public class Chart_ViewHolder extends RecyclerView.ViewHolder{
-    public ImageView icon;
-    public TextView description;
+    public TextView title;
+    public TextView vocal;
 
     public Chart_ViewHolder(@NonNull View itemView) {
         super(itemView);
 
-        icon = (ImageView)itemView.findViewById(R.id.music_icon);
-        description = (TextView) itemView.findViewById(R.id.music_description);
+        title = (TextView) itemView.findViewById(R.id.chart_title);
+        vocal = (TextView) itemView.findViewById(R.id.chart_vocal);
     }
 }

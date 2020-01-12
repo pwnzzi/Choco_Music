@@ -1,5 +1,6 @@
 package com.example.choco_music.fragments;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -57,7 +58,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     private CoordinatorLayout background;
     private ArrayList<Button> btn_tags;
     private Button music_evaluate_btn, confirmButton;
-    private  Boolean isRunning = false;
     private ArrayList<Boolean> clicks;
     public MediaPlayer mediaPlayer;
     private ImageView music_play_btn;
@@ -67,10 +67,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     private int currentStar = 5;
     private boolean playPause;
     private boolean initalStage = true;
-    //private String url;
-    private String[] url_list=null;
-    private int MAX_ITEM_COUNT = 50;
-    private ProgressDialog progressDialog;
+    private AlertDialog progressDialog;
     private int position;
     ArrayList<VerticalData> datas;
 
@@ -101,22 +98,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         music_evaluate_btn = (Button) view.findViewById(R.id.music_evaluate_btn);
         music_play_btn = (ImageView) view.findViewById(R.id.home_fragment_play_btn);
 
-     /*   music_play_btn.setOnClickListener(new ImageView.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(isRunning){
-                    mediaPlayer.stop();
-                    music_play_btn.setImageResource(R.drawable.ic_triangle_right);
-                } else {
-                    mediaPlayer = MediaPlayer.create(getContext(), R.raw.test);
-                    music_play_btn.setImageResource(R.drawable.playing_btn);
-
-                    mediaPlayer.start();
-                }
-                isRunning = !isRunning;
-            }
-        });*/
-
+        //음악 평가 클릭 이벤트
         music_evaluate_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,7 +172,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
 
             @Override
             public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
-
             }
         });
         // 취소, 완료 버튼
@@ -214,8 +195,8 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                     mediaPlayer.reset();
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     View centerView = snapHelper.findSnapView(mLayoutManager);
-                    int pos = mLayoutManager.getPosition(centerView);
-                    Log.e("Snapped Item Position:",""+pos);
+                    position = mLayoutManager.getPosition(centerView);
+                    Log.e("Snapped Item Position:",""+position);
                 }
 
                 for(int i=0; i!=5; ++i)
@@ -225,11 +206,8 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                     clicks.set(i, false);
                     btn_tags.get(i).setBackgroundResource(R.drawable.button_border);
                 }
-
-
             }
         });
-
 
         confirmButton = view.findViewById(R.id.sheet_confirm);
         confirmButton.setOnClickListener(new View.OnClickListener() {
@@ -361,11 +339,16 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     @Override
     public void onPause() {
         super.onPause();
-        if(mediaPlayer != null){
+      /*  if(mediaPlayer != null){
             mediaPlayer.reset();
             mediaPlayer.release();
             mediaPlayer = null;
             progressDialog.dismiss();
+        }*/
+        if(mediaPlayer != null){
+            mediaPlayer.reset();
+            mediaPlayer.release();
+            mediaPlayer = null;
         }
     }
 
@@ -414,6 +397,9 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         }
     }
 
+
+    // 평가화면 리사이클러뷰 여백 조정
+
     public class OffsetItemDecoration extends RecyclerView.ItemDecoration {
 
         private Context ctx;
@@ -422,7 +408,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
 
             this.ctx = ctx;
         }
-
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
 
@@ -437,7 +422,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                 setupOutRect(outRect, offset, false);
             }
         }
-
         private void setupOutRect(Rect rect, int offset, boolean start) {
 
             if (start) {
@@ -446,7 +430,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                 rect.right = offset;
             }
         }
-
         private int getScreenWidth() {
 
             WindowManager wm = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
@@ -456,7 +439,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             return size.x;
         }
     }
-
 }
 
 

@@ -2,62 +2,87 @@ package com.example.choco_music.activities;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.choco_music.Interface.RetrofitExService;
 import com.example.choco_music.R;
 import com.example.choco_music.adapters.ChartAdapter;
 import com.example.choco_music.model.ChartData;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class Originalsong_chart extends AppCompatActivity {
 
-    private RecyclerView mVerticalView;
-    private ChartAdapter mAdapter;
-    private LinearLayoutManager mLayoutManager;
-
-
-    private int MAX_ITEM_COUNT = 50;
-
+    private RecyclerView  OriginalSong_View;
+    private ChartAdapter Original_Adapter;
+    private LinearLayoutManager Original_LayoutManager;
+    private Retrofit retrofit;
+    private RetrofitExService retrofitExService;
+    private ArrayList<ChartData> Original_datas;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chart_list);
 
-        mVerticalView = (RecyclerView)findViewById(R.id.chart_list);
-
-        //init Data
-
-        ArrayList<ChartData> data = new ArrayList<>();
-
-        int i=0;
-        while(i< MAX_ITEM_COUNT){
-            data.add(new ChartData(R.mipmap.ic_launcher,i+"번째 데이터"));
-            i++;
-        }
-
-        //init LayoutManager
-
-        mLayoutManager = new LinearLayoutManager(this);
-
-        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL); // 기본값이 VERTICAL
-
-        // setLayoutManager
-        mVerticalView.setLayoutManager(mLayoutManager);
-
-        // init Adapter
-        mAdapter = new ChartAdapter();
-
-        // set Data
-        mAdapter.setData(data);
-
-        // set Adapter
-        mVerticalView.setAdapter(mAdapter);
+        init_retrofit();
 
     }
+    private void init_retrofit(){
+        OriginalSong_View = (RecyclerView)findViewById(R.id.chart_list);
+        //init LayoutManager
+        Original_LayoutManager  = new LinearLayoutManager(this);
+        //서버 통신을 위한 레스트로핏 적용
+        retrofit = new Retrofit.Builder()
+                .baseUrl(RetrofitExService.URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        retrofitExService = retrofit.create(RetrofitExService.class);
+
+        // 데이터베이스에 데이터 받아오기
+        retrofitExService.getData1().enqueue(new Callback<ArrayList<ChartData>>() {
+            @Override
+            public void onResponse(@NonNull Call<ArrayList<ChartData>> call, @NonNull Response<ArrayList<ChartData>> response) {
+                if (response.isSuccessful()) {
+                    Original_datas = response.body();
+
+                    if (Original_datas != null) {
+                        for (int i = 0; i < Original_datas.size(); i++) {
+                            Log.d("data" + i, Original_datas.get(i).getTitle() + "");
+                            Log.d("data" + i, Original_datas.get(i).getVocal() + "");
+                        }
+                        Log.d("getData1 end", "======================================");
+                    }
+                    //     filerul_data.add(datas.get(i).getFilerul());
+                    // setLayoutManager
+                    OriginalSong_View.setLayoutManager(Original_LayoutManager);
+                    Original_LayoutManager .setOrientation(LinearLayoutManager.VERTICAL); // 기본값이 VERTICAL
+                    // init Adapter
+                    Original_Adapter = new ChartAdapter();
+                    // set Data
+                    Original_Adapter.setData(Original_datas);
+                    // set Adapter
+                    OriginalSong_View.setAdapter(Original_Adapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<ChartData>> call, Throwable t) {
+            }
+        });
+    }
+
 }

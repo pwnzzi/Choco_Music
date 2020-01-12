@@ -2,19 +2,19 @@ package com.example.choco_music.model;
 
 public class ChartData {
 
-    private int img;
-    private String text;
+    private String title;
+    private String vocal;
 
-    public ChartData(int img, String text){
-        this.img = img;
-        this.text = text;
+    public ChartData(String title, String vocal){
+        this.title = title;
+        this.vocal = vocal;
     }
 
-    public String getText(){
-        return this.text;
+    public String getTitle(){
+        return this.title;
     }
 
-    public int getImg(){
-        return this.img;
+    public String getVocal(){
+        return this.vocal;
     }
 }

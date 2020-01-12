@@ -17,16 +17,39 @@
             android:id="@+id/music_icon"
             android:src="@drawable/elbum_img"/>
 
-        <TextView
-            style="@style/TextStyle5"
-            android:textSize="20dp"
-            android:layout_marginLeft="10dp"
+        <LinearLayout
+            android:layout_toRightOf="@+id/music_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/music_description"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/music_icon"
-            android:text="~번째"/>
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/TextStyle5"
+                android:textSize="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/chart_title"
+                android:text="노래 제목"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/music_icon" />
+            <TextView
+                style="@style/TextStyle5"
+                android:textSize="20dp"
+                android:layout_marginLeft="10dp"
+                android:text="보컬"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/chart_vocal"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/music_icon" />
+
+
+
+
+        </LinearLayout>
+
+
 
     </RelativeLayout>
 

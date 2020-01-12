@@ -52,8 +52,8 @@ public class ChartAdapter extends RecyclerView.Adapter<Chart_ViewHolder>  {
 
         ChartData data = chartDatas.get(position);
 
-        holder.description.setText(data.getText());
-        holder.icon.setImageResource(data.getImg());
+        holder.vocal.setText(data.getVocal());
+        holder.title.setText(data.getTitle());
 
     }
 

@@ -24,6 +24,8 @@ public class VerticalViewHolder extends RecyclerView.ViewHolder {
 
         title = (TextView) itemView.findViewById(R.id.title);
         vocal = (TextView) itemView.findViewById(R.id.vocal);
+
+        //리사이클러뷰 아이템
         icon = itemView.findViewById(R.id.love_icon);
         genre = itemView.findViewById(R.id.vertical_genre);
         border = itemView.findViewById(R.id.vertical_icon);

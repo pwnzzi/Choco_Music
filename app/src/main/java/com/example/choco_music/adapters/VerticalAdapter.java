@@ -1,9 +1,11 @@
 package com.example.choco_music.adapters;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,8 +16,12 @@ import com.example.choco_music.model.VerticalData;
 
 import java.util.ArrayList;
 
+import static com.example.choco_music.R.id.genre_layout;
+
 public class VerticalAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
     private ArrayList<VerticalData> verticalDatas;
+    private View view;
+
 
     public void setData(ArrayList<VerticalData> list){
         verticalDatas = list;
@@ -26,14 +32,14 @@ public class VerticalAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
 
         //사용할 아이템 뷰를 생성해준다.
 
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.vertical_recycler_items,parent,false);
+        view= LayoutInflater.from(parent.getContext()).inflate(R.layout.vertical_recycler_items,parent,false);
         VerticalViewHolder holder = new VerticalViewHolder(view);
 
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull VerticalViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull VerticalViewHolder holder, final int position) {
 
         VerticalData data = verticalDatas.get(position);
 
@@ -46,7 +52,6 @@ public class VerticalAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
             holder.border.setBackgroundResource(R.drawable.border_cover_orig);
             holder.tri.setImageResource(R.drawable.ic_triangle_original);
         }
-
     }
 // https://android-blog.dev/19?category=677940 출처
     @Override

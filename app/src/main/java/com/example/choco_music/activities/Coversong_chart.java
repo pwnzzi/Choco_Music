@@ -34,12 +34,6 @@ public class Coversong_chart extends AppCompatActivity {
 
         ArrayList<ChartData> data = new ArrayList<>();
 
-        int i=0;
-        while(i< MAX_ITEM_COUNT){
-            data.add(new ChartData(R.mipmap.ic_launcher,i+"번째 데이터"));
-            i++;
-        }
-
         //init LayoutManager
 
         mLayoutManager = new LinearLayoutManager(this);
