@@ -67,22 +67,22 @@ public class NotificationPlayer {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 startMyOwnForeground();
             else{
+                mNotificationBuilder = new NotificationCompat.Builder(mService);
+                mNotificationBuilder.setSmallIcon(R.mipmap.ic_launcher)
+                        .setOngoing(true)
+                        .setContentIntent(mMainPendingIntent)
+                        .setContent(mRemoteViews);
 
+                Notification notification = mNotificationBuilder.build();
+                notification.priority = Notification.PRIORITY_MAX;
+                notification.contentIntent = mMainPendingIntent;
+                if (!isForeground) {
+                    isForeground = true;
+                    // 서비스를 Foreground 상태로 만든다
+                    mService.startForeground(NOTIFICATION_PLAYER_ID, notification);
+                }
             }
-            mNotificationBuilder = new NotificationCompat.Builder(mService);
-            mNotificationBuilder.setSmallIcon(R.mipmap.ic_launcher)
-                    .setOngoing(true)
-                    .setContentIntent(mMainPendingIntent)
-                    .setContent(mRemoteViews);
 
-            Notification notification = mNotificationBuilder.build();
-            notification.priority = Notification.PRIORITY_MAX;
-            notification.contentIntent = mMainPendingIntent;
-            if (!isForeground) {
-                isForeground = true;
-                // 서비스를 Foreground 상태로 만든다
-                mService.startForeground(NOTIFICATION_PLAYER_ID, notification);
-            }
         }
 
         @TargetApi(Build.VERSION_CODES.O)
@@ -96,16 +96,18 @@ public class NotificationPlayer {
             assert manager != null;
             manager.createNotificationChannel(chan);
 
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(mService, NOTIFICATION_CHANNEL_ID);
-            Notification notification = notificationBuilder.setOngoing(true)
-                    .setSmallIcon(R.drawable.chart_tab_icon)
-                    .setContentTitle("App is running in background")
-                    .setPriority(NotificationManager.IMPORTANCE_MIN)
-                    .setCategory(Notification.CATEGORY_SERVICE)
-                    .build();
+            mNotificationBuilder = new NotificationCompat.Builder(mService, NOTIFICATION_CHANNEL_ID);
+            mNotificationBuilder.setSmallIcon(R.mipmap.ic_launcher)
+                    .setOngoing(true)
+                    .setContentIntent(mMainPendingIntent)
+                    .setContent(mRemoteViews);
+
+            Notification notification = mNotificationBuilder.build();
+            notification.priority = Notification.PRIORITY_MAX;
+            notification.contentIntent = mMainPendingIntent;
             if (!isForeground) {
                 isForeground = true;
-                mService.startForeground(2, notification);
+                mService.startForeground(NOTIFICATION_PLAYER_ID, notification);
             }
         }
 
