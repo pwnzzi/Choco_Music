@@ -101,22 +101,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         music_evaluate_btn = (Button) view.findViewById(R.id.music_evaluate_btn);
         music_play_btn = (ImageView) view.findViewById(R.id.home_fragment_play_btn);
 
-     /*   music_play_btn.setOnClickListener(new ImageView.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(isRunning){
-                    mediaPlayer.stop();
-                    music_play_btn.setImageResource(R.drawable.ic_triangle_right);
-                } else {
-                    mediaPlayer = MediaPlayer.create(getContext(), R.raw.test);
-                    music_play_btn.setImageResource(R.drawable.playing_btn);
-
-                    mediaPlayer.start();
-                }
-                isRunning = !isRunning;
-            }
-        });*/
-
         music_evaluate_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,7 +174,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
 
             @Override
             public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
-
+                t.printStackTrace();
             }
         });
         // 취소, 완료 버튼
@@ -214,8 +198,8 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                     mediaPlayer.reset();
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     View centerView = snapHelper.findSnapView(mLayoutManager);
-                    int pos = mLayoutManager.getPosition(centerView);
-                    Log.e("Snapped Item Position:",""+pos);
+                    position = mLayoutManager.getPosition(centerView);
+                    Log.e("Snapped Item Position:","" + position);
                 }
 
                 for(int i=0; i!=5; ++i)
@@ -225,8 +209,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                     clicks.set(i, false);
                     btn_tags.get(i).setBackgroundResource(R.drawable.button_border);
                 }
-
-
             }
         });
 
@@ -353,11 +335,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             stars.get(i).setImageResource(R.drawable.star_selected);
     }
 
-    private int getCurrentItem(){
-        return ((LinearLayoutManager)mVerticalView.getLayoutManager())
-                .findFirstVisibleItemPosition();
-    }
-
     @Override
     public void onPause() {
         super.onPause();
@@ -365,8 +342,9 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             mediaPlayer.reset();
             mediaPlayer.release();
             mediaPlayer = null;
-            progressDialog.dismiss();
         }
+        if(progressDialog != null)
+            progressDialog.dismiss();
     }
 
     //음악 플레이어

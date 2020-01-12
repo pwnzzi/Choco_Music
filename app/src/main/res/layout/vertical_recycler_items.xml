@@ -28,7 +28,7 @@
             android:layout_gravity="center"/>
 
         <TextView
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp"
             android:textSize="15sp"
             style="@style/TextStyle4"
@@ -54,7 +54,8 @@
 
         <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
 
             <ImageView
                 android:adjustViewBounds="true"
