@@ -8,9 +8,12 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -24,9 +27,7 @@ public class MusicPlay_activity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
     private Boolean isRunning = false;
     private View runLayout;
-
-
-
+    private FrameLayout background;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,14 +41,18 @@ public class MusicPlay_activity extends AppCompatActivity {
         music_list_btn=(ImageView)findViewById(R.id.play_layout_list);
         runLayout = findViewById(R.id.linear_running_btn);
 
+        background = findViewById(R.id.musicplay_activity_layout);
+        Drawable drawable = getResources().getDrawable(R.drawable.elbum_img);
+        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+        Blur blur = new Blur(this, background, bitmap, 10, this);
+        blur.run();
+
         //커버곡 리스트 화면 불러오기
 
         music_list_btn.setOnClickListener(new ImageView.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getBaseContext(), Coversong_chart.class);
-
-
                 startActivity(intent);
             }
         });

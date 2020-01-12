@@ -172,6 +172,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
 
             @Override
             public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
+
             }
         });
         // 취소, 완료 버튼
@@ -196,8 +197,8 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     View centerView = snapHelper.findSnapView(mLayoutManager);
                     position = mLayoutManager.getPosition(centerView);
-                    Log.e("Snapped Item Position:",""+position);
-                }
+                    Log.e("Snapped Item Position:","" + position);
+                    }
 
                 for(int i=0; i!=5; ++i)
                     stars.get(i).setImageResource(R.drawable.star_selected);
@@ -206,8 +207,11 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                     clicks.set(i, false);
                     btn_tags.get(i).setBackgroundResource(R.drawable.button_border);
                 }
+
+
             }
         });
+
 
         confirmButton = view.findViewById(R.id.sheet_confirm);
         confirmButton.setOnClickListener(new View.OnClickListener() {
@@ -331,25 +335,17 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             stars.get(i).setImageResource(R.drawable.star_selected);
     }
 
-    private int getCurrentItem(){
-        return ((LinearLayoutManager)mVerticalView.getLayoutManager())
-                .findFirstVisibleItemPosition();
-    }
 
     @Override
     public void onPause() {
         super.onPause();
-      /*  if(mediaPlayer != null){
-            mediaPlayer.reset();
-            mediaPlayer.release();
-            mediaPlayer = null;
-            progressDialog.dismiss();
-        }*/
         if(mediaPlayer != null){
             mediaPlayer.reset();
             mediaPlayer.release();
             mediaPlayer = null;
         }
+        if(progressDialog != null)
+            progressDialog.dismiss();
     }
 
     //음악 플레이어

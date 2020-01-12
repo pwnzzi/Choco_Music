@@ -1,6 +1,7 @@
 package com.example.choco_music.model;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -8,7 +9,9 @@ import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
+import android.text.Layout;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -18,13 +21,13 @@ import com.example.choco_music.activities.MainActivity;
 
 public class Blur implements Runnable {
     private Context context;
-    private CoordinatorLayout image;
+    private ViewGroup image;
     private Bitmap smallBitmap;
     private int radius;
-    private FragmentActivity activity;
+    private Activity activity;
     private Bitmap bitmap;
 
-    public Blur(Context context, CoordinatorLayout image, Bitmap smallBitmap, int radius, FragmentActivity activity) {
+    public Blur(Context context, ViewGroup image, Bitmap smallBitmap, int radius, Activity activity) {
         this.context = context;
         this.image = image;
         this.smallBitmap = smallBitmap;

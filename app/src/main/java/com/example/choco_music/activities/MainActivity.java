@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // 스플래쉬 화면
-        Intent intent = new Intent(this, LoadingActivity.class);
+        Intent intent = new Intent(this, TempActivity.class);
         startActivity(intent);
 
         // 뷰페이져
