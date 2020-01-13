@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // 스플래쉬 화면
-        Intent intent = new Intent(this, TempActivity.class);
+        Intent intent = new Intent(this, LoadingActivity.class);
         startActivity(intent);
 
         // 뷰페이져
@@ -65,4 +65,5 @@ public class MainActivity extends AppCompatActivity {
             public void onTabReselected(TabLayout.Tab tab) {}
         });
     }
+
 }

@@ -53,6 +53,18 @@ public class AudioServiceInterface {
         }
     }
 
+    public void pause_home_fragment() {
+        if (mService != null) {
+            mService.pause();
+        }
+    }
+
+    public void play_home_fragment() {
+        if (mService != null) {
+            mService.play();
+        }
+    }
+
     public void forward() {
         if (mService != null) {
             mService.forward();

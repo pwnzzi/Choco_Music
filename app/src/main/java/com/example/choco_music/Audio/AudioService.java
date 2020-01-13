@@ -21,7 +21,7 @@ public class AudioService extends Service {
     private int mCurrentPosition;
     private AudioAdapter.AudioItem mAudioItem;
     private String currentUrl;
-    private NotificationPlayer mNotificationPlayer;
+    //private NotificationPlayer mNotificationPlayer;
 
     public class AudioServiceBinder extends Binder {
         AudioService getService() {
@@ -40,7 +40,7 @@ public class AudioService extends Service {
                 isPrepared = true;
                 mp.start();
                 sendBroadcast(new Intent(BroadcastActions.PREPARED)); // prepared 전송
-                updateNotificationPlayer();
+            //    updateNotificationPlayer();
             }
         });
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -48,7 +48,7 @@ public class AudioService extends Service {
             public void onCompletion(MediaPlayer mp) {
                 isPrepared = false;
                 sendBroadcast(new Intent(BroadcastActions.PLAY_STATE_CHANGED)); // 재생상태 변경 전송
-                updateNotificationPlayer();
+            //    updateNotificationPlayer();
             }
         });
         mMediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
@@ -56,13 +56,13 @@ public class AudioService extends Service {
             public boolean onError(MediaPlayer mp, int what, int extra) {
                 isPrepared = false;
                 sendBroadcast(new Intent(BroadcastActions.PLAY_STATE_CHANGED)); // 재생상태 변경 전송
-                updateNotificationPlayer();
+             //   updateNotificationPlayer();
                 return false;
             }
         });
 
 
-        mNotificationPlayer = new NotificationPlayer(this);
+     //   mNotificationPlayer = new NotificationPlayer(this);
     }
 
     @Override
@@ -117,15 +117,28 @@ public class AudioService extends Service {
         if (isPrepared) {
             mMediaPlayer.start();
             sendBroadcast(new Intent(BroadcastActions.PLAY_STATE_CHANGED)); // 재생상태 변경 전송
-            updateNotificationPlayer();
+      //      updateNotificationPlayer();
         }
+    }
+    public void pause_home_fragment(){
+        mMediaPlayer.pause();
+        sendBroadcast(new Intent(BroadcastActions.PLAY_STATE_CHANGED));
+
+    }
+
+    public void play_home_fragment() {
+
+            mMediaPlayer.start();
+            sendBroadcast(new Intent(BroadcastActions.PLAY_STATE_CHANGED)); // 재생상태 변경 전송
+            //      updateNotificationPlayer();
+
     }
 
     public void pause() {
         if (isPrepared) {
             mMediaPlayer.pause();
             sendBroadcast(new Intent(BroadcastActions.PLAY_STATE_CHANGED)); // 재생상태 변경 전송
-            updateNotificationPlayer();
+        //    updateNotificationPlayer();
         }
     }
 
@@ -155,7 +168,7 @@ public class AudioService extends Service {
     public boolean isPlaying() {
         return mMediaPlayer.isPlaying();
     }
-
+/*
     private void updateNotificationPlayer() {
         if (mNotificationPlayer != null) {
             mNotificationPlayer.updateNotificationPlayer();
@@ -166,7 +179,7 @@ public class AudioService extends Service {
         if (mNotificationPlayer != null) {
             mNotificationPlayer.removeNotificationPlayer();
         }
-    }
+    }*/
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -184,7 +197,7 @@ public class AudioService extends Service {
                 forward();
             } else if (CommandActions.CLOSE.equals(action)) {
                 pause();
-                removeNotificationPlayer();
+           //     removeNotificationPlayer();
             }
         }
         return super.onStartCommand(intent, flags, startId);

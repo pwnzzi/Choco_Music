@@ -2,26 +2,13 @@ package com.example.choco_music.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -32,7 +19,6 @@ import com.example.choco_music.Audio.AudioApplication;
 import com.example.choco_music.Audio.BroadcastActions;
 import com.example.choco_music.Interface.RetrofitExService;
 import com.example.choco_music.R;
-import com.example.choco_music.adapters.VerticalAdapter;
 import com.example.choco_music.model.VerticalData;
 import com.squareup.picasso.Picasso;
 
@@ -93,7 +79,7 @@ public class TempActivity extends AppCompatActivity implements View.OnClickListe
                         urls.add(data.getFilerul());
                     }
                     AudioApplication.getInstance().getServiceInterface().setPlayList(urls); // 재생목록등록
-                    AudioApplication.getInstance().getServiceInterface().play(0);
+               //     AudioApplication.getInstance().getServiceInterface().play(0);
                 }
             }
 
@@ -104,7 +90,7 @@ public class TempActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         registerBroadcast();
-        updateUI();
+      //  updateUI();
     }
 
     private void registerBroadcast() {
@@ -159,6 +145,7 @@ public class TempActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
 
     @Override
     protected void onDestroy() {
