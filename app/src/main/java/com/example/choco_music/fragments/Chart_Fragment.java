@@ -16,20 +16,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SnapHelper;
 
 import com.example.choco_music.Interface.RetrofitExService;
 import com.example.choco_music.R;
 import com.example.choco_music.activities.Coversong_chart;
-import com.example.choco_music.activities.MainActivity;
 import com.example.choco_music.activities.MusicPlay_activity;
 import com.example.choco_music.activities.Originalsong_chart;
 import com.example.choco_music.adapters.ChartAdapter;
 import com.example.choco_music.adapters.PagerSnapWithSpanCountHelper;
-import com.example.choco_music.adapters.VerticalAdapter;
 import com.example.choco_music.model.ChartData;
+import com.example.choco_music.model.RecyclerItemClickListener;
 import com.example.choco_music.model.VerticalData;
 
 import java.util.ArrayList;
@@ -49,7 +46,7 @@ public class Chart_Fragment extends Fragment {
     private int MAX_ITEM_COUNT = 50;
     private Retrofit retrofit;
     private RetrofitExService retrofitExService;
-    private ArrayList<ChartData> Original_datas;
+    private ArrayList<VerticalData> Original_datas;
 
 
     @Nullable
@@ -58,7 +55,7 @@ public class Chart_Fragment extends Fragment {
         View view= inflater.inflate(R.layout.chart_fragment,null,false);
 
         init_btn(view);
-        init_recylerview(view);
+        init_recyclerview(view);
         init_retrofit();
 
         return view;
@@ -88,7 +85,7 @@ public class Chart_Fragment extends Fragment {
             }
         });
     }
-    public void init_recylerview(View view){
+    public void init_recyclerview(View view){
 
         CoverSong_View = (RecyclerView)view.findViewById(R.id.CoverSong_list);
         OriginalSong_View=(RecyclerView)view.findViewById(R.id.OriginalSong_list);
@@ -97,7 +94,22 @@ public class Chart_Fragment extends Fragment {
 
         snapHelper.attachToRecyclerView(CoverSong_View);
         snapHelper2.attachToRecyclerView(OriginalSong_View);
+
+        OriginalSong_View.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), OriginalSong_View,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(getActivity(), MusicPlay_activity.class);
+                        intent.putExtra("list", Original_datas);
+                        intent.putExtra("position", position);
+                        startActivity(intent);
+                    }
+
+                    @Override public void onLongItemClick(View view, int position) { }
+                })
+        );
     }
+
+
     private void init_retrofit(){
 
         Original_LayoutManager = new GridLayoutManager(getContext(), 5, GridLayoutManager.HORIZONTAL, false);
@@ -109,9 +121,9 @@ public class Chart_Fragment extends Fragment {
         retrofitExService = retrofit.create(RetrofitExService.class);
 
         // 데이터베이스에 데이터 받아오기
-        retrofitExService.getData1().enqueue(new Callback<ArrayList<ChartData>>() {
+        retrofitExService.getData2().enqueue(new Callback<ArrayList<VerticalData>>() {
             @Override
-            public void onResponse(@NonNull Call<ArrayList<ChartData>> call, @NonNull Response<ArrayList<ChartData>> response) {
+            public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
                 if (response.isSuccessful()) {
                     Original_datas = response.body();
 
@@ -136,58 +148,9 @@ public class Chart_Fragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<ChartData>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
             }
         });
     }
-
-    public interface ClickListener {
-        void onClick(View view, int position);
-
-        void onLongClick(View view, int position);
-    }
-
-    public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
-
-        private GestureDetector gestureDetector;
-        private Chart_Fragment.ClickListener clickListener;
-
-        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final Chart_Fragment.ClickListener clickListener) {
-            this.clickListener = clickListener;
-            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onSingleTapUp(MotionEvent e) {
-                    return true;
-                }
-
-                @Override
-                public void onLongPress(MotionEvent e) {
-                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-                    if (child != null && clickListener != null) {
-                        clickListener.onLongClick(child, recyclerView.getChildAdapterPosition(child));
-                    }
-                }
-            });
-        }
-
-        @Override
-        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-            View child = rv.findChildViewUnder(e.getX(), e.getY());
-            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-                clickListener.onClick(child, rv.getChildAdapterPosition(child));
-            }
-            return false;
-        }
-
-        @Override
-        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-        }
-
-        @Override
-        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-        }
-    }
-
-
 
 }

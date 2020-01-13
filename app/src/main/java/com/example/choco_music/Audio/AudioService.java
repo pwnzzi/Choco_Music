@@ -11,17 +11,18 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.provider.MediaStore;
 
+import com.example.choco_music.model.VerticalData;
+
 import java.util.ArrayList;
 
 public class AudioService extends Service {
     private final IBinder mBinder = new AudioServiceBinder();
-    private ArrayList<String> mAudioUrls = new ArrayList<>();
+    private ArrayList<VerticalData> mAudioDatas = new ArrayList<>();
     private MediaPlayer mMediaPlayer;
     private boolean isPrepared;
     private int mCurrentPosition;
-    private AudioAdapter.AudioItem mAudioItem;
-    private String currentUrl;
-    //private NotificationPlayer mNotificationPlayer;
+    private VerticalData currentData;
+    private NotificationPlayer mNotificationPlayer;
 
     public class AudioServiceBinder extends Binder {
         AudioService getService() {
@@ -40,7 +41,7 @@ public class AudioService extends Service {
                 isPrepared = true;
                 mp.start();
                 sendBroadcast(new Intent(BroadcastActions.PREPARED)); // prepared 전송
-            //    updateNotificationPlayer();
+                updateNotificationPlayer();
             }
         });
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -48,7 +49,7 @@ public class AudioService extends Service {
             public void onCompletion(MediaPlayer mp) {
                 isPrepared = false;
                 sendBroadcast(new Intent(BroadcastActions.PLAY_STATE_CHANGED)); // 재생상태 변경 전송
-            //    updateNotificationPlayer();
+                updateNotificationPlayer();
             }
         });
         mMediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
@@ -56,13 +57,13 @@ public class AudioService extends Service {
             public boolean onError(MediaPlayer mp, int what, int extra) {
                 isPrepared = false;
                 sendBroadcast(new Intent(BroadcastActions.PLAY_STATE_CHANGED)); // 재생상태 변경 전송
-             //   updateNotificationPlayer();
+                updateNotificationPlayer();
                 return false;
             }
         });
 
 
-     //   mNotificationPlayer = new NotificationPlayer(this);
+        mNotificationPlayer = new NotificationPlayer(this);
     }
 
     @Override
@@ -82,12 +83,12 @@ public class AudioService extends Service {
 
     private void queryAudioItem(int position) {
         mCurrentPosition = position;
-        currentUrl = mAudioUrls.get(position);
+        currentData = mAudioDatas.get(position);
     }
 
     private void prepare() {
         try {
-            mMediaPlayer.setDataSource(currentUrl);
+            mMediaPlayer.setDataSource(currentData.getFilerul());
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mMediaPlayer.prepareAsync();
         } catch (Exception e) {
@@ -100,10 +101,10 @@ public class AudioService extends Service {
         mMediaPlayer.reset();
     }
 
-    public void setPlayList(ArrayList<String> audioUrls) {
-        if (!mAudioUrls.equals(audioUrls)) {
-            mAudioUrls.clear();
-            mAudioUrls.addAll(audioUrls);
+    public void setPlayList(ArrayList<VerticalData> audioDatas) {
+        if (!mAudioDatas.equals(audioDatas)) {
+            mAudioDatas.clear();
+            mAudioDatas.addAll(audioDatas);
         }
     }
 
@@ -117,7 +118,7 @@ public class AudioService extends Service {
         if (isPrepared) {
             mMediaPlayer.start();
             sendBroadcast(new Intent(BroadcastActions.PLAY_STATE_CHANGED)); // 재생상태 변경 전송
-      //      updateNotificationPlayer();
+            updateNotificationPlayer();
         }
     }
     public void pause_home_fragment(){
@@ -130,7 +131,7 @@ public class AudioService extends Service {
 
             mMediaPlayer.start();
             sendBroadcast(new Intent(BroadcastActions.PLAY_STATE_CHANGED)); // 재생상태 변경 전송
-            //      updateNotificationPlayer();
+                  updateNotificationPlayer();
 
     }
 
@@ -138,13 +139,13 @@ public class AudioService extends Service {
         if (isPrepared) {
             mMediaPlayer.pause();
             sendBroadcast(new Intent(BroadcastActions.PLAY_STATE_CHANGED)); // 재생상태 변경 전송
-        //    updateNotificationPlayer();
+            updateNotificationPlayer();
         }
     }
 
 
     public void forward() {
-        if (mAudioUrls.size() - 1 > mCurrentPosition) {
+        if (mAudioDatas.size() - 1 > mCurrentPosition) {
             mCurrentPosition++; // 다음 포지션으로 이동.
         } else {
             mCurrentPosition = 0; // 처음 포지션으로 이동.
@@ -156,19 +157,19 @@ public class AudioService extends Service {
         if (mCurrentPosition > 0) {
             mCurrentPosition--; // 이전 포지션으로 이동.
         } else {
-            mCurrentPosition = mAudioUrls.size() - 1; // 마지막 포지션으로 이동.
+            mCurrentPosition = mAudioDatas.size() - 1; // 마지막 포지션으로 이동.
         }
         play(mCurrentPosition);
     }
 
-    public AudioAdapter.AudioItem getAudioItem() {
-        return mAudioItem;
+    public VerticalData getAudioItem() {
+        return mAudioDatas.get(mCurrentPosition);
     }
 
     public boolean isPlaying() {
         return mMediaPlayer.isPlaying();
     }
-/*
+
     private void updateNotificationPlayer() {
         if (mNotificationPlayer != null) {
             mNotificationPlayer.updateNotificationPlayer();
@@ -179,7 +180,7 @@ public class AudioService extends Service {
         if (mNotificationPlayer != null) {
             mNotificationPlayer.removeNotificationPlayer();
         }
-    }*/
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -197,7 +198,7 @@ public class AudioService extends Service {
                 forward();
             } else if (CommandActions.CLOSE.equals(action)) {
                 pause();
-           //     removeNotificationPlayer();
+                removeNotificationPlayer();
             }
         }
         return super.onStartCommand(intent, flags, startId);

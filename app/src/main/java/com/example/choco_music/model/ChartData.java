@@ -1,6 +1,8 @@
 package com.example.choco_music.model;
 
-public class ChartData {
+import java.io.Serializable;
+
+public class ChartData implements Serializable {
 
     private String title;
     private String vocal;

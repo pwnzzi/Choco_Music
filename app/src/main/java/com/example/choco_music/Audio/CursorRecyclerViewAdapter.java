@@ -6,6 +6,8 @@ import android.database.DataSetObserver;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.choco_music.model.VerticalData;
+
 /**
  * Created by skyfishjy on 10/31/14.
  */
@@ -53,9 +55,9 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
         return 0;
     }
 
-    public String getItemUrl(int position) {
+    public VerticalData getItemUrl(int position) {
         if (mDataValid && mCursor != null && mCursor.moveToPosition(position)) {
-            return mCursor.getString(mRowIdColumn);
+            //return mCursor.getString(mRowIdColumn);
         }
         return null;
     }

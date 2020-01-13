@@ -21,9 +21,8 @@ public class ChartAdapter extends RecyclerView.Adapter<Chart_ViewHolder>  {
 
 
 
-    private ArrayList<ChartData> chartDatas ;
-
-    public void setData(ArrayList<ChartData> list){
+    private ArrayList<VerticalData> chartDatas ;
+    public void setData(ArrayList<VerticalData> list){
         chartDatas = list;
     }
 
@@ -32,16 +31,7 @@ public class ChartAdapter extends RecyclerView.Adapter<Chart_ViewHolder>  {
     public Chart_ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         //사용할 아이템 뷰를 생성해준다.
-
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chart_recycler_items,parent,false);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), MusicPlay_activity.class);
-                view.getContext().startActivity(intent);
-                ((Activity)view.getContext()).overridePendingTransition(R.anim.anim_slide_in_bottom, R.anim.anim_slide_out_top);
-            }
-        });
         Chart_ViewHolder holder = new Chart_ViewHolder(view);
         return holder;
 
@@ -50,7 +40,7 @@ public class ChartAdapter extends RecyclerView.Adapter<Chart_ViewHolder>  {
     @Override
     public void onBindViewHolder(@NonNull Chart_ViewHolder holder, int position) {
 
-        ChartData data = chartDatas.get(position);
+        VerticalData data = chartDatas.get(position);
 
         holder.vocal.setText(data.getVocal());
         holder.title.setText(data.getTitle());

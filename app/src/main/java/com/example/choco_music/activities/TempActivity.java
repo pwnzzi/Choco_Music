@@ -74,11 +74,7 @@ public class TempActivity extends AppCompatActivity implements View.OnClickListe
             public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
                 if (response.isSuccessful()) {
                     datas = response.body();
-                    ArrayList<String> urls = new ArrayList<>();
-                    for(VerticalData data : datas){
-                        urls.add(data.getFilerul());
-                    }
-                    AudioApplication.getInstance().getServiceInterface().setPlayList(urls); // 재생목록등록
+                    AudioApplication.getInstance().getServiceInterface().setPlayList(datas); // 재생목록등록
                //     AudioApplication.getInstance().getServiceInterface().play(0);
                 }
             }
@@ -109,15 +105,6 @@ public class TempActivity extends AppCompatActivity implements View.OnClickListe
             mBtnPlayPause.setImageResource(R.drawable.playing_btn);
         } else {
             mBtnPlayPause.setImageResource(R.drawable.play_btn);
-        }
-        AudioAdapter.AudioItem audioItem = AudioApplication.getInstance().getServiceInterface().getAudioItem();
-        if (audioItem != null) {
-            Uri albumArtUri = ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), audioItem.mAlbumId);
-            Picasso.with(getApplicationContext()).load(albumArtUri).error(R.drawable.elbum_img).into(mImgAlbumArt);
-            mTxtTitle.setText(audioItem.mTitle);
-        } else {
-            mImgAlbumArt.setImageResource(R.drawable.elbum_img);
-            mTxtTitle.setText("재생중인 음악이 없습니다.");
         }
     }
 

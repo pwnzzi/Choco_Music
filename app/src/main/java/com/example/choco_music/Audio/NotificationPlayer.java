@@ -68,7 +68,7 @@ public class NotificationPlayer {
                 startMyOwnForeground();
             else{
                 mNotificationBuilder = new NotificationCompat.Builder(mService);
-                mNotificationBuilder.setSmallIcon(R.mipmap.ic_launcher)
+                mNotificationBuilder.setSmallIcon(R.drawable.elbum_img)
                         .setOngoing(true)
                         .setContentIntent(mMainPendingIntent)
                         .setContent(mRemoteViews);

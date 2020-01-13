@@ -15,6 +15,7 @@ import com.example.choco_music.Interface.RetrofitExService;
 import com.example.choco_music.R;
 import com.example.choco_music.adapters.ChartAdapter;
 import com.example.choco_music.model.ChartData;
+import com.example.choco_music.model.VerticalData;
 
 import java.util.ArrayList;
 
@@ -31,7 +32,7 @@ public class Originalsong_chart extends AppCompatActivity {
     private LinearLayoutManager Original_LayoutManager;
     private Retrofit retrofit;
     private RetrofitExService retrofitExService;
-    private ArrayList<ChartData> Original_datas;
+    private ArrayList<VerticalData> Original_datas;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,9 +54,9 @@ public class Originalsong_chart extends AppCompatActivity {
         retrofitExService = retrofit.create(RetrofitExService.class);
 
         // 데이터베이스에 데이터 받아오기
-        retrofitExService.getData1().enqueue(new Callback<ArrayList<ChartData>>() {
+        retrofitExService.getData2().enqueue(new Callback<ArrayList<VerticalData>>() {
             @Override
-            public void onResponse(@NonNull Call<ArrayList<ChartData>> call, @NonNull Response<ArrayList<ChartData>> response) {
+            public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
                 if (response.isSuccessful()) {
                     Original_datas = response.body();
 
@@ -80,7 +81,7 @@ public class Originalsong_chart extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<ChartData>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
             }
         });
     }

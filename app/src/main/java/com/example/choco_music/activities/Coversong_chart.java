@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.choco_music.R;
 import com.example.choco_music.adapters.ChartAdapter;
 import com.example.choco_music.model.ChartData;
+import com.example.choco_music.model.VerticalData;
 
 import java.util.ArrayList;
 
@@ -32,7 +33,7 @@ public class Coversong_chart extends AppCompatActivity {
 
         //init Data
 
-        ArrayList<ChartData> data = new ArrayList<>();
+        ArrayList<VerticalData> data = new ArrayList<>();
 
         //init LayoutManager
 

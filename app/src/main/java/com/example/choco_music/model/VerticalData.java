@@ -1,6 +1,8 @@
 package com.example.choco_music.model;
 
-public class VerticalData {
+import java.io.Serializable;
+
+public class VerticalData implements Serializable {
 
 
     private String title;

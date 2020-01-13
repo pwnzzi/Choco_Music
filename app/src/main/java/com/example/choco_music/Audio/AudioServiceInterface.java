@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 
+import com.example.choco_music.model.VerticalData;
+
 import java.util.ArrayList;
 
 public class AudioServiceInterface {
@@ -29,9 +31,9 @@ public class AudioServiceInterface {
                 .setPackage(context.getPackageName()), mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
-    public void setPlayList(ArrayList<String> audioUrls) {
+    public void setPlayList(ArrayList<VerticalData> audioDatas) {
         if (mService != null) {
-            mService.setPlayList(audioUrls);
+            mService.setPlayList(audioDatas);
         }
     }
 
@@ -92,7 +94,7 @@ public class AudioServiceInterface {
         return false;
     }
 
-    public AudioAdapter.AudioItem getAudioItem() {
+    public VerticalData getAudioItem() {
         if (mService != null) {
             return mService.getAudioItem();
         }

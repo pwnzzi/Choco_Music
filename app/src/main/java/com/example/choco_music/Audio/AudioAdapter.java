@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.choco_music.R;
+import com.example.choco_music.model.VerticalData;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -59,13 +60,13 @@ public class AudioAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHol
         }
     }
 
-    public ArrayList<String> getAudioUrls() {
+    public ArrayList<VerticalData> getAudioDatas() {
         int count = getItemCount();
-        ArrayList<String> audioUrls = new ArrayList<>();
+        ArrayList<VerticalData> audioDatas = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            audioUrls.add(getItemUrl(i));
+            audioDatas.add(getItemUrl(i));
         }
-        return audioUrls;
+        return audioDatas;
     }
 
     private class AudioViewHolder extends RecyclerView.ViewHolder {
@@ -86,7 +87,7 @@ public class AudioAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHol
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AudioApplication.getInstance().getServiceInterface().setPlayList(getAudioUrls()); // 재생목록등록
+                    //AudioApplication.getInstance().getServiceInterface().setPlayList(getAudioUrls()); // 재생목록등록
                     AudioApplication.getInstance().getServiceInterface().play(mPosition); // 선택한 오디오재생
                 }
             });

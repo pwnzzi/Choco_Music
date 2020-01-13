@@ -39,6 +39,8 @@ import com.example.choco_music.model.Blur;
 import com.example.choco_music.model.VerticalData;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -146,7 +148,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                 if (response.isSuccessful()) {
                     datas = response.body();
                     //음악 재생기에 넣어줄 리스트를 만들어준다.
-                    ArrayList<String> urls = new ArrayList<>();
 
                     if (datas != null) {
                         for (int i = 0; i < datas.size(); i++) {
@@ -159,7 +160,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                             Log.d("data" + i, datas.get(i).getLyrics() + "");
                             Log.d("data" + i, datas.get(i).getGenre() + "");
                             Log.d("data" + i, datas.get(i).getFilerul() + "");
-                            urls.add(datas.get(i).getFilerul());
                         }
                         Log.d("getData2 end", "======================================");
                     }
@@ -172,7 +172,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                     // set Adapter
                     mVerticalView.setAdapter(mAdapter);
                     //오디오 어플리 케이션에 재생할 음악 url을 담아준다.
-                    AudioApplication.getInstance().getServiceInterface().setPlayList(urls);
+                    AudioApplication.getInstance().getServiceInterface().setPlayList(datas);
                     //AudioApplication.getInstance().getServiceInterface().play(0);
                 }
             }
@@ -402,15 +402,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             music_play_btn.setImageResource(R.drawable.playing_btn);
         } else {
             music_play_btn.setImageResource(R.drawable.ic_triangle_right);
-        }
-        AudioAdapter.AudioItem audioItem = AudioApplication.getInstance().getServiceInterface().getAudioItem();
-        if (audioItem != null) {
-          //  Uri albumArtUri = ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), audioItem.mAlbumId);
-        //    Picasso.with(getContext()).load(albumArtUri).error(R.drawable.elbum_img).into(mImgAlbumArt);
-           // mTxtTitle.setText(audioItem.mTitle);
-        } else {
-           //  mImgAlbumArt.setImageResource(R.drawable.elbum_img);
-          //  mTxtTitle.setText("재생중인 음악이 없습니다.");
         }
     }
 

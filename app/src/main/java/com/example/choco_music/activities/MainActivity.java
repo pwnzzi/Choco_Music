@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+
+import com.example.choco_music.Audio.AudioApplication;
 import com.example.choco_music.R;
 import com.example.choco_music.adapters.SwipeViewPager;
 import com.example.choco_music.adapters.ViewPagerAdpater;
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                     playing_bar.setVisibility(View.GONE);
                 } else {
                     playing_bar.setVisibility(View.VISIBLE);
+                    AudioApplication.getInstance().getServiceInterface().pause_home_fragment();
                 }
             }
 

@@ -1,44 +1,59 @@
 package com.example.choco_music.activities;
 
 
+import android.content.BroadcastReceiver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Layout;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+
+import com.example.choco_music.Audio.AudioAdapter;
+import com.example.choco_music.Audio.AudioApplication;
+import com.example.choco_music.Audio.BroadcastActions;
 import com.example.choco_music.R;
 import com.example.choco_music.model.Blur;
+import com.example.choco_music.model.ChartData;
+import com.example.choco_music.model.VerticalData;
+import com.squareup.picasso.Picasso;
 
-public class MusicPlay_activity extends AppCompatActivity {
+import java.util.ArrayList;
 
+public class MusicPlay_activity extends AppCompatActivity implements View.OnClickListener{
 
-    private ImageView music_play_btn,music_finish,music_list_btn;
-    private MediaPlayer mediaPlayer;
+    private ImageView music_play_btn;
     private Boolean isRunning = false;
     private View runLayout;
     private FrameLayout background;
 
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateUI();
+        }
+    };
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         setContentView(R.layout.music_play_layout);
 
         music_play_btn = (ImageView)findViewById(R.id.music_play);
-        music_finish= (ImageView)findViewById(R.id.play_layout_finish);
-        music_list_btn=(ImageView)findViewById(R.id.play_layout_list);
         runLayout = findViewById(R.id.linear_running_btn);
 
         background = findViewById(R.id.musicplay_activity_layout);
@@ -47,48 +62,84 @@ public class MusicPlay_activity extends AppCompatActivity {
         Blur blur = new Blur(this, background, bitmap, 10, this);
         blur.run();
 
-        //커버곡 리스트 화면 불러오기
+        music_play_btn.setOnClickListener(this);
+        findViewById(R.id.play_layout_list).setOnClickListener(this);
+        findViewById(R.id.play_layout_finish).setOnClickListener(this);
+        findViewById(R.id.play_back).setOnClickListener(this);
+        findViewById(R.id.play_front).setOnClickListener(this);
 
-        music_list_btn.setOnClickListener(new ImageView.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        Intent intent = getIntent();
+        ArrayList<VerticalData> datas = (ArrayList<VerticalData>)intent.getSerializableExtra("list");
+        int position = intent.getIntExtra("position", 0);
+        AudioApplication.getInstance().getServiceInterface().setPlayList(datas); // 재생목록등록
+        AudioApplication.getInstance().getServiceInterface().play(position);
+        registerBroadcast();
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()){
+            case R.id.play_layout_list: //커버곡 리스트 화면 불러오기
                 Intent intent = new Intent(getBaseContext(), Coversong_chart.class);
                 startActivity(intent);
-            }
-        });
-        // activity 종료
+                break;
 
-        music_finish.setOnClickListener(new ImageView.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            case R.id.play_layout_finish:
                 finish();
-            }
-        });
+                break;
 
-        // 음악 재생및 종료
-        music_play_btn.setOnClickListener(new ImageView.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            case R.id.music_play: // 음악 재생및 종료
                 if(isRunning){
-                    mediaPlayer.stop();
                     music_play_btn.setImageResource(R.drawable.play_btn);
                 } else {
-                    mediaPlayer = MediaPlayer.create(MusicPlay_activity.this, R.raw.test);
                     music_play_btn.setImageResource(R.drawable.playing_btn);
-                    mediaPlayer.start();
                 }
+                AudioApplication.getInstance().getServiceInterface().togglePlay();
                 isRunning = !isRunning;
-            }
-        });
+                break;
+
+            case R.id.play_back: // 이전 곡
+                AudioApplication.getInstance().getServiceInterface().rewind();
+                updateUI();
+                break;
+
+            case R.id.play_front: // 다음 곡
+                AudioApplication.getInstance().getServiceInterface().forward();
+                updateUI();
+                break;
+
+
+        }
     }
+
+    private void updateUI() {
+        if (AudioApplication.getInstance().getServiceInterface().isPlaying()) {
+            music_play_btn.setImageResource(R.drawable.playing_btn);
+        } else {
+            music_play_btn.setImageResource(R.drawable.play_btn);
+        }
+        VerticalData audioItem = AudioApplication.getInstance().getServiceInterface().getAudioItem();
+        ((TextView)findViewById(R.id.play_title)).setText(audioItem.getTitle());
+        ((TextView)findViewById(R.id.play_vocal)).setText(audioItem.getVocal());
+
+    }
+
+    private void registerBroadcast() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BroadcastActions.PREPARED);
+        filter.addAction(BroadcastActions.PLAY_STATE_CHANGED);
+        registerReceiver(mBroadcastReceiver, filter);
+    }
+
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // MediaPlayer 해지
-        if(mediaPlayer != null) {
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
+        unregisterBroadcast();
+    }
+
+    private void unregisterBroadcast() {
+        unregisterReceiver(mBroadcastReceiver);
     }
 }
