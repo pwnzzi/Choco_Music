@@ -38,7 +38,8 @@
             android:id="@+id/title"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/vertical_icon"
-            android:text="~번째"/>
+            android:text="노래제목"
+            android:maxLines="1"/>
 
         <TextView
             android:layout_marginBottom="5dp"
@@ -50,7 +51,8 @@
             android:id="@+id/vocal"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/vertical_icon"
-            android:text="가수"/>
+            android:text="가수"
+            android:maxLines="1"/>
 
         <FrameLayout
             android:layout_width="wrap_content"
