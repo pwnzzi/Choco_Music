@@ -60,7 +60,7 @@ public class AudioAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHol
         }
     }
 
-    public ArrayList<VerticalData> getAudioDatas() {
+   /* public ArrayList<VerticalData> getAudioDatas() {
         int count = getItemCount();
         ArrayList<VerticalData> audioDatas = new ArrayList<>();
         for (int i = 0; i < count; i++) {
@@ -68,7 +68,7 @@ public class AudioAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHol
         }
         return audioDatas;
     }
-
+*/
     private class AudioViewHolder extends RecyclerView.ViewHolder {
         private final Uri artworkUri = Uri.parse("content://media/external/audio/albumart");
         private ImageView mImgAlbumArt;

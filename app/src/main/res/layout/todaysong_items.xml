@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content" android:layout_marginLeft="30dp"
+    android:layout_marginRight="30dp" android:background="@drawable/recomand_bound">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/elbum_img"/>
+
+
+        <TextView
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="너와 걷던 그길 나는 아직도 여기 널 좋아 했는데 너는 끝을 말해네
+가지말라고 소리쳐 물러봐도 너는 그대로 나를 떠나 가는데"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="290dp"
+        android:layout_marginLeft="10dp"
+        android:paddingTop="5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="5dp"
+        android:background="@drawable/round_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/title_todaysong"
+            android:textColor="#ffffff"
+            android:text=" 제목 "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:textColor="#ffffff"
+            android:text=" - "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/vocal_todaysong"
+            android:textColor="#ffffff"
+            android:text="가수"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</FrameLayout>

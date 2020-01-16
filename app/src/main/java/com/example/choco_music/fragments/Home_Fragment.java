@@ -13,6 +13,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -60,7 +63,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     public MediaPlayer mediaPlayer;
     private ImageView music_play_btn;
     private View view;
-    private Button cancelButton;
+    private Button cancelButton, loveIcon;
     private ArrayList<ImageView> stars;
     private int currentStar = 5;
     private boolean playPause;
@@ -70,6 +73,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     private ArrayList<VerticalData> datas;
     private BottomSheetBehavior sheetBehavior;
     AudioService mservice;
+    private Boolean isRunning = false;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -100,11 +104,12 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
 
         //태그 버튼 적용
         btn_tag();
-
         layoutBottomSheet = view.findViewById(R.id.bottom_sheet);
         sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
         music_evaluate_btn = (Button) view.findViewById(R.id.music_evaluate_btn);
         music_play_btn = (ImageView) view.findViewById(R.id.home_fragment_play_btn);
+
+
         //음악 평가 클릭 이벤트
         music_evaluate_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,7 +198,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             @Override
             public void onClick(View view) {
                 sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                cancelButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_evaluate_homefragment));
+                cancelButton.setBackgroundResource(R.drawable.button_evaluate_homefragment);
             }
         });
         // 리사이클러 뷰가 스크롤 될때 현재 위치를 받아오기 위해서 사용하는 코드
@@ -203,19 +208,15 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                 super.onScrollStateChanged(recyclerView, newState);
                 //리사이 클러뷰 화면 전환시 play 버튼 다시 적용 하는 코드
                 initalStage = true;
-                music_play_btn.setImageResource(R.drawable.ic_triangle_right);
+                music_play_btn.setImageResource(R.drawable.play_btn);
                 playPause = false;
-                // 미디어 플레이 리셋 하는 버튼
-               /* if (mediaPlayer != null)
-                    mediaPlayer.reset();*/
-
                 // 현재 포지션 값을 받아 오는 코드
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     View centerView = snapHelper.findSnapView(mLayoutManager);
                     position = mLayoutManager.getPosition(centerView);
                     Log.e("Snapped Item Position:","" + position);
                     }
-
+                //별 선택시
                 for(int i=0; i!=5; ++i)
                     stars.get(i).setImageResource(R.drawable.star_selected);
                 currentStar = 5;
@@ -227,13 +228,15 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
 
             }
         });
-
-
+        //확인 버튼
         confirmButton = view.findViewById(R.id.sheet_confirm);
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_evaluate_homefragment));
+                confirmButton.setBackgroundResource(R.drawable.button_evaluate_homefragment);
+                Toast myToast = Toast.makeText(getActivity().getApplicationContext(),"평가가 완료 되었습니다.",Toast.LENGTH_SHORT);
+                myToast.setGravity(Gravity.CENTER,0,0);
+                myToast.show();
             }
         });
         // 별
@@ -249,11 +252,10 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         music_play_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // AudioApplication.getInstance().getServiceInterface().togglePlay();
-                //데이터 베이스에서 받아온 데이터를 리사이클러뷰의 위치에 따라 url을 받아온다.
                 if (!playPause) {
                     if (initalStage) {
                         AudioApplication.getInstance().getServiceInterface().play(position);
+                        initalStage =!initalStage;
                     } else {
                         if (!AudioApplication.getInstance().getServiceInterface().isPlaying()) {
                             AudioApplication.getInstance().getServiceInterface().play_home_fragment();
@@ -401,7 +403,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         if (AudioApplication.getInstance().getServiceInterface().isPlaying()) {
             music_play_btn.setImageResource(R.drawable.playing_btn);
         } else {
-            music_play_btn.setImageResource(R.drawable.ic_triangle_right);
+            music_play_btn.setImageResource(R.drawable.play_btn);
         }
     }
 

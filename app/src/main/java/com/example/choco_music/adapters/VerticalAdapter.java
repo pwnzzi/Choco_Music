@@ -21,6 +21,7 @@ import static com.example.choco_music.R.id.genre_layout;
 public class VerticalAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
     private ArrayList<VerticalData> verticalDatas;
     private View view;
+    private int id;
 
 
     public void setData(ArrayList<VerticalData> list){
@@ -57,6 +58,10 @@ public class VerticalAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
     @Override
     public int getItemCount() {
         return verticalDatas.size();
+    }
+
+    public int getItemPosition() {
+        return id;
     }
 
 }

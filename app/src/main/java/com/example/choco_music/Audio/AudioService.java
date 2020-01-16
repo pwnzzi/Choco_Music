@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.provider.MediaStore;
 
+import com.example.choco_music.model.CoverData;
 import com.example.choco_music.model.VerticalData;
 
 import java.util.ArrayList;
@@ -18,11 +19,15 @@ import java.util.ArrayList;
 public class AudioService extends Service {
     private final IBinder mBinder = new AudioServiceBinder();
     private ArrayList<VerticalData> mAudioDatas = new ArrayList<>();
+    private ArrayList<CoverData> Cover_AudioDatas = new ArrayList<>();
     private MediaPlayer mMediaPlayer;
     private boolean isPrepared;
     private int mCurrentPosition;
     private VerticalData currentData;
+    private CoverData currentData_Cover;
     private NotificationPlayer mNotificationPlayer;
+
+
 
     public class AudioServiceBinder extends Binder {
         AudioService getService() {
@@ -86,9 +91,24 @@ public class AudioService extends Service {
         currentData = mAudioDatas.get(position);
     }
 
+    private void queryAudioItem_cover(int position) {
+        mCurrentPosition = position;
+        currentData_Cover = Cover_AudioDatas.get(position);
+    }
+
     private void prepare() {
         try {
             mMediaPlayer.setDataSource(currentData.getFilerul());
+            mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mMediaPlayer.prepareAsync();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void prepare_cover() {
+        try {
+            mMediaPlayer.setDataSource(currentData_Cover.getFilerul());
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mMediaPlayer.prepareAsync();
         } catch (Exception e) {
@@ -108,10 +128,23 @@ public class AudioService extends Service {
         }
     }
 
+    public void setPlayList_Cover(ArrayList<CoverData> audioDatas_cover) {
+        if (!Cover_AudioDatas.equals(audioDatas_cover)) {
+            Cover_AudioDatas.clear();
+            Cover_AudioDatas.addAll(audioDatas_cover);
+        }
+    }
+
     public void play(int position) {
         queryAudioItem(position);
         stop();
         prepare();
+    }
+
+    public void play_cover(int position) {
+        queryAudioItem_cover(position);
+        stop();
+        prepare_cover();
     }
 
     public void play() {
@@ -120,19 +153,6 @@ public class AudioService extends Service {
             sendBroadcast(new Intent(BroadcastActions.PLAY_STATE_CHANGED)); // 재생상태 변경 전송
             updateNotificationPlayer();
         }
-    }
-    public void pause_home_fragment(){
-        mMediaPlayer.pause();
-        sendBroadcast(new Intent(BroadcastActions.PLAY_STATE_CHANGED));
-
-    }
-
-    public void play_home_fragment() {
-
-            mMediaPlayer.start();
-            sendBroadcast(new Intent(BroadcastActions.PLAY_STATE_CHANGED)); // 재생상태 변경 전송
-                  updateNotificationPlayer();
-
     }
 
     public void pause() {
@@ -164,6 +184,10 @@ public class AudioService extends Service {
 
     public VerticalData getAudioItem() {
         return mAudioDatas.get(mCurrentPosition);
+    }
+
+    public CoverData getAudioItem_cover() {
+        return  Cover_AudioDatas.get(mCurrentPosition);
     }
 
     public boolean isPlaying() {

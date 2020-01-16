@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="60dp"
     android:background="#1e1e1e"
-    android:weightSum="6">
+    android:weightSum="8">
 
     <TextView
-        android:layout_weight="2"
+        android:layout_weight="4"
         android:layout_width="0dp"
         android:layout_height="match_parent"/>
 
@@ -38,6 +38,16 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:src="@drawable/back_btn"/>
+
+    <ImageView
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_music_list"
+        android:tint="#ffffff" />
 
 
 </LinearLayout>
