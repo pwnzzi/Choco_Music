@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:id="@+id/home_fragment_layout"
-    android:scaleType="fitXY"
+    android:scaleType="centerCrop"
     android:background="@drawable/elbum_img"
     android:layout_height="match_parent">
 
