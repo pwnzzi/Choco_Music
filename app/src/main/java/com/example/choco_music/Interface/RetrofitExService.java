@@ -1,6 +1,7 @@
 package com.example.choco_music.Interface;
 
 import com.example.choco_music.model.ChartData;
+import com.example.choco_music.model.CoverData;
 import com.example.choco_music.model.VerticalData;
 
 import java.util.ArrayList;
@@ -19,6 +20,13 @@ public interface RetrofitExService {
 
     @GET("song/own/")
     Call<ArrayList<VerticalData>> getData2();
+
+    @GET("song/own/")
+    Call<ArrayList<VerticalData>> getData_home(@Query("query") String title ,  @Query("start") int startPosition);
+
+
+    @GET("song/covered/")
+    Call<ArrayList<CoverData>> getData_Cover();
 
     @GET("song/own/")
     Call<ArrayList<ChartData>> getData1();

@@ -6,16 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#171717"
-    android:weightSum="9"
+
     >
 
 
         <LinearLayout
-            android:layout_weight="0.6"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="10"
             android:background="@drawable/chart_round_bar"
@@ -52,34 +51,9 @@
                 </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_weight="2.4"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp">
-
-                <Button
-                    android:layout_gravity="center"
-                    android:id="@+id/button2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/button1"
-                    android:text="Stop Music From URL" />
-
-                <Button
-                    android:layout_gravity="center"
-                    android:id="@+id/button1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:text="Start Music From URL" />
-        </LinearLayout>
-
-
         <ScrollView
-            android:layout_weight="6"
             android:layout_width="match_parent"
-            android:layout_height="0dp">
+            android:layout_height="match_parent">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/play_list"

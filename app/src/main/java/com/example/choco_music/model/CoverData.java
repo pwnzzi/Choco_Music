@@ -2,11 +2,12 @@ package com.example.choco_music.model;
 
 import java.io.Serializable;
 
-public class VerticalData implements Serializable {
-
+public class CoverData implements Serializable {
 
     private String title;
-    private  String vocal;
+    private String vocal;
+    private String music_url;
+    private String Album_img_url;
     private  int id;
     private  String genre;
     private  String lyrics;
@@ -15,20 +16,15 @@ public class VerticalData implements Serializable {
     private  String lyricist;
     private String fileurl;
 
-    public VerticalData(String title, String vocal){
-
+    public CoverData(String title, String vocal,String music_url){
         this.title = title;
-        this.title = vocal;
-
+        this.vocal = vocal;
+        this.music_url= music_url;
     }
 
-    public String getTitle(){
-        return this.title;
-    }
+    public String getTitle(){ return this.title; }
 
-    public String getVocal(){
-        return this.vocal;
-    }
+    public String getVocal(){ return this.vocal; }
 
     public String getFilerul(){return this.fileurl;}
 
@@ -55,9 +51,5 @@ public class VerticalData implements Serializable {
     public int getId() {
         return id;
     }
-
-
-
-
 
 }

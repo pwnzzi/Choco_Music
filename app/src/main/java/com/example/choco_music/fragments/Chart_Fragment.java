@@ -24,8 +24,10 @@ import com.example.choco_music.activities.Coversong_chart;
 import com.example.choco_music.activities.MusicPlay_activity;
 import com.example.choco_music.activities.Originalsong_chart;
 import com.example.choco_music.adapters.ChartAdapter;
+import com.example.choco_music.adapters.CoverAdapter;
 import com.example.choco_music.adapters.PagerSnapWithSpanCountHelper;
 import com.example.choco_music.model.ChartData;
+import com.example.choco_music.model.CoverData;
 import com.example.choco_music.model.RecyclerItemClickListener;
 import com.example.choco_music.model.VerticalData;
 
@@ -41,12 +43,13 @@ public class Chart_Fragment extends Fragment {
 
     private RecyclerView CoverSong_View,OriginalSong_View;
     private ChartAdapter Original_Adapter;
+    private CoverAdapter coverAdapter;
     private LinearLayoutManager Cover_LayoutManager,Original_LayoutManager;
     private Button Cover_btn, Originall_btn;
-    private int MAX_ITEM_COUNT = 50;
     private Retrofit retrofit;
     private RetrofitExService retrofitExService;
     private ArrayList<VerticalData> Original_datas;
+    private ArrayList<CoverData> Cover_datas;
 
 
     @Nullable
@@ -57,6 +60,7 @@ public class Chart_Fragment extends Fragment {
         init_btn(view);
         init_recyclerview(view);
         init_retrofit();
+     //   init_retrofit_cover();
 
         return view;
     }
@@ -87,6 +91,8 @@ public class Chart_Fragment extends Fragment {
     }
     public void init_recyclerview(View view){
 
+        //자자곡, 커버곡 리사이클러뷰를 만들어준다.
+
         CoverSong_View = (RecyclerView)view.findViewById(R.id.CoverSong_list);
         OriginalSong_View=(RecyclerView)view.findViewById(R.id.OriginalSong_list);
         PagerSnapWithSpanCountHelper snapHelper = new PagerSnapWithSpanCountHelper(5);
@@ -100,6 +106,21 @@ public class Chart_Fragment extends Fragment {
                     @Override public void onItemClick(View view, int position) {
                         Intent intent = new Intent(getActivity(), MusicPlay_activity.class);
                         intent.putExtra("list", Original_datas);
+                        intent.putExtra("chart",1);
+                        intent.putExtra("position", position);
+                        startActivity(intent);
+                    }
+
+                    @Override public void onLongItemClick(View view, int position) { }
+                })
+        );
+
+        CoverSong_View.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), CoverSong_View,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(getActivity(), MusicPlay_activity.class);
+                        intent.putExtra("list", Cover_datas);
+                        intent.putExtra("chart", 2);
                         intent.putExtra("position", position);
                         startActivity(intent);
                     }
@@ -113,6 +134,7 @@ public class Chart_Fragment extends Fragment {
     private void init_retrofit(){
 
         Original_LayoutManager = new GridLayoutManager(getContext(), 5, GridLayoutManager.HORIZONTAL, false);
+        Cover_LayoutManager= new GridLayoutManager(getContext(), 5, GridLayoutManager.HORIZONTAL, false);
         //서버 통신을 위한 레스트로핏 적용
         retrofit = new Retrofit.Builder()
                 .baseUrl(RetrofitExService.URL)
@@ -151,6 +173,39 @@ public class Chart_Fragment extends Fragment {
             public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
             }
         });
-    }
 
+
+
+        // 데이터베이스에 데이터 받아오기
+        retrofitExService.getData_Cover().enqueue(new Callback<ArrayList<CoverData>>() {
+            @Override
+            public void onResponse(@NonNull Call<ArrayList<CoverData>> call, @NonNull Response<ArrayList<CoverData>> response) {
+                if (response.isSuccessful()) {
+                    Cover_datas = response.body();
+
+                    if (Cover_datas != null) {
+                        for (int i = 0; i < Cover_datas.size(); i++) {
+                            Log.d("data" + i, Cover_datas.get(i).getTitle() + "");
+                            Log.d("data" + i, Cover_datas.get(i).getVocal() + "");
+                        }
+                        Log.d("getData_Cover end", "======================================");
+                    }
+                    //     filerul_data.add(datas.get(i).getFilerul());
+                    // setLayoutManager
+                    CoverSong_View.setLayoutManager(Cover_LayoutManager);
+                    Cover_LayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                    // init Adapter
+                    coverAdapter = new CoverAdapter();
+                    // set Data
+                    coverAdapter.setData(Cover_datas);
+                    // set Adapter
+                    CoverSong_View.setAdapter(coverAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<CoverData>> call, Throwable t) {
+            }
+        });
+    }
 }
