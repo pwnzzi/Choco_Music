@@ -156,9 +156,8 @@ public class NotificationPlayer {
                 remoteViews.setImageViewResource(R.id.btn_play_pause, R.drawable.play_btn);
             }
 
-            remoteViews.setTextViewText(R.id.ntf_title, AudioApplication.getInstance().getServiceInterface().getAudioItem().getTitle());
-            remoteViews.setTextViewText(R.id.ntf_vocal, AudioApplication.getInstance().getServiceInterface().getAudioItem().getVocal());
-
+            String title = "임시";
+            remoteViews.setTextViewText(R.id.txt_title, title);
             Uri albumArtUri = null; // ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), mService.getAudioItem().mAlbumId);
             //Picasso.with(mService).load(albumArtUri).error(R.drawable.elbum_img).into(remoteViews, R.id.img_albumart, NOTIFICATION_PLAYER_ID, notification);
         }

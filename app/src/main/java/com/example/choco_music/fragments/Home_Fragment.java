@@ -104,7 +104,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
                 if (response.isSuccessful()) {
                     ArrayList<VerticalData> vertical = response.body();
-                    if (datas != null) {
+                    if (vertical != null) {
                         for (int i = 0; i <vertical.size(); i++) {
                             //오늘의 곡 정보를 가져와서 데이터에 담는다.
                             String title = vertical.get(i).getTitle();

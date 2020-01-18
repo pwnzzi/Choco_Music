@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="7"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <ImageView
             android:id="@+id/play_layout_finish"
@@ -179,13 +180,12 @@
             >
 
             <ImageView
-                android:id="@+id/music_play_replay"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/replay_unselected"
+                android:src="@drawable/replay"
                 />
 
             <ImageView
@@ -219,13 +219,12 @@
                 android:src="@drawable/back_btn"/>
 
             <ImageView
-                android:id="@+id/music_play_shuffle"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/shuffle_unselected"
+                android:src="@drawable/shuffle"
                 />
 
         </LinearLayout>
