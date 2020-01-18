@@ -34,6 +34,8 @@ dependencies {
     // 서버통신을 위한 레스트로핏 동기화
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    //이미지 글리이드
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
 
 
 }

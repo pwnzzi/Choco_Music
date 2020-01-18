@@ -1,7 +1,9 @@
 package com.example.choco_music.Interface;
 
+import com.example.choco_music.model.AlbumData;
 import com.example.choco_music.model.ChartData;
 import com.example.choco_music.model.CoverData;
+import com.example.choco_music.model.TodaySongData;
 import com.example.choco_music.model.VerticalData;
 
 import java.util.ArrayList;
@@ -15,11 +17,14 @@ public interface RetrofitExService {
     String URL = "http://ec2-15-164-222-230.ap-northeast-2.compute.amazonaws.com:8080/";
 
 
- //   @GET("song/own/")
- //   Call<ArrayList<VerticalData>> getData2(@Query("id") int id);
+    //   @GET("song/own/")
+    //   Call<ArrayList<VerticalData>> getData2(@Query("id") int id);
 
     @GET("song/own/")
     Call<ArrayList<VerticalData>> getData2();
+
+    @GET("song/own/")
+    Call<ArrayList<VerticalData>> getData3(@Query("query") int id);
 
     @GET("song/own/")
     Call<ArrayList<VerticalData>> getData_home(@Query("query") String title ,  @Query("start") int startPosition);
@@ -31,8 +36,11 @@ public interface RetrofitExService {
     @GET("song/own/")
     Call<ArrayList<ChartData>> getData1();
 
-    @GET("elbum/own/")
-    Call<ArrayList<VerticalData>> elbumData(@Query("id") int id);
+    @GET("album/own/")
+    Call<ArrayList<AlbumData>> AlbumData(@Query("id") int id);
+
+    @GET("song/recommended/today/")
+    Call<ArrayList<TodaySongData>> getData_Song_Today();
 
 
 }

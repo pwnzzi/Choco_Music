@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.choco_music.R;
 import com.example.choco_music.adapters.VerticalAdapter;
 import com.example.choco_music.fragments.Home_Fragment;
+import com.example.choco_music.model.HomeData;
+import com.example.choco_music.model.Playlist_Database_OpenHelper;
 import com.example.choco_music.model.VerticalData;
 
 import java.util.ArrayList;
@@ -30,15 +32,18 @@ public class VerticalViewHolder extends RecyclerView.ViewHolder {
     public boolean love = false;
     public boolean layout=false;
     public LinearLayout genre_layout;
+    public ImageView img;
+    public Home_Fragment home_fragment;
 
     public VerticalViewHolder(@NonNull View itemView) {
         super(itemView);
 
+        home_fragment = new Home_Fragment();
         title = itemView.findViewById(R.id.title);
         vocal = itemView.findViewById(R.id.vocal);
+        img= itemView.findViewById(R.id.vertical_icon);
+        icon=itemView.findViewById(R.id.love_icon);
 
-        //리사이클러뷰 아이템
-        icon = itemView.findViewById(R.id.love_icon);
         genre = itemView.findViewById(R.id.vertical_genre);
         border = itemView.findViewById(R.id.vertical_icon);
         tri = itemView.findViewById(R.id.vertical_tri);
@@ -49,6 +54,9 @@ public class VerticalViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View view) {
                 if(love == false) {
                     icon.setBackgroundResource(R.drawable.heart_selected);
+                    home_fragment.add_playlist();
+
+
                 }
                 else{
                     icon.setBackgroundResource(R.drawable.heart_unselected_album);

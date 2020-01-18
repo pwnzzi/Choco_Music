@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -22,7 +23,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -31,19 +31,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
-import com.example.choco_music.Audio.AudioAdapter;
 import com.example.choco_music.Audio.AudioApplication;
-import com.example.choco_music.Audio.AudioService;
 import com.example.choco_music.Audio.BroadcastActions;
 import com.example.choco_music.Interface.RetrofitExService;
 import com.example.choco_music.R;
-import com.example.choco_music.adapters.VerticalAdapter;
+import com.example.choco_music.activities.MusicPlay_activity;
+import com.example.choco_music.adapters.HomeSongAdapter;
+import com.example.choco_music.model.AlbumData;
 import com.example.choco_music.model.Blur;
+import com.example.choco_music.model.HomeData;
+import com.example.choco_music.model.RecyclerItemClickListener;
 import com.example.choco_music.model.VerticalData;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -53,7 +53,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Home_Fragment extends Fragment implements View.OnClickListener{
 
     private RecyclerView mVerticalView;
-    private VerticalAdapter mAdapter;
+    private HomeSongAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private LinearLayout layoutBottomSheet;
     private CoordinatorLayout background;
@@ -62,8 +62,8 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     private ArrayList<Boolean> clicks;
     public MediaPlayer mediaPlayer;
     private ImageView music_play_btn;
-    private View view;
-    private Button cancelButton, loveIcon;
+    private View view, view_item;
+    private Button cancelButton;
     private ArrayList<ImageView> stars;
     private int currentStar = 5;
     private boolean playPause;
@@ -72,8 +72,12 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     private int position;
     private ArrayList<VerticalData> datas;
     private BottomSheetBehavior sheetBehavior;
-    AudioService mservice;
-    private Boolean isRunning = false;
+    private RetrofitExService retrofitExService;
+    private Retrofit retrofit;
+    private final SnapHelper snapHelper = new PagerSnapHelper();
+    private ArrayList<AlbumData> albumDatas;
+    public String img_path ;
+    private ArrayList<HomeData> homeDatas;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -81,198 +85,80 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             updateUI();
         }
     };
-
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.home_fragment, null, false);
+        view_item = inflater.inflate(R.layout.vertical_recycler_items, null, false);
 
-        getAudioListFromMediaDatabase();
-        //서버 통신을 위한 레스트로핏 적용
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(RetrofitExService.URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        RetrofitExService retrofitExService = retrofit.create(RetrofitExService.class);
-
-
-
-        //init LayoutManager
-        mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
-
-        //태그 버튼 적용
-        btn_tag();
-        layoutBottomSheet = view.findViewById(R.id.bottom_sheet);
-        sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
-        music_evaluate_btn = (Button) view.findViewById(R.id.music_evaluate_btn);
-        music_play_btn = (ImageView) view.findViewById(R.id.home_fragment_play_btn);
-
-
-        //음악 평가 클릭 이벤트
-        music_evaluate_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            }
-        });
-
-        // bottom sheet dragable
-        sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                if (newState == BottomSheetBehavior.STATE_DRAGGING) {
-                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                }
-            }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-            }
-        });
-
-        //RecyclerVier binding
-        mVerticalView = (RecyclerView) view.findViewById(R.id.vertivcal_list);
-        final SnapHelper snapHelper = new PagerSnapHelper();
-        snapHelper.attachToRecyclerView(mVerticalView);
-        mVerticalView.addItemDecoration(new OffsetItemDecoration(getContext()));
-
-
-        // 홈 배경화면에 앨범 이미지 어둡게 세팅
-        background = view.findViewById(R.id.home_fragment_layout);
-        Drawable drawable = getResources().getDrawable(R.drawable.elbum_img);
-        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-        Blur blur = new Blur(getContext(), background, bitmap, 10, getActivity());
-        blur.run();
-
+       setup_retrofit();
+       btn_tag();
+       setup_view(view);
+       setup_data();
+       return view;
+    }
+    private void setup_data(){
         // 데이터베이스에 데이터 받아오기
         retrofitExService.getData2().enqueue(new Callback<ArrayList<VerticalData>>() {
             @Override
             public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
                 if (response.isSuccessful()) {
                     datas = response.body();
-                    //음악 재생기에 넣어줄 리스트를 만들어준다.
-
                     if (datas != null) {
-                        for (int i = 0; i < datas.size(); i++) {
-                            Log.d("data" + i, datas.get(i).getTitle() + "");
-                            Log.d("data" + i, datas.get(i).getId() + "");
-                            Log.d("data" + i, datas.get(i).getLyricist() + "");
-                            Log.d("data" + i, datas.get(i).getVocal() + "");
-                            Log.d("data" + i, datas.get(i).getBucketName() + "");
-                            Log.d("data" + i, datas.get(i).getComment() + "");
-                            Log.d("data" + i, datas.get(i).getLyrics() + "");
-                            Log.d("data" + i, datas.get(i).getGenre() + "");
-                            Log.d("data" + i, datas.get(i).getFilerul() + "");
+                        for (int i = 0; i <datas.size(); i++) {
+                            //오늘의 곡 정보를 가져와서 데이터에 담는다.
+                            String title = datas.get(i).getTitle();
+                            String vocal = datas.get(i).getVocal();
+                            String genre = datas.get(i).getGenre();
+                            Log.e("제목", title);
+                            Log.e("가수", vocal);
+
+                            int album_number = datas.get(i).getAlbum();
+                            setup_album(album_number,title,vocal,genre);
                         }
-                        Log.d("getData2 end", "======================================");
                     }
-                    // setLayoutManager
-                    mVerticalView.setLayoutManager(mLayoutManager);
-                    // init Adapter
-                    mAdapter = new VerticalAdapter();
-                    // set Data
-                    mAdapter.setData(datas);
-                    // set Adapter
-                    mVerticalView.setAdapter(mAdapter);
-                    //오디오 어플리 케이션에 재생할 음악 url을 담아준다.
                     AudioApplication.getInstance().getServiceInterface().setPlayList(datas);
                     //AudioApplication.getInstance().getServiceInterface().play(0);
                 }
             }
-
             @Override
             public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
-
             }
         });
-
         registerBroadcast();
-      // updateUI();
-
-
-        // 취소, 완료 버튼
-        cancelButton = view.findViewById(R.id.sheet_cancel);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                cancelButton.setBackgroundResource(R.drawable.button_evaluate_homefragment);
-            }
-        });
-        // 리사이클러 뷰가 스크롤 될때 현재 위치를 받아오기 위해서 사용하는 코드
-        mVerticalView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                //리사이 클러뷰 화면 전환시 play 버튼 다시 적용 하는 코드
-                initalStage = true;
-                music_play_btn.setImageResource(R.drawable.play_btn);
-                playPause = false;
-                // 현재 포지션 값을 받아 오는 코드
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    View centerView = snapHelper.findSnapView(mLayoutManager);
-                    position = mLayoutManager.getPosition(centerView);
-                    Log.e("Snapped Item Position:","" + position);
-                    }
-                //별 선택시
-                for(int i=0; i!=5; ++i)
-                    stars.get(i).setImageResource(R.drawable.star_selected);
-                currentStar = 5;
-                for(int i=0; i!=10; ++i){
-                    clicks.set(i, false);
-                    btn_tags.get(i).setBackgroundResource(R.drawable.button_border);
-                }
-
-
-            }
-        });
-        //확인 버튼
-        confirmButton = view.findViewById(R.id.sheet_confirm);
-        confirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                confirmButton.setBackgroundResource(R.drawable.button_evaluate_homefragment);
-                Toast myToast = Toast.makeText(getActivity().getApplicationContext(),"평가가 완료 되었습니다.",Toast.LENGTH_SHORT);
-                myToast.setGravity(Gravity.CENTER,0,0);
-                myToast.show();
-            }
-        });
-        // 별
-        stars = new ArrayList<>();
-        stars.add((ImageView) view.findViewById(R.id.star_1));
-        stars.add((ImageView) view.findViewById(R.id.star_2));
-        stars.add((ImageView) view.findViewById(R.id.star_3));
-        stars.add((ImageView) view.findViewById(R.id.star_4));
-        stars.add((ImageView) view.findViewById(R.id.star_5));
-        for (int i = 0; i < 5; ++i)
-            stars.get(i).setOnClickListener(this);
-
-        music_play_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!playPause) {
-                    if (initalStage) {
-                        AudioApplication.getInstance().getServiceInterface().play(position);
-                        initalStage =!initalStage;
-                    } else {
-                        if (!AudioApplication.getInstance().getServiceInterface().isPlaying()) {
-                            AudioApplication.getInstance().getServiceInterface().play_home_fragment();
-                        }
-                    }
-                    playPause = true;
-                } else {
-                    if ( AudioApplication.getInstance().getServiceInterface().isPlaying()) {
-                       AudioApplication.getInstance().getServiceInterface().pause_home_fragment();
-                    }
-                    playPause = false;
-                }
-            }
-        });
-        return view;
+        // updateUI();
     }
 
+    private void setup_album(final int Album_Number ,final String title, final String vocal, final String genre){
+
+        Call<ArrayList<AlbumData>> call = retrofitExService.AlbumData(Album_Number);
+        call.enqueue(new Callback<ArrayList<AlbumData>>()  {
+            @Override
+            public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
+                if (response.isSuccessful()) {
+                    albumDatas = response.body();
+                    if ( albumDatas!= null) {
+                        for (int i = 0; i < albumDatas.size(); i++) {
+                            if ( albumDatas.get(i).getId() == Album_Number ){
+                                img_path = albumDatas.get(i).getImg_path();
+                                Log.e("앨범데이터1",img_path);
+                                Log.e("앨범데이터 제목",title);
+                                homeDatas.add(new HomeData(title,vocal,img_path,genre));
+                                // 홈 배경화면에 앨범 이미지 어둡게 세팅
+
+                            }
+                        }
+                    }
+                    mAdapter = new HomeSongAdapter();
+                    mAdapter.setData(homeDatas);
+                    mVerticalView.setAdapter(mAdapter);
+                }
+            }
+            @Override
+            public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {
+            }
+        });
+    }
     private void btn_tag() {
         btn_tags = new ArrayList<>();
         clicks = new ArrayList<>();
@@ -292,8 +178,14 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             clicks.add(false);
         }
     }
-
-
+    private void setup_retrofit(){
+        //서버 통신을 위한 레스트로핏 적용
+        retrofit = new Retrofit.Builder()
+                .baseUrl(RetrofitExService.URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        retrofitExService = retrofit.create(RetrofitExService.class);
+    }
     @Override
     public void onClick(View view) {
         int btns = 0;
@@ -336,7 +228,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             else
                 btn_tags.get(btns).setBackgroundResource(R.drawable.button_state_focused);
             clicks.set(btns, !clicks.get(btns));
-
         }
         btns = 0;
         for(int i = 0; i < 5; ++i)
@@ -344,8 +235,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         for(int i=0; i<currentStar; ++i)
             stars.get(i).setImageResource(R.drawable.star_selected);
     }
-
-
     @Override
     public void onPause() {
         super.onPause();
@@ -358,7 +247,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             progressDialog.dismiss();
     }
     // 평가화면 리사이클러뷰 여백 조정
-
     public class OffsetItemDecoration extends RecyclerView.ItemDecoration {
 
         private Context ctx;
@@ -382,7 +270,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             }
         }
         private void setupOutRect(Rect rect, int offset, boolean start) {
-
             if (start) {
                 rect.left = offset;
             } else {
@@ -390,7 +277,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             }
         }
         private int getScreenWidth() {
-
             WindowManager wm = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
             Display display = wm.getDefaultDisplay();
             Point size = new Point();
@@ -398,7 +284,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             return size.x;
         }
     }
-
     private void updateUI() {
         if (AudioApplication.getInstance().getServiceInterface().isPlaying()) {
             music_play_btn.setImageResource(R.drawable.playing_btn);
@@ -406,7 +291,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             music_play_btn.setImageResource(R.drawable.play_btn);
         }
     }
-
     private void registerBroadcast() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(BroadcastActions.PREPARED);
@@ -421,10 +305,132 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     private void unregisterBroadcast() {
         getActivity().unregisterReceiver(mBroadcastReceiver);
     }
-    private void getAudioListFromMediaDatabase() {
-        //DB접근
-    }
+    private void setup_view(View view){
+        // 취소, 완료 버튼
+        cancelButton = view.findViewById(R.id.sheet_cancel);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                cancelButton.setBackgroundResource(R.drawable.button_evaluate_homefragment);
+            }
+        });
+        //확인 버튼
+        confirmButton = view.findViewById(R.id.sheet_confirm);
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmButton.setBackgroundResource(R.drawable.button_evaluate_homefragment);
+                Toast myToast = Toast.makeText(getActivity().getApplicationContext(),"평가가 완료 되었습니다.",Toast.LENGTH_SHORT);
+                myToast.setGravity(Gravity.CENTER,0,0);
+                myToast.show();
+            }
+        });
+        //init LayoutManager
+        homeDatas= new ArrayList<HomeData>();
+        mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
+        // setLayoutManager
+        //RecyclerVier binding
+        mVerticalView = (RecyclerView) view.findViewById(R.id.vertivcal_list);
+        snapHelper.attachToRecyclerView(mVerticalView);
+        mVerticalView.addItemDecoration(new OffsetItemDecoration(getContext()));
+        mVerticalView.setLayoutManager(mLayoutManager);
 
+        layoutBottomSheet = view.findViewById(R.id.bottom_sheet);
+        sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
+        music_evaluate_btn = (Button) view.findViewById(R.id.music_evaluate_btn);
+        music_play_btn = (ImageView) view.findViewById(R.id.home_fragment_play_btn);
+
+
+
+        //음악 평가 클릭 이벤트
+        music_evaluate_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            }
+        });
+        // bottom sheet dragable
+        sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+            }
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+            }
+        });
+
+        // 홈 배경화면에 앨범 이미지 어둡게 세팅
+        background = view.findViewById(R.id.home_fragment_layout);
+        Drawable drawable = getResources().getDrawable(R.drawable.elbum_img);
+        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+        Blur blur = new Blur(getContext(), background, bitmap, 10, getActivity());
+        blur.run();
+
+        // 리사이클러 뷰가 스크롤 될때 현재 위치를 받아오기 위해서 사용하는 코드
+        mVerticalView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                //리사이 클러뷰 화면 전환시 play 버튼 다시 적용 하는 코드
+                initalStage = true;
+                music_play_btn.setImageResource(R.drawable.play_btn);
+                playPause = false;
+                // 현재 포지션 값을 받아 오는 코드
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    View centerView = snapHelper.findSnapView(mLayoutManager);
+                    position = mLayoutManager.getPosition(centerView);
+                    Log.e("Snapped Item Position:","" + position);
+                }
+                //별 선택시
+                for(int i=0; i!=5; ++i)
+                    stars.get(i).setImageResource(R.drawable.star_selected);
+                currentStar = 5;
+                for(int i=0; i!=10; ++i) {
+                    clicks.set(i, false);
+                    btn_tags.get(i).setBackgroundResource(R.drawable.button_border);
+                }
+            }
+        });
+        // 별
+        stars = new ArrayList<>();
+        stars.add((ImageView) view.findViewById(R.id.star_1));
+        stars.add((ImageView) view.findViewById(R.id.star_2));
+        stars.add((ImageView) view.findViewById(R.id.star_3));
+        stars.add((ImageView) view.findViewById(R.id.star_4));
+        stars.add((ImageView) view.findViewById(R.id.star_5));
+        for (int i = 0; i < 5; ++i)
+            stars.get(i).setOnClickListener(this);
+
+        music_play_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!playPause) {
+                    if (initalStage) {
+                        AudioApplication.getInstance().getServiceInterface().play(position);
+                        initalStage =!initalStage;
+                    } else {
+                        if (!AudioApplication.getInstance().getServiceInterface().isPlaying()) {
+                            AudioApplication.getInstance().getServiceInterface().play_home_fragment();
+                        }
+                    }
+                    playPause = true;
+                } else {
+                    if ( AudioApplication.getInstance().getServiceInterface().isPlaying()) {
+                        AudioApplication.getInstance().getServiceInterface().pause_home_fragment();
+                    }
+                    playPause = false;
+                }
+            }
+        });
+    }
+    public void add_playlist(){
+        Log.e("1번 값",""+ position );
+    }
 }
 
 

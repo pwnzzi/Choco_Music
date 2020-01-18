@@ -1,53 +1,55 @@
 package com.example.choco_music.adapters;
 
 import android.graphics.Color;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.choco_music.Holder.TodaySong_ViewHolder;
 import com.example.choco_music.Holder.VerticalViewHolder;
 import com.example.choco_music.R;
-import com.example.choco_music.model.VerticalData;
+import com.example.choco_music.model.HomeData;
+import com.example.choco_music.model.IntroduceData;
 
 import java.util.ArrayList;
 
-import static com.example.choco_music.R.id.genre_layout;
+public class HomeSongAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
 
-public class VerticalAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
-    private ArrayList<VerticalData> verticalDatas;
+    private ArrayList<HomeData> homeDatas;
     private View view;
     private int id;
 
+    public void setData(ArrayList<HomeData> list){homeDatas = list;}
 
-    public void setData(ArrayList<VerticalData> list){
-        verticalDatas = list;
-    }
     @NonNull
     @Override
     public VerticalViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        //사용할 아이템 뷰를 생성해준다.
-
-        view= LayoutInflater.from(parent.getContext()).inflate(R.layout.vertical_recycler_items,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.vertical_recycler_items,parent,false);
         VerticalViewHolder holder = new VerticalViewHolder(view);
 
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull VerticalViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull VerticalViewHolder holder, int position) {
 
-        VerticalData data = verticalDatas.get(position);
-
+        //데이터에 받아온 값을 각각의 아이템에 넣어준다.
+        HomeData data = homeDatas.get(position);
         holder.vocal.setText(data.getVocal());
         holder.title.setText(data.getTitle());
-       // Glide.with(holder.itemView.getContext()).load(data.getImg_path()).into(holder.img);
+
+        //이미지를 글라이드를 이용해서 넣어준다.
+
+        if(data.getImg_path() != null)
+            Log.e("잘넘어오나?",data.getImg_path());
+            Glide.with(holder.itemView.getContext()).load(data.getImg_path()).into(holder.img);
 
 
         if(data.getGenre().equals("자작곡")) {
@@ -57,15 +59,11 @@ public class VerticalAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
             holder.border.setBackgroundResource(R.drawable.border_cover_orig);
             holder.tri.setImageResource(R.drawable.ic_triangle_original);
         }
+
     }
-// https://android-blog.dev/19?category=677940 출처
+
     @Override
     public int getItemCount() {
-        return verticalDatas.size();
+        return homeDatas.size();
     }
-
-    public int getItemPosition() {
-        return id;
-    }
-
 }

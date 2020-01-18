@@ -14,13 +14,17 @@ public class VerticalData implements Serializable {
     private  String bucketName;
     private  String lyricist;
     private String fileurl;
+    private int album;
 
     public VerticalData(String title, String vocal){
 
         this.title = title;
-        this.title = vocal;
+        this.vocal = vocal;
 
     }
+
+
+    public int getAlbum(){ return this.album; }
 
     public String getTitle(){
         return this.title;

@@ -1,223 +1,241 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="250dp"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     >
 
 
-    <LinearLayout
-        android:layout_marginTop="20.8dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/vertical_genre"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/back_img"/>
+
+
+        <LinearLayout
+            android:layout_marginTop="20.8dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="커버곡"
-            android:textSize="17dp"
-            style="@style/TextStyle3"
-            android:background="@drawable/round_songtype"
-            android:layout_gravity="center"/>
-
-        <TextView
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="5dp"
-            android:textSize="15sp"
-            style="@style/TextStyle4"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/title"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/vertical_icon"
-            android:text="노래제목"
-            android:maxLines="1"/>
-
-        <TextView
-            android:layout_marginBottom="5dp"
-            android:textSize="15sp"
-            style="@style/TextStyle4"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/vocal"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/vertical_icon"
-            android:text="가수"
-            android:maxLines="1"/>
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+            android:layout_height="match_parent">
 
 
-            <ImageView
-                android:adjustViewBounds="true"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:id="@+id/vertical_icon"
-                android:src="@drawable/elbum_img"
-                android:padding="1dp"
-                android:scaleType="centerCrop"
-                android:cropToPadding="true"
-                android:background="@drawable/border_cover"
-                />
-
-            <Button
-                android:id="@+id/love_icon"
-                android:layout_marginLeft="5dp"
-                android:layout_gravity="bottom"
-                android:layout_width="55dp"
-                android:layout_height="55dp"
-                android:background="@drawable/heart_unselected_album"/>
-
-            <LinearLayout
-                android:visibility="gone"
-                android:id="@+id/genre_layout"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:orientation="vertical"
-                android:background="@color/transparent">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:textColor="#000000"
-                        android:background="#ff9600"
-                        android:paddingLeft="5dp"
-                        android:paddingTop="5dp"
-                        android:paddingBottom="5dp"
-                        android:paddingRight="5dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
-                        android:layout_marginLeft="20dp"
-                        android:text="#발라드"/>
 
 
-                    <TextView
-                        android:textColor="#000000"
-                        android:background="#ff9600"
-                        android:paddingLeft="5dp"
-                        android:paddingTop="5dp"
-                        android:paddingBottom="5dp"
-                        android:paddingRight="5dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
-                        android:layout_marginLeft="20dp"
-                        android:text="#발라드"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-
-                    android:weightSum="2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:textColor="#000000"
-                        android:background="#ff9600"
-                        android:paddingLeft="5dp"
-                        android:paddingTop="5dp"
-                        android:paddingBottom="5dp"
-                        android:paddingRight="5dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
-                        android:layout_marginLeft="20dp"
-                        android:text="#발라드"/>
-
-
-                    <TextView
-                        android:textColor="#000000"
-                        android:background="#ff9600"
-                        android:paddingLeft="5dp"
-                        android:paddingTop="5dp"
-                        android:paddingBottom="5dp"
-                        android:paddingRight="5dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
-                        android:layout_marginLeft="20dp"
-                        android:text="#발라드"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:textColor="#000000"
-                        android:background="#ff9600"
-                        android:paddingLeft="5dp"
-                        android:paddingTop="5dp"
-                        android:paddingBottom="5dp"
-                        android:paddingRight="5dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
-                        android:layout_marginLeft="20dp"
-                        android:text="#발라드"/>
-
-
-                    <TextView
-                        android:textColor="#000000"
-                        android:background="#ff9600"
-                        android:paddingLeft="5dp"
-                        android:paddingTop="5dp"
-                        android:paddingBottom="5dp"
-                        android:paddingRight="5dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
-                        android:layout_marginLeft="20dp"
-                        android:text="#발라드"/>
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/vertical_tri"
+            <TextView
+                android:id="@+id/vertical_genre"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:src="@drawable/ic_triangle_cover"
+                android:text="커버곡"
+                android:textSize="17dp"
+                style="@style/TextStyle3"
+                android:background="@drawable/round_songtype"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="15sp"
+                style="@style/TextStyle4"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/title"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/vertical_icon"
+                android:text="노래제목"
+                android:maxLines="1"/>
+
+            <TextView
+                android:layout_marginBottom="5dp"
+                android:textSize="15sp"
+                style="@style/TextStyle4"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/vocal"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/vertical_icon"
+                android:text="가수"
+                android:maxLines="1"/>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+
+                <ImageView
+                    android:adjustViewBounds="true"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:id="@+id/vertical_icon"
+                    android:src="@drawable/elbum_img"
+                    android:padding="1dp"
+                    android:scaleType="centerCrop"
+                    android:cropToPadding="true"
+                    android:background="@drawable/border_cover"
+                    />
+
+                <Button
+                    android:id="@+id/love_icon"
+                    android:layout_marginLeft="5dp"
+                    android:layout_gravity="bottom"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:background="@drawable/heart_unselected_album"/>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/genre_layout"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:orientation="vertical"
+                    android:background="@color/transparent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:textColor="#000000"
+                            android:background="#ff9600"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="30dp"
+                            android:layout_marginLeft="20dp"
+                            android:text="#발라드"/>
+
+
+                        <TextView
+                            android:textColor="#000000"
+                            android:background="#ff9600"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="30dp"
+                            android:layout_marginLeft="20dp"
+                            android:text="#발라드"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+
+                        android:weightSum="2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:textColor="#000000"
+                            android:background="#ff9600"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="30dp"
+                            android:layout_marginLeft="20dp"
+                            android:text="#발라드"/>
+
+
+                        <TextView
+                            android:textColor="#000000"
+                            android:background="#ff9600"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="30dp"
+                            android:layout_marginLeft="20dp"
+                            android:text="#발라드"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:textColor="#000000"
+                            android:background="#ff9600"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="30dp"
+                            android:layout_marginLeft="20dp"
+                            android:text="#발라드"/>
+
+
+                        <TextView
+                            android:textColor="#000000"
+                            android:background="#ff9600"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="30dp"
+                            android:layout_marginLeft="20dp"
+                            android:text="#발라드"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/vertical_tri"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:src="@drawable/ic_triangle_cover"
+                    />
+
+            </FrameLayout>
+
+            <TextView
+                android:layout_marginTop="5dp"
+                android:textSize="15sp"
+                style="@style/TextStyle4"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/vertical_description2"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/vertical_icon"
                 />
 
-        </FrameLayout>
-
-        <TextView
-            android:layout_marginTop="5dp"
-            android:textSize="15sp"
-            style="@style/TextStyle4"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/vertical_description2"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/vertical_icon"
-            />
 
 
-    </LinearLayout>
+        </LinearLayout>
 
+
+
+    </FrameLayout>
 
 
 

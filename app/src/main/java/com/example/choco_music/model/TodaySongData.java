@@ -4,27 +4,27 @@ import java.io.Serializable;
 
 public class TodaySongData implements Serializable {
 
-    private String title;
-    private String vocal;
+    private int songOwn;
+    private int songCovered;
+    private int id;
 
-    public TodaySongData(String title, String vocal){
-        this.title = title;
-        this.vocal = vocal;
-    }
+    public TodaySongData(int songOwn,int songCovered, int id){
+        this.songOwn = songOwn;
+        this.songCovered = songCovered;
+        this.id = id;
 
-    public String getTitle(){
-        return this.title;
-    }
 
-    public String getVocal(){
-        return this.vocal;
     }
 
-    public void setTitle(String title){
-        this.title = title;
+    public int get_songOwn(){
+        return this.songOwn;
     }
-    public void setVocal(String vocal){
-        this.vocal = vocal;
+
+    public int getId(){ return this.id;}
+
+    public int get_songCovered(){
+        return this.songCovered;
     }
+
 }
 

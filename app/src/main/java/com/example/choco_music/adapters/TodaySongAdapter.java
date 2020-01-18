@@ -9,9 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.choco_music.Holder.TodaySong_ViewHolder;
 import com.example.choco_music.R;
 import com.example.choco_music.model.TodaySongData;
-import com.example.choco_music.model.VerticalData;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class TodaySongAdapter extends RecyclerView.Adapter<TodaySong_ViewHolder> {
@@ -30,8 +27,8 @@ public class TodaySongAdapter extends RecyclerView.Adapter<TodaySong_ViewHolder>
     public void onBindViewHolder(@NonNull TodaySong_ViewHolder holder, int position) {
 
         TodaySongData data = todaySongDatas.get(position);
-        holder.vocal.setText(data.getVocal());
-        holder.title.setText(data.getTitle());
+       // holder.vocal.setText(data.getVocal());
+       // holder.title.setText(data.getTitle());
     }
 
     @Override

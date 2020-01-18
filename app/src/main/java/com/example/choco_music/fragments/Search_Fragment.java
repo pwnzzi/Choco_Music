@@ -1,6 +1,5 @@
 package com.example.choco_music.fragments;
 
-import android.content.ClipData;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,8 +21,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.choco_music.Interface.RetrofitExService;
 import com.example.choco_music.R;
+import com.example.choco_music.adapters.IntroduceSongAdapter;
 import com.example.choco_music.adapters.SearchAdapter;
-import com.example.choco_music.adapters.TodaySongAdapter;
+import com.example.choco_music.model.AlbumData;
+import com.example.choco_music.model.IntroduceData;
 import com.example.choco_music.model.SearchData;
 import com.example.choco_music.model.TodaySongData;
 import com.example.choco_music.model.VerticalData;
@@ -39,7 +40,7 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
     private RecyclerView Search_View , TodaySong_view;
     private RecyclerView.LayoutManager mLayoutManager, tLayoutManager;
     private SearchAdapter mAdapter;
-    private TodaySongAdapter tAdapter;
+    private IntroduceSongAdapter tAdapter;
     private Button search_btn;
     private InputMethodManager mInputMethodManager;
     private EditText mEtKeyword;
@@ -49,11 +50,19 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
     private TextView genre, todaysong_list;
     private ArrayList<VerticalData> musics;
     private ArrayList<TodaySongData> todaySongDatas;
+    private ArrayList<IntroduceData> introduceDatas;
+    private ArrayList<AlbumData> albumDatas;
+    private int songOwn, songCovered;
+    private String img_path;
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.search_fragment, null, false);
+
+        Setup_Retrofit2();
+        Start_TodaySong_view();
         Setup_Recyclerview(view);
         Setup_Searchview(view);
         return view;
@@ -62,7 +71,8 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
         genre= view.findViewById(R.id.song_search_fragment);
         todaysong_list= view.findViewById(R.id.todaysong_list);
         Search_datas = new ArrayList<SearchData>();
-        todaySongDatas = new ArrayList<TodaySongData>();
+      //  todaySongDatas = new ArrayList<TodaySongData>();
+        introduceDatas= new ArrayList<IntroduceData>();
         Search_View = view.findViewById(R.id.search_view);
         TodaySong_view = view.findViewById(R.id.todaysong_view);
         //Search_View.setHasFixedSize(true);
@@ -70,13 +80,13 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
         tLayoutManager = new LinearLayoutManager(getContext());
         Search_View.setLayoutManager(mLayoutManager);
         TodaySong_view.setLayoutManager(tLayoutManager);
-        //오늘의 추천곡을 리사이클러뷰에 연결한다.
-        todaySongDatas.add(new TodaySongData("그시간속","백선욱"));
-        tAdapter = new TodaySongAdapter();
-        tAdapter.setData(todaySongDatas);
-        TodaySong_view.setAdapter(tAdapter);
-        Log.e("--------",""+todaySongDatas.get(0).getTitle());
-
+    }
+    private void Setup_Retrofit2(){
+        retrofit = new Retrofit.Builder()
+                .baseUrl(RetrofitExService.URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        retrofitExService = retrofit.create(RetrofitExService.class);
     }
     private void Setup_Searchview(View view){
         mEtKeyword = view.findViewById(R.id.search_edit_frame);
@@ -160,9 +170,7 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
                     genre.setVisibility(View.VISIBLE);
                     TodaySong_view.setVisibility(View.GONE);
                     todaysong_list.setVisibility(View.GONE);
-
                 }
-
                 // 리스트 데이터가 변경되었으므로 아답터를 갱신하여 검색된 데이터를 화면에 보여준다.
                     mAdapter = new SearchAdapter();
                     mAdapter.setData(Search_datas);
@@ -173,5 +181,105 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
             public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
             }
         });
+    }
+    private void Start_TodaySong_view(){
+
+        Call<ArrayList<TodaySongData>> call_ = retrofitExService.getData_Song_Today();
+
+        call_.enqueue(new Callback<ArrayList<TodaySongData>>()  {
+            @Override
+            public void onResponse(@NonNull Call<ArrayList<TodaySongData>> call, @NonNull Response<ArrayList<TodaySongData>> response) {
+                if (response.isSuccessful()) {
+                    todaySongDatas= response.body();
+
+                    if (todaySongDatas != null) {
+                        for (int i = 0; i <todaySongDatas.size(); i++) {
+                            Log.e("data" + i, todaySongDatas.get(i).get_songOwn() + "");
+                            Log.e("data" + i, todaySongDatas.get(i).get_songCovered() + "");
+                            //오늘의 곡 정보를 가져와서 데이터에 담는다.
+                            songOwn = todaySongDatas.get(i).get_songOwn();
+                            songCovered = todaySongDatas.get(i).get_songCovered();
+                            Log.e("data",""+songCovered);
+                            Log.e("data",""+songOwn);
+                            get_musics_data(songOwn);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<TodaySongData>> call, Throwable t) {
+            }
+        });
+    }
+    private void get_musics_data(final int Song_Number){
+
+
+        Call<ArrayList<VerticalData>> call = retrofitExService.getData3(Song_Number);
+
+        call.enqueue(new Callback<ArrayList<VerticalData>>()  {
+            @Override
+            public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
+                if (response.isSuccessful()) {
+                    musics= response.body();
+
+                    if (musics != null) {
+                        for (int i = 0; i < musics.size(); i++) {
+
+                            if (musics.get(i).getId() == Song_Number ){
+
+                                String todaysong_title = musics.get(i).getTitle();
+                                String todaysong_vocal = musics.get(i).getVocal();
+                                String todaysong_comment = musics.get(i).getComment();
+                                int todaysong_album = musics.get(i).getAlbum();
+
+                                Log.e("data", "" +  todaysong_comment);
+                                Log.e("data", "" + todaysong_title);
+                                Log.e("data", "" + todaysong_vocal);
+                                get_img_data(todaysong_comment,todaysong_title,todaysong_vocal,todaysong_album);
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
+            }
+        });
+    }
+
+    private String get_img_data(final String comment , final String title ,final  String vocal ,final int Song_Number){
+
+        Call<ArrayList<AlbumData>> call = retrofitExService.AlbumData(Song_Number);
+
+        call.enqueue(new Callback<ArrayList<AlbumData>>()  {
+            @Override
+            public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
+                if (response.isSuccessful()) {
+                    albumDatas = response.body();
+
+                    if ( albumDatas!= null) {
+                        for (int i = 0; i < albumDatas.size(); i++) {
+
+                            if ( albumDatas.get(i).getId() == Song_Number ){
+
+                                img_path = albumDatas.get(i).getImg_path();
+
+                                Log.e("이미지 정보!!!!!!!!!!!!!", "" + img_path);
+
+                                 introduceDatas.add(new IntroduceData(title, vocal,  comment,img_path ));
+                            }
+                        }
+                    }
+                    tAdapter = new IntroduceSongAdapter();
+                    tAdapter.setData(introduceDatas);
+                    TodaySong_view.setAdapter(tAdapter);
+                }
+            }
+            @Override
+            public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {
+            }
+        }); return img_path;
     }
 }

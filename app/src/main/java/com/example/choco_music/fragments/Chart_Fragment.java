@@ -1,12 +1,9 @@
 package com.example.choco_music.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -26,7 +23,6 @@ import com.example.choco_music.activities.Originalsong_chart;
 import com.example.choco_music.adapters.ChartAdapter;
 import com.example.choco_music.adapters.CoverAdapter;
 import com.example.choco_music.adapters.PagerSnapWithSpanCountHelper;
-import com.example.choco_music.model.ChartData;
 import com.example.choco_music.model.CoverData;
 import com.example.choco_music.model.RecyclerItemClickListener;
 import com.example.choco_music.model.VerticalData;
@@ -60,8 +56,6 @@ public class Chart_Fragment extends Fragment {
         init_btn(view);
         init_recyclerview(view);
         init_retrofit();
-     //   init_retrofit_cover();
-
         return view;
     }
 

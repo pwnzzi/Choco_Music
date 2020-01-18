@@ -1,56 +1,95 @@
 package com.example.choco_music.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import android.content.BroadcastReceiver;
-import android.content.ContentUris;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.Uri;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.choco_music.Audio.AudioAdapter;
-import com.example.choco_music.Audio.AudioApplication;
-import com.example.choco_music.Audio.BroadcastActions;
-import com.example.choco_music.Interface.RetrofitExService;
 import com.example.choco_music.R;
 import com.example.choco_music.model.VerticalData;
-import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-public class TempActivity extends AppCompatActivity implements View.OnClickListener {
+public class TempActivity extends AppCompatActivity /*implements View.OnClickListener*/ {
     private final static int LOADER_ID = 0x001;
 
     private AudioAdapter mAdapter;
     ArrayList<VerticalData> datas;
 
-    private ImageView mImgAlbumArt;
+    private ImageView mImgAlbumArt,imageView;
     private TextView mTxtTitle;
     private ImageButton mBtnPlayPause;
-    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-        @Override
+    Bitmap bmImg;
+
+   // private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+    /*    @Override
         public void onReceive(Context context, Intent intent) {
             updateUI();
         }
-    };
+    };*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temp);
 
+        File f = new File("https://chocomusic.s3.ap-northeast-2.amazonaws.com/StaticFile/SongOwn/%EC%88%A8_6DAYLAYOFF.jpg");
+    //    Bitmap myBitmap = BitmapFactory.decodeFile(f.getAbsolutePath());
+        imageView = findViewById(R.id.img_temp);
+    //    imageView.setImageBitmap(myBitmap);
+
+        Thread mThread = new Thread() {
+            public void run(){
+
+
+                URL myFileUrl = null;
+                try {
+                    myFileUrl = new URL("https://chocomusic.s3.ap-northeast-2.amazonaws.com/StaticFile/SongOwn/%EC%88%A8_6DAYLAYOFF.jpg");
+
+                    HttpURLConnection conn= (HttpURLConnection)myFileUrl.openConnection();
+                    conn.setDoInput(true);
+                    conn.connect();
+
+                    InputStream is = conn.getInputStream();
+                    bmImg = BitmapFactory.decodeStream(is);
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+
+            }
+
+        };
+
+        mThread.start();
+
+        try{
+            mThread.join();
+            imageView.setImageBitmap(bmImg);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
+
+
+
+
+
+
+
+/*
         getAudioListFromMediaDatabase();
 
         mImgAlbumArt = (ImageView) findViewById(R.id.img_albumart);
@@ -137,7 +176,8 @@ public class TempActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterBroadcast();
-    }
+        unregisterBroadcast();*/
+        }
+
 }
 
