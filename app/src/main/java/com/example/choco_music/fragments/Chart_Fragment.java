@@ -143,7 +143,7 @@ public class Chart_Fragment extends Fragment {
 
                     Original_Chart = new ArrayList<>();
                     for(VerticalData data: Original_datas)
-                        Original_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFilerul(), true));
+                        Original_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true));
 
                     if (Original_datas != null) {
                         for (int i = 0; i < Original_datas.size(); i++) {

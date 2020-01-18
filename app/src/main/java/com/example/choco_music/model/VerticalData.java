@@ -34,7 +34,7 @@ public class VerticalData implements Serializable {
         return this.vocal;
     }
 
-    public String getFilerul(){return this.fileurl;}
+    public String getFileurl(){return this.fileurl;}
 
     public String getLyricist() {
         return lyricist;
