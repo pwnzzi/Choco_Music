@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.choco_music.Holder.VerticalViewHolder;
 import com.example.choco_music.R;
+import com.example.choco_music.model.ChartData;
 import com.example.choco_music.model.VerticalData;
 
 import java.util.ArrayList;
@@ -19,12 +20,12 @@ import java.util.ArrayList;
 import static com.example.choco_music.R.id.genre_layout;
 
 public class VerticalAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
-    private ArrayList<VerticalData> verticalDatas;
+    private ArrayList<ChartData> verticalDatas;
     private View view;
     private int id;
 
 
-    public void setData(ArrayList<VerticalData> list){
+    public void setData(ArrayList<ChartData> list){
         verticalDatas = list;
     }
     @NonNull
@@ -42,11 +43,11 @@ public class VerticalAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull VerticalViewHolder holder, final int position) {
 
-        VerticalData data = verticalDatas.get(position);
+        ChartData data = verticalDatas.get(position);
 
         holder.vocal.setText(data.getVocal());
         holder.title.setText(data.getTitle());
-        if(data.getGenre().equals("자작곡")) {
+        if(data.getType()) {
             holder.genre.setBackgroundResource(R.drawable.round_songtype_orig);
             holder.genre.setText("자작곡");
             holder.genre.setTextColor(Color.rgb(255,255,255));

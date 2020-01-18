@@ -39,8 +39,11 @@ import com.example.choco_music.Interface.RetrofitExService;
 import com.example.choco_music.R;
 import com.example.choco_music.adapters.VerticalAdapter;
 import com.example.choco_music.model.Blur;
+import com.example.choco_music.model.ChartData;
 import com.example.choco_music.model.VerticalData;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -70,7 +73,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     private boolean initalStage = true;
     private AlertDialog progressDialog;
     private int position;
-    private ArrayList<VerticalData> datas;
+    private ArrayList<ChartData> datas;
     private BottomSheetBehavior sheetBehavior;
     AudioService mservice;
     private Boolean isRunning = false;
@@ -151,23 +154,12 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             @Override
             public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
                 if (response.isSuccessful()) {
-                    datas = response.body();
-                    //음악 재생기에 넣어줄 리스트를 만들어준다.
+                    ArrayList<VerticalData> vertical = response.body();
 
-                    if (datas != null) {
-                        for (int i = 0; i < datas.size(); i++) {
-                            Log.d("data" + i, datas.get(i).getTitle() + "");
-                            Log.d("data" + i, datas.get(i).getId() + "");
-                            Log.d("data" + i, datas.get(i).getLyricist() + "");
-                            Log.d("data" + i, datas.get(i).getVocal() + "");
-                            Log.d("data" + i, datas.get(i).getBucketName() + "");
-                            Log.d("data" + i, datas.get(i).getComment() + "");
-                            Log.d("data" + i, datas.get(i).getLyrics() + "");
-                            Log.d("data" + i, datas.get(i).getGenre() + "");
-                            Log.d("data" + i, datas.get(i).getFilerul() + "");
-                        }
-                        Log.d("getData2 end", "======================================");
-                    }
+                    datas = new ArrayList<>();
+                    for(VerticalData data : vertical)
+                        datas.add(new ChartData(data.getTitle(), data.getVocal(), data.getFilerul(), data.getGenre().equals("자작곡")));
+
                     // setLayoutManager
                     mVerticalView.setLayoutManager(mLayoutManager);
                     // init Adapter
@@ -177,6 +169,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                     // set Adapter
                     mVerticalView.setAdapter(mAdapter);
                     //오디오 어플리 케이션에 재생할 음악 url을 담아준다.
+
                     AudioApplication.getInstance().getServiceInterface().setPlayList(datas);
                     //AudioApplication.getInstance().getServiceInterface().play(0);
                 }

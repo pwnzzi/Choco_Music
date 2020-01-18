@@ -2,29 +2,23 @@ package com.example.choco_music.Audio;
 
 import android.app.Service;
 import android.content.Intent;
-import android.database.Cursor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.provider.MediaStore;
 
-import com.example.choco_music.model.CoverData;
-import com.example.choco_music.model.VerticalData;
+import com.example.choco_music.model.ChartData;
 
 import java.util.ArrayList;
 
 public class AudioService extends Service {
     private final IBinder mBinder = new AudioServiceBinder();
-    private ArrayList<VerticalData> mAudioDatas = new ArrayList<>();
-    private ArrayList<CoverData> Cover_AudioDatas = new ArrayList<>();
+    private ArrayList<ChartData> mAudioDatas = new ArrayList<>();
     private MediaPlayer mMediaPlayer;
     private boolean isPrepared;
     private int mCurrentPosition;
-    private VerticalData currentData;
-    private CoverData currentData_Cover;
+    private ChartData currentData;
     private NotificationPlayer mNotificationPlayer;
 
 
@@ -91,24 +85,9 @@ public class AudioService extends Service {
         currentData = mAudioDatas.get(position);
     }
 
-    private void queryAudioItem_cover(int position) {
-        mCurrentPosition = position;
-        currentData_Cover = Cover_AudioDatas.get(position);
-    }
-
     private void prepare() {
         try {
-            mMediaPlayer.setDataSource(currentData.getFilerul());
-            mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mMediaPlayer.prepareAsync();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void prepare_cover() {
-        try {
-            mMediaPlayer.setDataSource(currentData_Cover.getFilerul());
+            mMediaPlayer.setDataSource(currentData.getFileurl());
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mMediaPlayer.prepareAsync();
         } catch (Exception e) {
@@ -121,17 +100,10 @@ public class AudioService extends Service {
         mMediaPlayer.reset();
     }
 
-    public void setPlayList(ArrayList<VerticalData> audioDatas) {
+    public void setPlayList(ArrayList<ChartData> audioDatas) {
         if (!mAudioDatas.equals(audioDatas)) {
             mAudioDatas.clear();
             mAudioDatas.addAll(audioDatas);
-        }
-    }
-
-    public void setPlayList_Cover(ArrayList<CoverData> audioDatas_cover) {
-        if (!Cover_AudioDatas.equals(audioDatas_cover)) {
-            Cover_AudioDatas.clear();
-            Cover_AudioDatas.addAll(audioDatas_cover);
         }
     }
 
@@ -139,12 +111,6 @@ public class AudioService extends Service {
         queryAudioItem(position);
         stop();
         prepare();
-    }
-
-    public void play_cover(int position) {
-        queryAudioItem_cover(position);
-        stop();
-        prepare_cover();
     }
 
     public void play() {
@@ -182,13 +148,10 @@ public class AudioService extends Service {
         play(mCurrentPosition);
     }
 
-    public VerticalData getAudioItem() {
+    public ChartData getAudioItem() {
         return mAudioDatas.get(mCurrentPosition);
     }
 
-    public CoverData getAudioItem_cover() {
-        return  Cover_AudioDatas.get(mCurrentPosition);
-    }
 
     public boolean isPlaying() {
         return mMediaPlayer.isPlaying();
