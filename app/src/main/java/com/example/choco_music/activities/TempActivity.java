@@ -113,8 +113,8 @@ public class TempActivity extends AppCompatActivity /*implements View.OnClickLis
             public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
                 if (response.isSuccessful()) {
                     datas = response.body();
-                    AudioApplication.getInstance().getServiceInterface().setPlayList(datas); // 재생목록등록
-               //     AudioApplication.getInstance().getServiceInterface().play(0);
+                    //AudioApplication.getInstance().getServiceInterface().setPlayList(datas); // 재생목록등록
+                    AudioApplication.getInstance().getServiceInterface().play(0);
                 }
             }
 

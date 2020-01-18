@@ -6,7 +6,6 @@ public class CoverData implements Serializable {
 
     private String title;
     private String vocal;
-    private String music_url;
     private String Album_img_url;
     private  int id;
     private  String genre;
@@ -16,17 +15,23 @@ public class CoverData implements Serializable {
     private  String lyricist;
     private String fileurl;
 
-    public CoverData(String title, String vocal,String music_url){
+    public CoverData(String title, String vocal, String fileurl){
         this.title = title;
         this.vocal = vocal;
-        this.music_url= music_url;
+        this.fileurl = fileurl;
     }
 
-    public String getTitle(){ return this.title; }
+    public String getTitle() {
+        return title;
+    }
 
-    public String getVocal(){ return this.vocal; }
+    public String getVocal() {
+        return vocal;
+    }
 
-    public String getFilerul(){return this.fileurl;}
+    public String getFileurl() {
+        return fileurl;
+    }
 
     public String getLyricist() {
         return lyricist;

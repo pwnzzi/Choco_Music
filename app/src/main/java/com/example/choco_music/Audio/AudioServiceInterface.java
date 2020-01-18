@@ -5,8 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import com.example.choco_music.model.CoverData;
-import com.example.choco_music.model.VerticalData;
+
+import com.example.choco_music.model.ChartData;
+
 import java.util.ArrayList;
 
 public class AudioServiceInterface {
@@ -30,27 +31,15 @@ public class AudioServiceInterface {
                 .setPackage(context.getPackageName()), mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
-    public void setPlayList(ArrayList<VerticalData> audioDatas) {
+    public void setPlayList(ArrayList<ChartData> audioDatas) {
         if (mService != null) {
             mService.setPlayList(audioDatas);
-        }
-    }
-
-    public void setPlayList_Cover(ArrayList<CoverData> audioDatas) {
-        if (mService != null) {
-            mService.setPlayList_Cover(audioDatas);
         }
     }
 
     public void play(int position) {
         if (mService != null) {
             mService.play(position);
-        }
-    }
-
-    public void play_cover(int position) {
-        if (mService != null) {
-            mService.play_cover(position);
         }
     }
 
@@ -105,16 +94,9 @@ public class AudioServiceInterface {
         return false;
     }
 
-    public VerticalData getAudioItem() {
+    public ChartData getAudioItem() {
         if (mService != null) {
             return mService.getAudioItem();
-        }
-        return null;
-    }
-
-    public CoverData getAudioItem_cover() {
-        if (mService != null) {
-            return mService.getAudioItem_cover();
         }
         return null;
     }

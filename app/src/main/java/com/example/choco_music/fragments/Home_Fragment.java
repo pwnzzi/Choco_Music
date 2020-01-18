@@ -41,8 +41,11 @@ import com.example.choco_music.model.AlbumData;
 import com.example.choco_music.model.Blur;
 import com.example.choco_music.model.HomeData;
 import com.example.choco_music.model.RecyclerItemClickListener;
+import com.example.choco_music.model.ChartData;
 import com.example.choco_music.model.VerticalData;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -62,15 +65,15 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     private ArrayList<Boolean> clicks;
     public MediaPlayer mediaPlayer;
     private ImageView music_play_btn;
-    private View view, view_item;
-    private Button cancelButton;
+    private View view;
+    private Button cancelButton, loveIcon;
     private ArrayList<ImageView> stars;
     private int currentStar = 5;
     private boolean playPause;
     private boolean initalStage = true;
     private AlertDialog progressDialog;
     private int position;
-    private ArrayList<VerticalData> datas;
+    private ArrayList<ChartData> datas;
     private BottomSheetBehavior sheetBehavior;
     private RetrofitExService retrofitExService;
     private Retrofit retrofit;
@@ -89,7 +92,8 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.home_fragment, null, false);
-        view_item = inflater.inflate(R.layout.vertical_recycler_items, null, false);
+
+
 
        setup_retrofit();
        btn_tag();
@@ -117,6 +121,22 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                             setup_album(album_number,title,vocal,genre);
                         }
                     }
+                    ArrayList<VerticalData> vertical = response.body();
+
+                    datas = new ArrayList<>();
+                    for(VerticalData data : vertical)
+                        datas.add(new ChartData(data.getTitle(), data.getVocal(), data.getFilerul(), data.getGenre().equals("자작곡")));
+
+                    // setLayoutManager
+                    mVerticalView.setLayoutManager(mLayoutManager);
+                    // init Adapter
+                    mAdapter = new VerticalAdapter();
+                    // set Data
+                    mAdapter.setData(datas);
+                    // set Adapter
+                    mVerticalView.setAdapter(mAdapter);
+                    //오디오 어플리 케이션에 재생할 음악 url을 담아준다.
+
                     AudioApplication.getInstance().getServiceInterface().setPlayList(datas);
                     //AudioApplication.getInstance().getServiceInterface().play(0);
                 }

@@ -73,25 +73,6 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
         findViewById(R.id.play_layout_finish).setOnClickListener(this);
         findViewById(R.id.play_back).setOnClickListener(this);
         findViewById(R.id.play_front).setOnClickListener(this);
-
-        Intent intent = getIntent();
-        chart = intent.getIntExtra("chart", 0);
-
-        Log.e("데이터",""+chart);
-        if(chart == 1){
-            ArrayList<VerticalData> original_datas = (ArrayList<VerticalData>)intent.getSerializableExtra("list");
-            int position = intent.getIntExtra("position", 0);
-            AudioApplication.getInstance().getServiceInterface().setPlayList(original_datas); // 재생목록등록
-            AudioApplication.getInstance().getServiceInterface().play(position);
-            registerBroadcast();
-
-        }else if(chart == 2){
-            ArrayList<CoverData> Cover_datas = (ArrayList<CoverData>)intent.getSerializableExtra("list");
-            int position = intent.getIntExtra("position", 0);
-            AudioApplication.getInstance().getServiceInterface().setPlayList_Cover(Cover_datas); // 재생목록등록
-            AudioApplication.getInstance().getServiceInterface().play_cover(position);
-            registerBroadcast();
-        }
     }
 
     @Override
@@ -142,7 +123,7 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
         } else {
             music_play_btn.setImageResource(R.drawable.play_btn);
         }
-        VerticalData audioItem = AudioApplication.getInstance().getServiceInterface().getAudioItem();
+        ChartData audioItem = AudioApplication.getInstance().getServiceInterface().getAudioItem();
         ((TextView)findViewById(R.id.play_title)).setText(audioItem.getTitle());
         ((TextView)findViewById(R.id.play_vocal)).setText(audioItem.getVocal());
 
@@ -154,7 +135,7 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
         } else {
             music_play_btn.setImageResource(R.drawable.play_btn);
         }
-        CoverData audioItem_cover = AudioApplication.getInstance().getServiceInterface().getAudioItem_cover();
+        ChartData audioItem_cover = AudioApplication.getInstance().getServiceInterface().getAudioItem();
         ((TextView)findViewById(R.id.play_title)).setText(audioItem_cover.getTitle());
         ((TextView)findViewById(R.id.play_vocal)).setText(audioItem_cover.getVocal());
 

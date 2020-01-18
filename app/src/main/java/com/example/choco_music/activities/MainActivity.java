@@ -16,7 +16,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import static com.example.choco_music.R.id.viewpager;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     SwipeViewPager viewPager;
     LinearLayout playing_bar;
@@ -64,12 +64,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(2).setCustomView(view3);
         tabLayout.getTabAt(3).setCustomView(view4);
 
-
-
-
-
-
-
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -77,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
                     playing_bar.setVisibility(View.GONE);
                 } else {
                     playing_bar.setVisibility(View.VISIBLE);
-                    AudioApplication.getInstance().getServiceInterface().pause_home_fragment();
                 }
             }
 
@@ -90,4 +83,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()){
+            case R.id.layout_playing_bar:
+                Intent intent = new Intent(this, MusicPlay_activity.class);
+                startActivity(intent);
+        }
+    }
 }

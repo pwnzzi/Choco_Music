@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.choco_music.Audio.AudioApplication;
 import com.example.choco_music.Interface.RetrofitExService;
 import com.example.choco_music.R;
 import com.example.choco_music.activities.Coversong_chart;
@@ -46,6 +47,8 @@ public class Chart_Fragment extends Fragment {
     private RetrofitExService retrofitExService;
     private ArrayList<VerticalData> Original_datas;
     private ArrayList<CoverData> Cover_datas;
+    private ArrayList<ChartData> Original_Chart;
+    private ArrayList<ChartData> Cover_Chart;
 
 
     @Nullable
@@ -98,11 +101,8 @@ public class Chart_Fragment extends Fragment {
         OriginalSong_View.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), OriginalSong_View,
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
-                        Intent intent = new Intent(getActivity(), MusicPlay_activity.class);
-                        intent.putExtra("list", Original_datas);
-                        intent.putExtra("chart",1);
-                        intent.putExtra("position", position);
-                        startActivity(intent);
+                        AudioApplication.getInstance().getServiceInterface().setPlayList(Original_Chart);
+                        AudioApplication.getInstance().getServiceInterface().play(position);
                     }
 
                     @Override public void onLongItemClick(View view, int position) { }
@@ -112,11 +112,8 @@ public class Chart_Fragment extends Fragment {
         CoverSong_View.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), CoverSong_View,
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
-                        Intent intent = new Intent(getActivity(), MusicPlay_activity.class);
-                        intent.putExtra("list", Cover_datas);
-                        intent.putExtra("chart", 2);
-                        intent.putExtra("position", position);
-                        startActivity(intent);
+                        AudioApplication.getInstance().getServiceInterface().setPlayList(Cover_Chart);
+                        AudioApplication.getInstance().getServiceInterface().play(position);
                     }
 
                     @Override public void onLongItemClick(View view, int position) { }
@@ -142,6 +139,10 @@ public class Chart_Fragment extends Fragment {
             public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
                 if (response.isSuccessful()) {
                     Original_datas = response.body();
+
+                    Original_Chart = new ArrayList<>();
+                    for(VerticalData data: Original_datas)
+                        Original_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFilerul(), true));
 
                     if (Original_datas != null) {
                         for (int i = 0; i < Original_datas.size(); i++) {
@@ -176,6 +177,9 @@ public class Chart_Fragment extends Fragment {
             public void onResponse(@NonNull Call<ArrayList<CoverData>> call, @NonNull Response<ArrayList<CoverData>> response) {
                 if (response.isSuccessful()) {
                     Cover_datas = response.body();
+                    Cover_Chart = new ArrayList<>();
+                    for(CoverData data: Cover_datas)
+                        Cover_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true));
 
                     if (Cover_datas != null) {
                         for (int i = 0; i < Cover_datas.size(); i++) {
