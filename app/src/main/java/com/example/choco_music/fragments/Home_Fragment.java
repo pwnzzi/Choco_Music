@@ -91,8 +91,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.home_fragment, null, false);
 
-
-
        setup_retrofit();
        btn_tag();
        setup_view(view);
@@ -107,17 +105,17 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                 if (response.isSuccessful()) {
                     ArrayList<VerticalData> vertical = response.body();
                     if (datas != null) {
-                        for (int i = 0; i <datas.size(); i++) {
+                        for (int i = 0; i <vertical.size(); i++) {
                             //오늘의 곡 정보를 가져와서 데이터에 담는다.
-                            String title = datas.get(i).getTitle();
-                            String vocal = datas.get(i).getVocal();
-                            String genre = datas.get(i).getGenre();
+                            String title = vertical.get(i).getTitle();
+                            String vocal = vertical.get(i).getVocal();
+                            String genre = vertical.get(i).getGenre();
                             Log.e("제목", title);
                             Log.e("가수", vocal);
-                            datas.add(new ChartData(datas.get(i).getTitle(), datas.get(i).getVocal(),
-                                    datas.get(i).getFileurl(), datas.get(i).getGenre().equals("자작곡")));
+                            datas.add(new ChartData(vertical.get(i).getTitle(), vertical.get(i).getVocal(),
+                                    vertical.get(i).getFileurl(), vertical.get(i).getGenre().equals("자작곡")));
 
-                            int album_number = datas.get(i).getAlbum();
+                            int album_number = vertical.get(i).getAlbum();
                             setup_album(album_number,title,vocal,genre);
                         }
                     }
@@ -311,6 +309,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         getActivity().unregisterReceiver(mBroadcastReceiver);
     }
     private void setup_view(View view){
+        datas = new ArrayList<>();
         // 취소, 완료 버튼
         cancelButton = view.findViewById(R.id.sheet_cancel);
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -371,10 +370,10 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
 
         // 홈 배경화면에 앨범 이미지 어둡게 세팅
         background = view.findViewById(R.id.home_fragment_layout);
-        Drawable drawable = getResources().getDrawable(R.drawable.ic_back_icon);
-        //Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-        //Blur blur = new Blur(getContext(), background, bitmap, 10, getActivity());
-        //blur.run();
+       /* Drawable drawable = getResources().getDrawable(R.drawable.elbum_img);
+        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+        Blur blur = new Blur(getContext(), background, bitmap, 10, getActivity());
+        blur.run();*/
 
         // 리사이클러 뷰가 스크롤 될때 현재 위치를 받아오기 위해서 사용하는 코드
         mVerticalView.addOnScrollListener(new RecyclerView.OnScrollListener() {

@@ -47,10 +47,9 @@ public class HomeSongAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
 
         //이미지를 글라이드를 이용해서 넣어준다.
 
-        if(data.getImg_path() != null)
-            Log.e("잘넘어오나?",data.getImg_path());
-            Glide.with(holder.itemView.getContext()).load(data.getImg_path()).into(holder.img);
 
+        Log.e("잘넘어오나?",data.getImg_path());
+        Glide.with(holder.itemView.getContext()).load(data.getImg_path()).into(holder.img);
 
         if(data.getGenre().equals("자작곡")) {
             holder.genre.setBackgroundResource(R.drawable.round_songtype_orig);
