@@ -101,5 +101,31 @@ public class AudioServiceInterface {
         return null;
     }
 
+    public void toggleShuffle(){
+        if (mService != null) {
+            mService.toggleShuffle();
+        }
+    }
+
+    public void toggleRepeat(){
+        if (mService != null) {
+            mService.toggleRepeat();
+        }
+    }
+
+    public boolean getShuffle(){
+        if (mService != null) {
+            return mService.getShuffle();
+        }
+        return false;
+    }
+
+    public int getRepeat(){
+        if (mService != null) {
+            return mService.getRepeat();
+        }
+        return -1;
+    }
+
 }
 

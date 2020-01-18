@@ -8,8 +8,7 @@
         android:id="@+id/img_albumart"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/elbum_img"/>
+        android:scaleType="fitXY" />
 
     <LinearLayout
         android:layout_width="0dp"

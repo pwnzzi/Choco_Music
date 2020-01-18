@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="64dp"
     android:gravity="center_vertical"
-    android:background="#888"
+    android:background="#000"
     android:orientation="horizontal">
 
     <ImageView
@@ -12,41 +12,60 @@
         android:layout_marginLeft="5dp"
         android:scaleType="fitXY"/>
 
-    <TextView
-        android:id="@+id/txt_title"
+    <LinearLayout
+        android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginLeft="5dp"
-        android:layout_weight="1"
         android:gravity="center_vertical"
-        android:text="Sample Title"
-        android:textColor="@android:color/black"/>
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/ntf_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#fff"
+            />
+
+        <TextView
+            android:id="@+id/ntf_vocal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#707070"
+            />
+
+    </LinearLayout>
+
 
     <ImageButton
         android:id="@+id/btn_rewind"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:background="@null"
         android:src="@drawable/front_tab"/>
 
     <ImageButton
         android:id="@+id/btn_play_pause"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
         android:background="@null"
         android:src="@drawable/play_btn"/>
 
     <ImageButton
         android:id="@+id/btn_forward"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
         android:background="@null"
         android:src="@drawable/back_btn"/>
 
     <ImageButton
         android:id="@+id/btn_close"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
         android:background="@null"
         android:src="@drawable/ic_close_black_24dp"/>
 </LinearLayout>

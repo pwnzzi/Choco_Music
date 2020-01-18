@@ -162,6 +162,8 @@ public class Chart_Fragment extends Fragment {
                     Original_Adapter.setData(Original_datas);
                     // set Adapter
                     OriginalSong_View.setAdapter(Original_Adapter);
+
+                    AudioApplication.getInstance().getServiceInterface().setPlayList(Original_Chart);
                 }
             }
 
@@ -207,4 +209,5 @@ public class Chart_Fragment extends Fragment {
             }
         });
     }
+
 }

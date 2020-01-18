@@ -1,13 +1,19 @@
 package com.example.choco_music.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.choco_music.Audio.AudioApplication;
+import com.example.choco_music.Audio.BroadcastActions;
 import com.example.choco_music.R;
 import com.example.choco_music.adapters.SwipeViewPager;
 import com.example.choco_music.adapters.ViewPagerAdpater;
@@ -20,6 +26,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     SwipeViewPager viewPager;
     LinearLayout playing_bar;
+    ImageView btn_front, btn_back, btn_play;
+    TextView txt_title, txt_vocal;
+
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateUI();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 스플래쉬 화면
         Intent intent = new Intent(this, LoadingActivity.class);
         startActivity(intent);
+        registerBroadcast();
 
         // 뷰페이져
         viewPager= findViewById(viewpager);
@@ -37,6 +53,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         viewPager.setAdapter(viewPagerAdpater);
 
+        btn_back = findViewById(R.id.playing_bar_back);
+        btn_front = findViewById(R.id.playing_bar_front);
+        btn_play = findViewById(R.id.playing_bar_play);
+
+        txt_title = findViewById(R.id.playing_bar_title);
+        txt_vocal = findViewById(R.id.playing_bar_vocal);
+
         //탭 레이아윳
         TabLayout tabLayout=findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
@@ -44,6 +67,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //음악 재생 버튼
         playing_bar = findViewById(R.id.layout_playing_bar);
         playing_bar.setVisibility(View.GONE);
+
+        btn_back.setOnClickListener(this);
+        btn_play.setOnClickListener(this);
+        btn_front.setOnClickListener(this);
+        playing_bar.setOnClickListener(this);
 
         //탭래이아웃
         View view1= getLayoutInflater().inflate(R.layout.customtab,null);
@@ -89,6 +117,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.layout_playing_bar:
                 Intent intent = new Intent(this, MusicPlay_activity.class);
                 startActivity(intent);
+                break;
+            case R.id.playing_bar_back:
+                AudioApplication.getInstance().getServiceInterface().rewind();
+                updateUI();
+                break;
+            case R.id.playing_bar_front:
+                AudioApplication.getInstance().getServiceInterface().forward();
+                updateUI();
+                break;
+            case R.id.playing_bar_play:
+                AudioApplication.getInstance().getServiceInterface().togglePlay();
+                updateUI();
         }
+    }
+
+    private void registerBroadcast() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BroadcastActions.PREPARED);
+        filter.addAction(BroadcastActions.PLAY_STATE_CHANGED);
+        registerReceiver(mBroadcastReceiver, filter);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterBroadcast();
+    }
+
+    private void unregisterBroadcast() {
+        unregisterReceiver(mBroadcastReceiver);
+    }
+
+    public void updateUI(){
+        if (AudioApplication.getInstance().getServiceInterface().isPlaying()) {
+            btn_play.setImageResource(R.drawable.playing_btn);
+        } else {
+            btn_play.setImageResource(R.drawable.play_btn);
+        }
+        txt_title.setText(AudioApplication.getInstance().getServiceInterface().getAudioItem().getTitle());
+        txt_vocal.setText(AudioApplication.getInstance().getServiceInterface().getAudioItem().getVocal());
     }
 }

@@ -38,19 +38,17 @@ import java.util.ArrayList;
 
 public class MusicPlay_activity extends AppCompatActivity implements View.OnClickListener{
 
-    private ImageView music_play_btn;
+    private ImageView music_play_btn, replay_btn, shuffle_btn;
     private Boolean isRunning = false;
     private View runLayout;
     private FrameLayout background;
+    private ImageView btn_shuffle, btn_repeat;
     private int chart;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(chart==1)
-                updateUI_original();
-            else
-                updateUI_cover();
+            updateUI();
         }
     };
 
@@ -60,19 +58,26 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.music_play_layout);
 
         music_play_btn = (ImageView)findViewById(R.id.music_play);
+        btn_shuffle = findViewById(R.id.music_play_shuffle);
+        btn_repeat = findViewById(R.id.music_play_replay);
         runLayout = findViewById(R.id.linear_running_btn);
 
         background = findViewById(R.id.musicplay_activity_layout);
-        Drawable drawable = getResources().getDrawable(R.drawable.elbum_img);
-        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-        Blur blur = new Blur(this, background, bitmap, 10, this);
-        blur.run();
+        //Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+        //Blur blur = new Blur(this, background, bitmap, 10, this);
+        //blur.run();
 
         music_play_btn.setOnClickListener(this);
         findViewById(R.id.play_layout_list).setOnClickListener(this);
         findViewById(R.id.play_layout_finish).setOnClickListener(this);
         findViewById(R.id.play_back).setOnClickListener(this);
         findViewById(R.id.play_front).setOnClickListener(this);
+        btn_repeat.setOnClickListener(this);
+        btn_shuffle.setOnClickListener(this);
+
+
+        registerBroadcast();
+        updateUI();
     }
 
     @Override
@@ -88,56 +93,59 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
                 break;
 
             case R.id.music_play: // 음악 재생및 종료
-                if(isRunning){
-                    music_play_btn.setImageResource(R.drawable.play_btn);
-                } else {
-                    music_play_btn.setImageResource(R.drawable.playing_btn);
-                }
                 AudioApplication.getInstance().getServiceInterface().togglePlay();
+                updateUI();
                 isRunning = !isRunning;
                 break;
 
             case R.id.play_back: // 이전 곡
                 AudioApplication.getInstance().getServiceInterface().rewind();
-                if(chart==1)
-                    updateUI_original();
-                else
-                    updateUI_cover();
+                updateUI();
                 break;
 
             case R.id.play_front: // 다음 곡
                 AudioApplication.getInstance().getServiceInterface().forward();
-                if(chart==1)
-                    updateUI_original();
-                else
-                    updateUI_cover();
+                updateUI();
                 break;
 
+            case R.id.music_play_shuffle:
+                AudioApplication.getInstance().getServiceInterface().toggleShuffle();
+                updateUI();
+                break;
+
+            case R.id.music_play_replay:
+                AudioApplication.getInstance().getServiceInterface().toggleRepeat();
+                updateUI();
+                break;
 
         }
     }
 
-    private void updateUI_original() {
+    private void updateUI() {
         if (AudioApplication.getInstance().getServiceInterface().isPlaying()) {
             music_play_btn.setImageResource(R.drawable.playing_btn);
         } else {
             music_play_btn.setImageResource(R.drawable.play_btn);
+        }
+        if (AudioApplication.getInstance().getServiceInterface().getShuffle()) {
+            btn_shuffle.setImageResource(R.drawable.shuffle);
+        } else {
+            btn_shuffle.setImageResource(R.drawable.shuffle_unselected);
+        }
+        switch (AudioApplication.getInstance().getServiceInterface().getRepeat()) {
+            case 0:
+                btn_repeat.setImageResource(R.drawable.replay_unselected);
+                break;
+            case 1:
+                btn_repeat.setImageResource(R.drawable.replay);
+                break;
+            case 2:
+                btn_repeat.setImageResource(R.drawable.replay_2);
+                break;
         }
         ChartData audioItem = AudioApplication.getInstance().getServiceInterface().getAudioItem();
         ((TextView)findViewById(R.id.play_title)).setText(audioItem.getTitle());
         ((TextView)findViewById(R.id.play_vocal)).setText(audioItem.getVocal());
-
-    }
-
-    private void updateUI_cover() {
-        if (AudioApplication.getInstance().getServiceInterface().isPlaying()) {
-            music_play_btn.setImageResource(R.drawable.playing_btn);
-        } else {
-            music_play_btn.setImageResource(R.drawable.play_btn);
-        }
-        ChartData audioItem_cover = AudioApplication.getInstance().getServiceInterface().getAudioItem();
-        ((TextView)findViewById(R.id.play_title)).setText(audioItem_cover.getTitle());
-        ((TextView)findViewById(R.id.play_vocal)).setText(audioItem_cover.getVocal());
 
     }
 
@@ -147,7 +155,6 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
         filter.addAction(BroadcastActions.PLAY_STATE_CHANGED);
         registerReceiver(mBroadcastReceiver, filter);
     }
-
 
     @Override
     protected void onDestroy() {

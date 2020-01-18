@@ -11,16 +11,18 @@ import android.os.PowerManager;
 import com.example.choco_music.model.ChartData;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class AudioService extends Service {
     private final IBinder mBinder = new AudioServiceBinder();
     private ArrayList<ChartData> mAudioDatas = new ArrayList<>();
     private MediaPlayer mMediaPlayer;
     private boolean isPrepared;
+    private int isRepeat;
+    private boolean isShuffle;
     private int mCurrentPosition;
     private ChartData currentData;
     private NotificationPlayer mNotificationPlayer;
-
 
 
     public class AudioServiceBinder extends Binder {
@@ -46,8 +48,20 @@ public class AudioService extends Service {
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                isPrepared = false;
-                sendBroadcast(new Intent(BroadcastActions.PLAY_STATE_CHANGED)); // 재생상태 변경 전송
+                if(isRepeat == 0) {
+                    isPrepared = false;
+                    sendBroadcast(new Intent(BroadcastActions.PLAY_STATE_CHANGED)); // 재생상태 변경 전송
+                } else if(isRepeat == 1){
+                    forward();
+                    updateNotificationPlayer();
+                } else if(isShuffle) {
+                    Random generator = new Random();
+                    play(generator.nextInt(mAudioDatas.size()));
+                    updateNotificationPlayer();
+                } else {
+                    play();
+                }
+
                 updateNotificationPlayer();
             }
         });
@@ -167,6 +181,22 @@ public class AudioService extends Service {
         if (mNotificationPlayer != null) {
             mNotificationPlayer.removeNotificationPlayer();
         }
+    }
+
+    public void toggleShuffle(){
+        isShuffle = !isShuffle;
+    }
+
+    public void toggleRepeat(){
+        isRepeat = (isRepeat + 1) % 3;
+    }
+
+    public boolean getShuffle(){
+        return isShuffle;
+    }
+
+    public int getRepeat(){
+        return isRepeat;
     }
 
     @Override
