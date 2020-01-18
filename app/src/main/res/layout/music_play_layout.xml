@@ -180,6 +180,7 @@
             >
 
             <ImageView
+                android:id="@+id/music_play_replay"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
                 android:layout_width="0dp"
@@ -219,6 +220,7 @@
                 android:src="@drawable/back_btn"/>
 
             <ImageView
+                android:id="@+id/music_play_shuffle"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
                 android:layout_width="0dp"
