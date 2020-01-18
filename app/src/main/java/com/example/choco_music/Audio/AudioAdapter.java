@@ -100,7 +100,7 @@ public class AudioAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHol
             mTxtSubTitle.setText(item.mArtist + "(" + item.mAlbum + ")");
             mTxtDuration.setText(DateFormat.format("mm:ss", item.mDuration));
             Uri albumArtUri = ContentUris.withAppendedId(artworkUri, item.mAlbumId);
-            Picasso.with(itemView.getContext()).load(albumArtUri).error(R.drawable.elbum_img).into(mImgAlbumArt);
+            Picasso.with(itemView.getContext()).load(albumArtUri).error(R.drawable.back_btn).into(mImgAlbumArt);
         }
     }
 }

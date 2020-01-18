@@ -13,7 +13,7 @@
         android:layout_height="0dp"
         android:layout_weight="7"
         android:orientation="vertical"
-        android:background="@drawable/elbum_img">
+        >
 
         <ImageView
             android:id="@+id/play_layout_finish"
