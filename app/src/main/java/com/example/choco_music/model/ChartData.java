@@ -7,7 +7,10 @@ public class ChartData implements Serializable {
     private String title;
     private String vocal;
     private String fileurl;
-    private boolean type;       // 자작곡이면 True
+    private boolean type;
+    private  String genre;
+    // 자작곡이면 True
+    private int album;
 
     public ChartData(String title, String vocal, String fileurl, boolean type){
         this.title = title;
@@ -15,6 +18,10 @@ public class ChartData implements Serializable {
         this.fileurl = fileurl;
         this.type = type;
     }
+
+    public int getAlbum(){return this.album;}
+
+    public String getGenre(){return this.genre;}
 
     public String getTitle(){
         return this.title;

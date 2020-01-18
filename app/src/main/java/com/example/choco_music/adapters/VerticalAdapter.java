@@ -21,13 +21,13 @@ import java.util.ArrayList;
 import static com.example.choco_music.R.id.genre_layout;
 
 public class VerticalAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
-    private ArrayList<ChartData> verticalDatas;
+    private ArrayList<ChartData> ChartDatas;
     private View view;
     private int id;
 
 
     public void setData(ArrayList<ChartData> list){
-        verticalDatas = list;
+        ChartDatas = list;
     }
     @NonNull
     @Override
@@ -44,15 +44,15 @@ public class VerticalAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull VerticalViewHolder holder, final int position) {
 
-        ChartData data = verticalDatas.get(position);
+        ChartData data = ChartDatas.get(position);
 
         holder.vocal.setText(data.getVocal());
         holder.title.setText(data.getTitle());
-        if(data.getType()) {
+
        // Glide.with(holder.itemView.getContext()).load(data.getImg_path()).into(holder.img);
 
 
-        if(data.getGenre().equals("자작곡")) {
+        if(data.getType()) {
             holder.genre.setBackgroundResource(R.drawable.round_songtype_orig);
             holder.genre.setText("자작곡");
             holder.genre.setTextColor(Color.rgb(255,255,255));
@@ -60,14 +60,11 @@ public class VerticalAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
             holder.tri.setImageResource(R.drawable.ic_triangle_original);
         }
     }
-// https://android-blog.dev/19?category=677940 출처
+
     @Override
     public int getItemCount() {
-        return verticalDatas.size();
+        return ChartDatas.size();
     }
 
-    public int getItemPosition() {
-        return id;
-    }
 
 }

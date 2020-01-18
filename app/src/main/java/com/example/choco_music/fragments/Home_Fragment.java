@@ -35,17 +35,14 @@ import com.example.choco_music.Audio.AudioApplication;
 import com.example.choco_music.Audio.BroadcastActions;
 import com.example.choco_music.Interface.RetrofitExService;
 import com.example.choco_music.R;
-import com.example.choco_music.activities.MusicPlay_activity;
 import com.example.choco_music.adapters.HomeSongAdapter;
+import com.example.choco_music.adapters.VerticalAdapter;
 import com.example.choco_music.model.AlbumData;
 import com.example.choco_music.model.Blur;
 import com.example.choco_music.model.HomeData;
-import com.example.choco_music.model.RecyclerItemClickListener;
 import com.example.choco_music.model.ChartData;
 import com.example.choco_music.model.VerticalData;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -81,6 +78,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     private ArrayList<AlbumData> albumDatas;
     public String img_path ;
     private ArrayList<HomeData> homeDatas;
+    private VerticalAdapter verticalAdapter;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -107,7 +105,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             @Override
             public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
                 if (response.isSuccessful()) {
-                    datas = response.body();
+                    ArrayList<VerticalData> vertical = response.body();
                     if (datas != null) {
                         for (int i = 0; i <datas.size(); i++) {
                             //오늘의 곡 정보를 가져와서 데이터에 담는다.
@@ -116,28 +114,15 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                             String genre = datas.get(i).getGenre();
                             Log.e("제목", title);
                             Log.e("가수", vocal);
+                            datas.add(new ChartData(datas.get(i).getTitle(), datas.get(i).getVocal(),
+                                    datas.get(i).getFileurl(), datas.get(i).getGenre().equals("자작곡")));
 
                             int album_number = datas.get(i).getAlbum();
                             setup_album(album_number,title,vocal,genre);
                         }
                     }
-                    ArrayList<VerticalData> vertical = response.body();
 
-                    datas = new ArrayList<>();
-                    for(VerticalData data : vertical)
-                        datas.add(new ChartData(data.getTitle(), data.getVocal(), data.getFilerul(), data.getGenre().equals("자작곡")));
-
-                    // setLayoutManager
-                    mVerticalView.setLayoutManager(mLayoutManager);
-                    // init Adapter
-                    mAdapter = new VerticalAdapter();
-                    // set Data
-                    mAdapter.setData(datas);
-                    // set Adapter
-                    mVerticalView.setAdapter(mAdapter);
-                    //오디오 어플리 케이션에 재생할 음악 url을 담아준다.
-
-                    AudioApplication.getInstance().getServiceInterface().setPlayList(datas);
+                    //AudioApplication.getInstance().getServiceInterface().setPlayList(datas);
                     //AudioApplication.getInstance().getServiceInterface().play(0);
                 }
             }
@@ -386,10 +371,10 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
 
         // 홈 배경화면에 앨범 이미지 어둡게 세팅
         background = view.findViewById(R.id.home_fragment_layout);
-        Drawable drawable = getResources().getDrawable(R.drawable.elbum_img);
-        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-        Blur blur = new Blur(getContext(), background, bitmap, 10, getActivity());
-        blur.run();
+        Drawable drawable = getResources().getDrawable(R.drawable.ic_back_icon);
+        //Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+        //Blur blur = new Blur(getContext(), background, bitmap, 10, getActivity());
+        //blur.run();
 
         // 리사이클러 뷰가 스크롤 될때 현재 위치를 받아오기 위해서 사용하는 코드
         mVerticalView.addOnScrollListener(new RecyclerView.OnScrollListener() {

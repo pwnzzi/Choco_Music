@@ -24,6 +24,7 @@ import com.example.choco_music.activities.Originalsong_chart;
 import com.example.choco_music.adapters.ChartAdapter;
 import com.example.choco_music.adapters.CoverAdapter;
 import com.example.choco_music.adapters.PagerSnapWithSpanCountHelper;
+import com.example.choco_music.model.ChartData;
 import com.example.choco_music.model.CoverData;
 import com.example.choco_music.model.RecyclerItemClickListener;
 import com.example.choco_music.model.VerticalData;
