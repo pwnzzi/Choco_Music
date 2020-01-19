@@ -4,18 +4,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -36,11 +32,10 @@ import com.example.choco_music.Audio.BroadcastActions;
 import com.example.choco_music.Interface.RetrofitExService;
 import com.example.choco_music.R;
 import com.example.choco_music.adapters.HomeSongAdapter;
-import com.example.choco_music.adapters.VerticalAdapter;
 import com.example.choco_music.model.AlbumData;
-import com.example.choco_music.model.Blur;
 import com.example.choco_music.model.HomeData;
 import com.example.choco_music.model.ChartData;
+import com.example.choco_music.model.Playlist_Database_OpenHelper;
 import com.example.choco_music.model.VerticalData;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import java.util.ArrayList;
@@ -78,7 +73,10 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     private ArrayList<AlbumData> albumDatas;
     public String img_path ;
     private ArrayList<HomeData> homeDatas;
-    private VerticalAdapter verticalAdapter;
+    Playlist_Database_OpenHelper playlist_database_openHelper;
+    private Context context;
+
+
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -134,6 +132,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
 
     private void setup_album(final int Album_Number ,final String title, final String vocal, final String genre){
 
+        homeDatas.clear();
         Call<ArrayList<AlbumData>> call = retrofitExService.AlbumData(Album_Number);
         call.enqueue(new Callback<ArrayList<AlbumData>>()  {
             @Override
@@ -432,8 +431,27 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             }
         });
     }
-    public void add_playlist(){
-        Log.e("1번 값",""+ position );
+
+    public void add_playlist (final int pos){
+
+        setup_retrofit();
+        retrofitExService.getData2().enqueue(new Callback<ArrayList<VerticalData>>() {
+            @Override
+            public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
+                if (response.isSuccessful()) {
+                    ArrayList<VerticalData> vertical = response.body();
+                    Log.e("된다!!!",""+vertical.get(pos).getTitle());
+
+                    playlist_database_openHelper= new Playlist_Database_OpenHelper(getActivity());
+                    playlist_database_openHelper.insertData("너를위해","임재범","몰라","몰라");
+
+                }
+            }
+            @Override
+            public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
+            }
+        });
+
     }
 }
 

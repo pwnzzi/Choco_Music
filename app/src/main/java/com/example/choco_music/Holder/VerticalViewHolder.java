@@ -1,26 +1,27 @@
 package com.example.choco_music.Holder;
 
-import android.content.Context;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.choco_music.R;
-import com.example.choco_music.adapters.VerticalAdapter;
 import com.example.choco_music.fragments.Home_Fragment;
 import com.example.choco_music.model.HomeData;
 import com.example.choco_music.model.Playlist_Database_OpenHelper;
+import com.example.choco_music.model.RecyclerItemClickListener;
 import com.example.choco_music.model.VerticalData;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class VerticalViewHolder extends RecyclerView.ViewHolder {
     public Button icon;
@@ -54,8 +55,9 @@ public class VerticalViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View view) {
                 if(love == false) {
                     icon.setBackgroundResource(R.drawable.heart_selected);
-                    home_fragment.add_playlist();
-
+                    int pos = getAdapterPosition();
+                    Log.e("현재 위치",""+ pos);
+                    home_fragment.add_playlist(pos);
 
                 }
                 else{
@@ -64,7 +66,7 @@ public class VerticalViewHolder extends RecyclerView.ViewHolder {
                 love = !love;
             }
         });
-
+/*
         border.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,8 +81,6 @@ public class VerticalViewHolder extends RecyclerView.ViewHolder {
                 layout = !layout;
             }
         });
-
-
-
+*/
     }
 }

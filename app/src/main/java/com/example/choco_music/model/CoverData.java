@@ -6,14 +6,13 @@ public class CoverData implements Serializable {
 
     private String title;
     private String vocal;
-    private String Album_img_url;
-    private  int id;
     private  String genre;
     private  String lyrics;
     private  String comment;
     private  String bucketName;
     private  String lyricist;
     private String fileurl;
+    private int album;
 
     public CoverData(String title, String vocal, String fileurl){
         this.title = title;
@@ -33,28 +32,11 @@ public class CoverData implements Serializable {
         return fileurl;
     }
 
-    public String getLyricist() {
-        return lyricist;
-    }
+    public String getGenre(){return genre;}
 
-    public String getGenre() {
-        return genre;
-    }
+    public int getAlbum(){return album;}
 
-    public String getLyrics() {
-        return lyrics;
-    }
 
-    public String getComment() {
-        return comment;
-    }
 
-    public String getBucketName() {
-        return bucketName;
-    }
-
-    public int getId() {
-        return id;
-    }
 
 }

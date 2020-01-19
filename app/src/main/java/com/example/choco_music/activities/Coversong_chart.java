@@ -33,12 +33,12 @@ public class Coversong_chart extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chart_list);
-        init_retrofit();
+       // init_retrofit();
 
     }
 
     private void init_retrofit(){
-        Cover_View = (RecyclerView)findViewById(R.id.chart_list);
+   /*     Cover_View = (RecyclerView)findViewById(R.id.chart_list);
         //init LayoutManager
         Cover_LayoutManager  = new LinearLayoutManager(this);
         //서버 통신을 위한 레스트로핏 적용
@@ -78,6 +78,6 @@ public class Coversong_chart extends AppCompatActivity {
             @Override
             public void onFailure(Call<ArrayList<CoverData>> call, Throwable t) {
             }
-        });
+        });*/
     }
 }
