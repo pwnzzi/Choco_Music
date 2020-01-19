@@ -1,76 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_playing_bar"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:background="#1e1e1e"
-    android:weightSum="8">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <SeekBar
+        android:id="@+id/playing_bar_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00ffffff"
+        />
 
     <LinearLayout
-        android:layout_weight="4"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="15dp"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        >
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:background="#1e1e1e"
+        android:weightSum="8">
 
-        <TextView
-            android:id="@+id/playing_bar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#fff"
-            />
+        <LinearLayout
+            android:layout_weight="4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            >
 
-        <TextView
-            android:id="@+id/playing_bar_vocal"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/playing_bar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                />
+
+            <TextView
+                android:id="@+id/playing_bar_vocal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#707070"
+                />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/playing_bar_back"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="#707070"
-            />
+            android:layout_weight="1"
+            android:src="@drawable/front_tab"/>
+
+
+
+        <ImageView
+            android:id="@+id/playing_bar_play"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/play_btn"
+            android:tint="#ffffff" />
+
+        <ImageView
+            android:id="@+id/playing_bar_front"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/back_btn"/>
+
+        <ImageView
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_music_list"
+            android:tint="#ffffff" />
 
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/playing_bar_back"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:src="@drawable/front_tab"/>
-
-
-
-    <ImageView
-        android:id="@+id/playing_bar_play"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:src="@drawable/play_btn"
-        android:tint="#ffffff" />
-
-    <ImageView
-        android:id="@+id/playing_bar_front"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:src="@drawable/back_btn"/>
-
-    <ImageView
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_music_list"
-        android:tint="#ffffff" />
-
 
 </LinearLayout>

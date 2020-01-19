@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -43,7 +44,10 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
     private View runLayout;
     private FrameLayout background;
     private ImageView btn_shuffle, btn_repeat;
+    private TextView txt_current, txt_length;
     private int chart;
+    SeekBar sb;
+    boolean seekBarControl = true;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -74,7 +78,25 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
         findViewById(R.id.play_front).setOnClickListener(this);
         btn_repeat.setOnClickListener(this);
         btn_shuffle.setOnClickListener(this);
+        sb = findViewById(R.id.music_play_seekbar);
+        txt_current = findViewById(R.id.music_play_current_txt);
+        txt_length = findViewById(R.id.music_play_length_txt);
 
+        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                seekBarControl = true;
+                AudioApplication.getInstance().getServiceInterface().seekTo(sb.getProgress());
+                updateUI();
+            }
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) { }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                seekBarControl = false;
+            }
+        });
 
         registerBroadcast();
         updateUI();
@@ -124,6 +146,8 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
     private void updateUI() {
         if (AudioApplication.getInstance().getServiceInterface().isPlaying()) {
             music_play_btn.setImageResource(R.drawable.playing_btn);
+            sb.setMax(AudioApplication.getInstance().getServiceInterface().getDuration());
+            new SeekThread().start();
         } else {
             music_play_btn.setImageResource(R.drawable.play_btn);
         }
@@ -146,6 +170,7 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
         ChartData audioItem = AudioApplication.getInstance().getServiceInterface().getAudioItem();
         ((TextView)findViewById(R.id.play_title)).setText(audioItem.getTitle());
         ((TextView)findViewById(R.id.play_vocal)).setText(audioItem.getVocal());
+        txt_length.setText(secondsToString(AudioApplication.getInstance().getServiceInterface().getDuration() / 1000));
 
     }
 
@@ -164,5 +189,34 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
 
     private void unregisterBroadcast() {
         unregisterReceiver(mBroadcastReceiver);
+    }
+
+    private String secondsToString(int pTime) {
+        if(pTime >= 3600)
+            return String.format("%d:%02d:%02d", pTime / 3600, pTime / 60 % 60, pTime % 60);
+        else
+            return String.format("%d:%02d", pTime / 60 % 60, pTime % 60);
+    }
+
+    class SeekThread extends Thread {
+        @Override
+        public void run() { // 쓰레드가 시작되면 콜백되는 메서드
+            // 씨크바 막대기 조금씩 움직이기 (노래 끝날 때까지 반복)
+            int times = 0;
+            while(AudioApplication.getInstance().getServiceInterface().isPlaying() && seekBarControl) {
+                final int current = AudioApplication.getInstance().getServiceInterface().getCurrentPosition();
+                sb.setProgress(current);
+                times = (times + 1) % 100;
+                if(times == 0)
+                    runOnUiThread(new Runnable() {
+                        public void run() { // 메시지 큐에 저장될 메시지의 내용
+                            if(current >= 3600000)
+                                txt_current.setText(String.format("%d:%02d:%02d", current / 3600000, current / 60000 % 60, current / 1000 % 60));
+                            else
+                                txt_current.setText(String.format("%d:%02d", current / 60000 % 60, current / 1000 % 60));
+                        }
+                    });
+            }
+        }
     }
 }

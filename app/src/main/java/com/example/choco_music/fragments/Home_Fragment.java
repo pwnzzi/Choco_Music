@@ -119,9 +119,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                             setup_album(album_number,title,vocal,genre);
                         }
                     }
-
-                    //AudioApplication.getInstance().getServiceInterface().setPlayList(datas);
-                    //AudioApplication.getInstance().getServiceInterface().play(0);
                 }
             }
             @Override
@@ -413,6 +410,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         music_play_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AudioApplication.getInstance().getServiceInterface().setPlayList(datas);
                 if (!playPause) {
                     if (initalStage) {
                         AudioApplication.getInstance().getServiceInterface().play(position);

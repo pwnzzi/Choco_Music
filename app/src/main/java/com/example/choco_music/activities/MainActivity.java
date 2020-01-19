@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.choco_music.Audio.AudioApplication;
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     SwipeViewPager viewPager;
     LinearLayout playing_bar;
     ImageView btn_front, btn_back, btn_play;
+    SeekBar sb;
+    boolean seekBarControl = true;
     TextView txt_title, txt_vocal;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
@@ -44,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 스플래쉬 화면
         Intent intent = new Intent(this, LoadingActivity.class);
         startActivity(intent);
-        registerBroadcast();
 
         // 뷰페이져
         viewPager= findViewById(viewpager);
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         txt_title = findViewById(R.id.playing_bar_title);
         txt_vocal = findViewById(R.id.playing_bar_vocal);
+        sb = findViewById(R.id.playing_bar_seekbar);
 
         //탭 레이아윳
         TabLayout tabLayout=findViewById(R.id.tablayout);
@@ -82,6 +85,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         view3.findViewById(R.id.icon).setBackgroundResource(R.drawable.search_tab_icon);
         View view4= getLayoutInflater().inflate(R.layout.customtab,null);
         view4.findViewById(R.id.icon).setBackgroundResource(R.drawable.playlist_tab_icon);
+
+        registerBroadcast();
+        updateUI();
 
       /*  tabLayout.getTabAt(0).setIcon(R.drawable.home_tab_icon);
         tabLayout.getTabAt(1).setIcon(R.drawable.chart_tab_icon);
@@ -107,6 +113,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
+        });
+
+        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                seekBarControl = true;
+                AudioApplication.getInstance().getServiceInterface().seekTo(sb.getProgress());
+                updateUI();
+            }
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) { }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                seekBarControl = false;
+            }
         });
 
     }
@@ -153,10 +175,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void updateUI(){
         if (AudioApplication.getInstance().getServiceInterface().isPlaying()) {
             btn_play.setImageResource(R.drawable.playing_btn);
+            sb.setMax(AudioApplication.getInstance().getServiceInterface().getDuration());
+            new SeekThread().start();
+            txt_title.setText(AudioApplication.getInstance().getServiceInterface().getAudioItem().getTitle());
+            txt_vocal.setText(AudioApplication.getInstance().getServiceInterface().getAudioItem().getVocal());
         } else {
             btn_play.setImageResource(R.drawable.play_btn);
         }
-        txt_title.setText(AudioApplication.getInstance().getServiceInterface().getAudioItem().getTitle());
-        txt_vocal.setText(AudioApplication.getInstance().getServiceInterface().getAudioItem().getVocal());
     }
+
+    class SeekThread extends Thread {
+        @Override
+        public void run() { // 쓰레드가 시작되면 콜백되는 메서드
+            // 씨크바 막대기 조금씩 움직이기 (노래 끝날 때까지 반복)
+            while(AudioApplication.getInstance().getServiceInterface().isPlaying() && seekBarControl) {
+                sb.setProgress(AudioApplication.getInstance().getServiceInterface().getCurrentPosition());
+            }
+        }
+    }
+
 }
