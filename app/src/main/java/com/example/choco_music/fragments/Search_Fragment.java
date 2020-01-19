@@ -54,12 +54,13 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
     private ArrayList<AlbumData> albumDatas;
     private int songOwn, songCovered;
     private String img_path;
+    private View view;
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.search_fragment, null, false);
+        view = inflater.inflate(R.layout.search_fragment, null, false);
 
         Setup_Retrofit2();
         Start_TodaySong_view();
@@ -122,6 +123,7 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
         Toast myToast = Toast.makeText(getActivity().getApplicationContext(),"검색어를 입력해주세요",Toast.LENGTH_SHORT);
         myToast.setGravity(Gravity.CENTER,0,0);
         myToast.show();
+        Setup_Recyclerview(view);
     }
     public void showNotFoundMessage(String keyword) {
         Toast myToast = Toast.makeText(getActivity().getApplicationContext(),"\'" + keyword + "\' 를 찾을 수 없습니다",Toast.LENGTH_SHORT);

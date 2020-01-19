@@ -3,7 +3,9 @@ package com.example.choco_music.adapters;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.example.choco_music.R;
 import com.example.choco_music.fragments.Chart_Fragment;
 import com.example.choco_music.fragments.Home_Fragment;
 import com.example.choco_music.fragments.Playlist_Fragment;
@@ -38,7 +40,6 @@ public class ViewPagerAdpater extends FragmentPagerAdapter {
             return f4;
         return null;
     }
-
 
     @Override
     public int getCount() {

@@ -1,11 +1,13 @@
 package com.example.choco_music.Holder;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,7 +38,7 @@ public class VerticalViewHolder extends RecyclerView.ViewHolder {
     public ImageView img;
     public Home_Fragment home_fragment;
 
-    public VerticalViewHolder(@NonNull View itemView) {
+    public VerticalViewHolder(@NonNull final View itemView) {
         super(itemView);
 
         home_fragment = new Home_Fragment();
@@ -57,7 +59,10 @@ public class VerticalViewHolder extends RecyclerView.ViewHolder {
                     icon.setBackgroundResource(R.drawable.heart_selected);
                     int pos = getAdapterPosition();
                     Log.e("현재 위치",""+ pos);
-                    home_fragment.add_playlist(pos);
+                    home_fragment.add_playlist(pos,itemView);
+                    Toast myToast = Toast.makeText(itemView.getContext(),"초코뮤직님의 좋아요",Toast.LENGTH_SHORT);
+                    myToast.setGravity(Gravity.CENTER,0,0);
+                    myToast.show();
 
                 }
                 else{

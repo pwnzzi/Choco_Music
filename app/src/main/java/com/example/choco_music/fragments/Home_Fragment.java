@@ -74,9 +74,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     public String img_path ;
     private ArrayList<HomeData> homeDatas;
     Playlist_Database_OpenHelper playlist_database_openHelper;
-    private Context context;
-
-
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -84,6 +81,8 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             updateUI();
         }
     };
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -144,7 +143,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                                 Log.e("앨범데이터 제목",title);
                                 homeDatas.add(new HomeData(title,vocal,img_path,genre));
                                 // 홈 배경화면에 앨범 이미지 어둡게 세팅
-
                             }
                         }
                     }
@@ -311,6 +309,9 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast myToast = Toast.makeText(getActivity().getApplicationContext(),"평가가 취소 되었습니다.",Toast.LENGTH_SHORT);
+                myToast.setGravity(Gravity.CENTER,0,0);
+                myToast.show();
                 sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 cancelButton.setBackgroundResource(R.drawable.button_evaluate_homefragment);
             }
@@ -324,6 +325,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                 Toast myToast = Toast.makeText(getActivity().getApplicationContext(),"평가가 완료 되었습니다.",Toast.LENGTH_SHORT);
                 myToast.setGravity(Gravity.CENTER,0,0);
                 myToast.show();
+                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
         //init LayoutManager
@@ -341,8 +343,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
         music_evaluate_btn = (Button) view.findViewById(R.id.music_evaluate_btn);
         music_play_btn = (ImageView) view.findViewById(R.id.home_fragment_play_btn);
-
-
 
         //음악 평가 클릭 이벤트
         music_evaluate_btn.setOnClickListener(new View.OnClickListener() {
@@ -430,7 +430,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         });
     }
 
-    public void add_playlist (final int pos){
+    public void add_playlist (final int pos , final View view){
 
         setup_retrofit();
         retrofitExService.getData2().enqueue(new Callback<ArrayList<VerticalData>>() {
@@ -440,9 +440,8 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                     ArrayList<VerticalData> vertical = response.body();
                     Log.e("된다!!!",""+vertical.get(pos).getTitle());
 
-                    playlist_database_openHelper= new Playlist_Database_OpenHelper(getActivity());
+                    playlist_database_openHelper= new Playlist_Database_OpenHelper(view.getContext());
                     playlist_database_openHelper.insertData("너를위해","임재범","몰라","몰라");
-
                 }
             }
             @Override
