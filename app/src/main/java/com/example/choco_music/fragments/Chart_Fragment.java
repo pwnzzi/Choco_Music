@@ -163,7 +163,7 @@ public class Chart_Fragment extends Fragment {
                                     if (albumDatas != null) {
                                         for (int i = 0; i < albumDatas.size(); i++) {
                                             if(v.getAlbum() == albumDatas.get(i).getId()){
-                                                Log.d("da"+v.getId(), albumDatas.get(i).getImg_path());
+                                                //Log.d("da"+v.getId(), albumDatas.get(i).getImg_path());
                                                 OriginalMap.get(v.getId()).setImg_path(albumDatas.get(i).getImg_path());
                                                 OriginalAdapter.notifyDataSetChanged();
                                             }
