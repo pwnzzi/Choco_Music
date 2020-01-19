@@ -3,7 +3,7 @@ package com.example.choco_music.model;
 import java.io.Serializable;
 
 public class CoverData implements Serializable {
-
+    private int id;
     private String title;
     private String vocal;
     private  String genre;
@@ -18,6 +18,10 @@ public class CoverData implements Serializable {
         this.title = title;
         this.vocal = vocal;
         this.fileurl = fileurl;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getTitle() {

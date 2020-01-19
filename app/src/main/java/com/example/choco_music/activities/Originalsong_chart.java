@@ -71,7 +71,7 @@ public class Originalsong_chart extends AppCompatActivity {
                     // init Adapter
                     Original_Adapter = new ChartAdapter();
                     // set Data
-                    Original_Adapter.setData(Original_datas);
+                    //Original_Adapter.setData(Original_datas);
                     // set Adapter
                     OriginalSong_View.setAdapter(Original_Adapter);
                 }

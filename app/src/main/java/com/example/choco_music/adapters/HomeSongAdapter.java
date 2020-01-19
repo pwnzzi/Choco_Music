@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.example.choco_music.Holder.TodaySong_ViewHolder;
 import com.example.choco_music.Holder.VerticalViewHolder;
 import com.example.choco_music.R;
+import com.example.choco_music.model.ChartData;
 import com.example.choco_music.model.HomeData;
 import com.example.choco_music.model.IntroduceData;
 
@@ -21,11 +22,11 @@ import java.util.ArrayList;
 
 public class HomeSongAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
 
-    private ArrayList<HomeData> homeDatas;
+    private ArrayList<ChartData> homeDatas;
     private View view;
     private int id;
 
-    public void setData(ArrayList<HomeData> list){homeDatas = list;}
+    public void setData(ArrayList<ChartData> list){homeDatas = list;}
 
     @NonNull
     @Override
@@ -41,17 +42,18 @@ public class HomeSongAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
     public void onBindViewHolder(@NonNull VerticalViewHolder holder, int position) {
 
         //데이터에 받아온 값을 각각의 아이템에 넣어준다.
-        HomeData data = homeDatas.get(position);
+        ChartData data = homeDatas.get(position);
         holder.vocal.setText(data.getVocal());
         holder.title.setText(data.getTitle());
 
         //이미지를 글라이드를 이용해서 넣어준다.
 
 
-        Log.e("잘넘어오나?",data.getImg_path());
-        Glide.with(holder.itemView.getContext()).load(data.getImg_path()).into(holder.img);
+        //Log.e("잘넘어오나?",data.getImg_path());
+        try{ Glide.with(holder.itemView.getContext()).load(data.getImg_path()).into(holder.img);}
+        catch(Exception e){}
 
-        if(data.getGenre().equals("자작곡")) {
+        if(data.getType()) {
             holder.genre.setBackgroundResource(R.drawable.round_songtype_orig);
             holder.genre.setText("자작곡");
             holder.genre.setTextColor(Color.rgb(255,255,255));

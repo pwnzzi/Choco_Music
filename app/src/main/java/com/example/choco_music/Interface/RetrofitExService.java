@@ -27,8 +27,7 @@ public interface RetrofitExService {
     Call<ArrayList<VerticalData>> getData3(@Query("query") int id);
 
     @GET("song/own/")
-    Call<ArrayList<VerticalData>> getData_home(@Query("query") String title ,  @Query("start") int startPosition);
-
+    Call<ArrayList<VerticalData>> getData_home(@Query("query") String title , @Query("start") int startPosition);
 
     @GET("song/covered/")
     Call<ArrayList<CoverData>> getData_Cover();
@@ -38,6 +37,9 @@ public interface RetrofitExService {
 
     @GET("album/own/")
     Call<ArrayList<AlbumData>> AlbumData(@Query("id") int id);
+
+    @GET("album/covered/")
+    Call<ArrayList<AlbumData>> AlbumData_cover(@Query("id") int id);
 
     @GET("song/recommended/today/")
     Call<ArrayList<TodaySongData>> getData_Song_Today();

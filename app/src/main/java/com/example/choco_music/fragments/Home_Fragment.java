@@ -39,6 +39,8 @@ import com.example.choco_music.model.Playlist_Database_OpenHelper;
 import com.example.choco_music.model.VerticalData;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -71,6 +73,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     private Retrofit retrofit;
     private final SnapHelper snapHelper = new PagerSnapHelper();
     private ArrayList<AlbumData> albumDatas;
+    private HashMap<Integer, ChartData> chartMap;
     public String img_path ;
     private ArrayList<HomeData> homeDatas;
     Playlist_Database_OpenHelper playlist_database_openHelper;
@@ -96,6 +99,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
        return view;
     }
     private void setup_data(){
+        chartMap = new HashMap<>();
         // 데이터베이스에 데이터 받아오기
         retrofitExService.getData2().enqueue(new Callback<ArrayList<VerticalData>>() {
             @Override
@@ -108,14 +112,40 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                             String title = vertical.get(i).getTitle();
                             String vocal = vertical.get(i).getVocal();
                             String genre = vertical.get(i).getGenre();
-                            Log.e("제목", title);
-                            Log.e("가수", vocal);
+                            //Log.e("제목", title);
+                            //Log.e("가수", vocal);
                             datas.add(new ChartData(vertical.get(i).getTitle(), vertical.get(i).getVocal(),
                                     vertical.get(i).getFileurl(), vertical.get(i).getGenre().equals("자작곡")));
+                            chartMap.put(vertical.get(i).getId(), datas.get(datas.size()-1));
 
-                            int album_number = vertical.get(i).getAlbum();
-                            setup_album(album_number,title,vocal,genre);
+                            final VerticalData v = vertical.get(i);
+
+                            Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData(vertical.get(i).getId());
+                            call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
+                                @Override
+                                public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
+                                    if (response.isSuccessful()) {
+                                        albumDatas = response.body();
+                                        if (albumDatas != null) {
+                                            for (int i = 0; i < albumDatas.size(); i++) {
+                                                if(v.getAlbum() == albumDatas.get(i).getId()){
+                                                    //Log.d("da"+v.getId(), albumDatas.get(i).getImg_path());
+                                                    chartMap.get(v.getId()).setImg_path(albumDatas.get(i).getImg_path());
+                                                    mAdapter.notifyDataSetChanged();
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                @Override
+                                public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {}
+                            });
                         }
+
+                        mAdapter = new HomeSongAdapter();
+                        mAdapter.setData(datas);
+                        mVerticalView.setAdapter(mAdapter);
+
                     }
                 }
             }
@@ -127,37 +157,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         // updateUI();
     }
 
-    private void setup_album(final int Album_Number ,final String title, final String vocal, final String genre){
 
-        homeDatas.clear();
-        Call<ArrayList<AlbumData>> call = retrofitExService.AlbumData(Album_Number);
-        call.enqueue(new Callback<ArrayList<AlbumData>>()  {
-            @Override
-            public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
-                if (response.isSuccessful()) {
-                    albumDatas = response.body();
-                    if ( albumDatas!= null) {
-                        for (int i = 0; i < albumDatas.size(); i++) {
-                            if ( albumDatas.get(i).getId() == Album_Number ){
-                                img_path = albumDatas.get(i).getImg_path();
-                                Log.e("앨범데이터1",img_path);
-                                Log.e("앨범데이터 제목",title);
-                                homeDatas.add(new HomeData(title,vocal,img_path,genre));
-                                // 홈 배경화면에 앨범 이미지 어둡게 세팅
-
-                            }
-                        }
-                    }
-                    mAdapter = new HomeSongAdapter();
-                    mAdapter.setData(homeDatas);
-                    mVerticalView.setAdapter(mAdapter);
-                }
-            }
-            @Override
-            public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {
-            }
-        });
-    }
     private void btn_tag() {
         btn_tags = new ArrayList<>();
         clicks = new ArrayList<>();

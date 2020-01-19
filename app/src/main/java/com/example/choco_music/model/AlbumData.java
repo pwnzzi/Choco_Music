@@ -12,8 +12,6 @@ public class AlbumData implements Serializable {
         this.albumName = albumName;
         this.img_path = img_path;
         this.id = id;
-
-
     }
 
     public String getAlbum_name(){

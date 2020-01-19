@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.choco_music.Holder.Chart_ViewHolder;
 import com.example.choco_music.R;
 import com.example.choco_music.activities.MusicPlay_activity;
@@ -19,10 +20,8 @@ import java.util.ArrayList;
 
 public class ChartAdapter extends RecyclerView.Adapter<Chart_ViewHolder>  {
 
-
-
-    private ArrayList<VerticalData> chartDatas ;
-    public void setData(ArrayList<VerticalData> list){
+    private ArrayList<ChartData> chartDatas;
+    public void setData(ArrayList<ChartData> list){
         chartDatas = list;
     }
 
@@ -40,10 +39,12 @@ public class ChartAdapter extends RecyclerView.Adapter<Chart_ViewHolder>  {
     @Override
     public void onBindViewHolder(@NonNull Chart_ViewHolder holder, int position) {
 
-        VerticalData data = chartDatas.get(position);
+        ChartData data = chartDatas.get(position);
 
         holder.vocal.setText(data.getVocal());
         holder.title.setText(data.getTitle());
+        try{ Glide.with(holder.itemView.getContext()).load(data.getImg_path()).into(holder.img);}
+        catch(Exception e){}
 
     }
 

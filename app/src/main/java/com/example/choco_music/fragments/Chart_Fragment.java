@@ -19,11 +19,8 @@ import com.example.choco_music.Audio.AudioApplication;
 import com.example.choco_music.Interface.RetrofitExService;
 import com.example.choco_music.R;
 import com.example.choco_music.activities.Coversong_chart;
-import com.example.choco_music.activities.MusicPlay_activity;
 import com.example.choco_music.activities.Originalsong_chart;
 import com.example.choco_music.adapters.ChartAdapter;
-import com.example.choco_music.adapters.CoverAdapter;
-import com.example.choco_music.adapters.HomeSongAdapter;
 import com.example.choco_music.adapters.PagerSnapWithSpanCountHelper;
 import com.example.choco_music.model.AlbumData;
 import com.example.choco_music.model.ChartData;
@@ -33,6 +30,7 @@ import com.example.choco_music.model.RecyclerItemClickListener;
 import com.example.choco_music.model.VerticalData;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,17 +41,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Chart_Fragment extends Fragment {
 
     private RecyclerView CoverSong_View,OriginalSong_View;
-    private ChartAdapter Original_Adapter;
-    private CoverAdapter coverAdapter;
+    private ChartAdapter OriginalAdapter;
+    private ChartAdapter CoverAdapter;
     private LinearLayoutManager Cover_LayoutManager,Original_LayoutManager;
     private Button Cover_btn, Originall_btn;
     private Retrofit retrofit;
     private RetrofitExService retrofitExService;
-    private ArrayList<VerticalData> Original_datas;
-    private ArrayList<CoverData> Cover_datas;
     private ArrayList<ChartData> Original_Chart;
     private ArrayList<ChartData> Cover_Chart;
-    private ArrayList<AlbumData> albumDatas;
+    private HashMap<Integer, ChartData> OriginalMap;
+    private HashMap<Integer, ChartData> CoverMap;
     private String img_path;
     private ArrayList<HomeData> homeDatas;
 
@@ -130,8 +127,9 @@ public class Chart_Fragment extends Fragment {
 
 
     private void init_retrofit(){
-
         homeDatas = new ArrayList<>();
+        OriginalMap = new HashMap<>();
+        CoverMap = new HashMap<>();
 
         Original_LayoutManager = new GridLayoutManager(getContext(), 5, GridLayoutManager.HORIZONTAL, false);
         Cover_LayoutManager= new GridLayoutManager(getContext(), 5, GridLayoutManager.HORIZONTAL, false);
@@ -147,30 +145,45 @@ public class Chart_Fragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
                 if (response.isSuccessful()) {
-                    Original_datas = response.body();
-
+                    ArrayList<VerticalData> verticalChart = response.body();
                     Original_Chart = new ArrayList<>();
-                    for(VerticalData data: Original_datas)
-                        Original_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true));
 
-                    if (Original_datas != null) {
-                        for (int i = 0; i < Original_datas.size(); i++) {
-                            Log.d("data" + i, Original_datas.get(i).getTitle() + "");
-                            Log.d("data" + i, Original_datas.get(i).getVocal() + "");
-                        }
-                        Log.d("getData1 end", "======================================");
+                    for(VerticalData data: verticalChart){
+                        Original_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true));
+                        OriginalMap.put(data.getId(), Original_Chart.get(Original_Chart.size()-1));
+                        //Log.d(data.getTitle(), data.getFileurl());
+
+                        final VerticalData v = data;
+                        Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData(data.getId());
+                        call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
+                            @Override
+                            public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
+                                if (response.isSuccessful()) {
+                                    ArrayList<AlbumData> albumDatas = response.body();
+                                    if (albumDatas != null) {
+                                        for (int i = 0; i < albumDatas.size(); i++) {
+                                            if(v.getAlbum() == albumDatas.get(i).getId()){
+                                                Log.d("da"+v.getId(), albumDatas.get(i).getImg_path());
+                                                OriginalMap.get(v.getId()).setImg_path(albumDatas.get(i).getImg_path());
+                                                OriginalAdapter.notifyDataSetChanged();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            @Override
+                            public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {
+                                t.printStackTrace();
+                            }
+                        });
                     }
-                    //     filerul_data.add(datas.get(i).getFilerul());
-                    // setLayoutManager
                     OriginalSong_View.setLayoutManager(Original_LayoutManager);
                     Original_LayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-                    // init Adapter
-                    Original_Adapter = new ChartAdapter();
+                    OriginalAdapter = new ChartAdapter();
                     // set Data
-                    Original_Adapter.setData(Original_datas);
+                    OriginalAdapter.setData(Original_Chart);
                     // set Adapter
-                    OriginalSong_View.setAdapter(Original_Adapter);
-
+                    OriginalSong_View.setAdapter(OriginalAdapter);
                 }
             }
 
@@ -179,71 +192,55 @@ public class Chart_Fragment extends Fragment {
             }
         });
 
-
-
         // 데이터베이스에 데이터 받아오기
         retrofitExService.getData_Cover().enqueue(new Callback<ArrayList<CoverData>>() {
             @Override
             public void onResponse(@NonNull Call<ArrayList<CoverData>> call, @NonNull Response<ArrayList<CoverData>> response) {
                 if (response.isSuccessful()) {
-                    Cover_datas = response.body();
+                    ArrayList<CoverData> coverChart = response.body();
                     Cover_Chart = new ArrayList<>();
 
-                    for(CoverData data: Cover_datas)
+                    for(CoverData data: coverChart){
                         Cover_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true));
+                        CoverMap.put(data.getId(), Cover_Chart.get(Cover_Chart.size()-1));
+                        //Log.d(data.getTitle(), data.getFileurl());
 
-                    if (Cover_datas != null) {
-                        for (int i = 0; i < Cover_datas.size(); i++) {
-                            setup_album(Cover_datas.get(i).getAlbum(),Cover_datas.get(i).getTitle()
-                                    ,Cover_datas.get(i).getVocal(),Cover_datas.get(i).getGenre());
-                        }
+                        final CoverData v = data;
+                        Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData_cover(data.getId());
+                        call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
+                            @Override
+                            public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
+                                if (response.isSuccessful()) {
+                                    ArrayList<AlbumData> albumDatas = response.body();
+                                    if (albumDatas != null) {
+                                        for (int i = 0; i < albumDatas.size(); i++) {
+                                            if(v.getAlbum() == albumDatas.get(i).getId()){
+                                                //Log.d("da"+v.getId(), albumDatas.get(i).getImg_path());
+                                                CoverMap.get(v.getId()).setImg_path(albumDatas.get(i).getImg_path());
+                                                CoverAdapter.notifyDataSetChanged();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            @Override
+                            public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {
+                                t.printStackTrace();
+                            }
+                        });
                     }
+                    CoverSong_View.setLayoutManager(Cover_LayoutManager);
+                    Cover_LayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                    CoverAdapter = new ChartAdapter();
+                    // set Data
+                    CoverAdapter.setData(Cover_Chart);
+                    // set Adapter
+                    CoverSong_View.setAdapter(CoverAdapter);
                 }
             }
 
             @Override
             public void onFailure(Call<ArrayList<CoverData>> call, Throwable t) {
-            }
-        });
-    }
-    private void setup_album(final int Album_Number ,final String title, final String vocal, final String genre){
-        homeDatas.clear();
-
-        Call<ArrayList<AlbumData>> call = retrofitExService.AlbumData(Album_Number);
-        call.enqueue(new Callback<ArrayList<AlbumData>>()  {
-            @Override
-            public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
-                if (response.isSuccessful()) {
-                    albumDatas = response.body();
-                    if ( albumDatas!= null) {
-                        for (int i = 0; i < albumDatas.size(); i++) {
-                            if ( albumDatas.get(i).getId() == Album_Number ){
-                                img_path = albumDatas.get(i).getImg_path();
-                                Log.e("앨범데이터1",img_path);
-                                Log.e("앨범데이터 제목",title);
-
-                                homeDatas.add(new HomeData(title,vocal,img_path,genre));
-                                // 홈 배경화면에 앨범 이미지 어둡게 세팅
-
-                            }
-                        }
-                    }
-                //    mAdapter.setData(homeDatas);
-                //    mVerticalView.setAdapter(mAdapter);
-
-                    // setLayoutManager
-                    CoverSong_View.setLayoutManager(Cover_LayoutManager);
-                    Cover_LayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-                    // init Adapter
-                    coverAdapter = new CoverAdapter();
-                    // set Data
-                    coverAdapter.setData(homeDatas);
-                    // set Adapter
-                    CoverSong_View.setAdapter(coverAdapter);
-                }
-            }
-            @Override
-            public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {
             }
         });
     }
