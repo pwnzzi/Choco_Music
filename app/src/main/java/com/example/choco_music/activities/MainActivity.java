@@ -1,6 +1,7 @@
 package com.example.choco_music.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,6 +9,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -18,7 +22,6 @@ import com.example.choco_music.Audio.BroadcastActions;
 import com.example.choco_music.R;
 import com.example.choco_music.adapters.SwipeViewPager;
 import com.example.choco_music.adapters.ViewPagerAdpater;
-import com.example.choco_music.fragments.Playlist_Fragment;
 import com.google.android.material.tabs.TabLayout;
 
 import static com.example.choco_music.R.id.viewpager;
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     SeekBar sb;
     boolean seekBarControl = true;
     TextView txt_title, txt_vocal;
+    private FragmentManager fragmentManager;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -44,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         // 스플래쉬 화면
         Intent intent = new Intent(this, LoadingActivity.class);
         startActivity(intent);
@@ -51,7 +57,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 뷰페이져
         viewPager= findViewById(viewpager);
         ViewPagerAdpater viewPagerAdpater= new ViewPagerAdpater(getSupportFragmentManager());
-        viewPager.setPagingEnabled(false);
+      //  viewPager.setPagingEnabled(false);
+
 
         viewPager.setAdapter(viewPagerAdpater);
 
@@ -77,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         playing_bar.setOnClickListener(this);
 
         //탭래이아웃
-        View view1= getLayoutInflater().inflate(R.layout.customtab,null);
+        final View view1= getLayoutInflater().inflate(R.layout.customtab,null);
         view1.findViewById(R.id.icon).setBackgroundResource(R.drawable.home_tab_icon);
         View view2= getLayoutInflater().inflate(R.layout.customtab,null);
         view2.findViewById(R.id.icon).setBackgroundResource(R.drawable.chart_tab_icon);
@@ -89,18 +96,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         registerBroadcast();
         updateUI();
 
-      /*  tabLayout.getTabAt(0).setIcon(R.drawable.home_tab_icon);
-        tabLayout.getTabAt(1).setIcon(R.drawable.chart_tab_icon);
-        tabLayout.getTabAt(2).setIcon(R.drawable.search_tab_icon);
-        tabLayout.getTabAt(3).setIcon(R.drawable.playlist_tab_icon);*/
         tabLayout.getTabAt(0).setCustomView(view1);
         tabLayout.getTabAt(1).setCustomView(view2);
         tabLayout.getTabAt(2).setCustomView(view3);
         tabLayout.getTabAt(3).setCustomView(view4);
 
+
+
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+
                 if(tab.getPosition() == 0){
                     playing_bar.setVisibility(View.GONE);
                 } else {
@@ -114,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
+
 
         sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -193,5 +201,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
+    public Animation inFromRightAnimation()
+    {
+        Animation inFromRight = new TranslateAnimation(
+                Animation.RELATIVE_TO_PARENT, +1.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f);
+        inFromRight.setDuration(240);
+        inFromRight.setInterpolator(new AccelerateInterpolator());
+        return inFromRight;
+    }
+
+    public Animation outToRightAnimation()
+    {
+        Animation outtoLeft = new TranslateAnimation(
+                Animation.RELATIVE_TO_PARENT, -1.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f);
+        outtoLeft.setDuration(240);
+        outtoLeft.setInterpolator(new AccelerateInterpolator());
+        return outtoLeft;
+    }
+
+
 
 }

@@ -13,12 +13,14 @@ public class Playlist_Database_OpenHelper extends SQLiteOpenHelper {
     private static final String DATABASE= "music.db";
     private static final int DATABASE_VERSION = 2;
     private String sql;
+    private Context context;
 
 
     private SQLiteDatabase db;
 
     public Playlist_Database_OpenHelper(Context context) {
         super(context, DATABASE, null, DATABASE_VERSION);
+        this.context = context;
     }
 
     @Override
