@@ -127,5 +127,25 @@ public class AudioServiceInterface {
         return -1;
     }
 
+    public int getCurrentPosition(){
+        if (mService != null) {
+            return mService.getCurrentPosition();
+        }
+        return 0;
+    }
+
+    public int getDuration(){
+        if (mService != null) {
+            return mService.getDuration();
+        }
+        return 0;
+    }
+
+    public void seekTo(int time){
+        if (mService != null) {
+            mService.seekTo(time);
+        }
+    }
+
 }
 

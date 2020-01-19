@@ -49,8 +49,8 @@ public class AudioService extends Service {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 if(isRepeat == 0) {
-                    isPrepared = false;
-                    sendBroadcast(new Intent(BroadcastActions.PLAY_STATE_CHANGED)); // 재생상태 변경 전송
+                    mMediaPlayer.seekTo(0);
+                    pause();
                 } else if(isRepeat == 1){
                     forward();
                     updateNotificationPlayer();
@@ -197,6 +197,18 @@ public class AudioService extends Service {
 
     public int getRepeat(){
         return isRepeat;
+    }
+
+    public int getCurrentPosition(){
+        return mMediaPlayer.getCurrentPosition();
+    }
+
+    public int getDuration(){
+        return mMediaPlayer.getDuration();
+    }
+
+    public void seekTo(int time){
+        mMediaPlayer.seekTo(time);
     }
 
     @Override
