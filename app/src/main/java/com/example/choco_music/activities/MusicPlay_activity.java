@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
@@ -37,6 +38,10 @@ import com.example.choco_music.model.VerticalData;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import jp.wasabeef.glide.transformations.BlurTransformation;
+
+import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
 public class MusicPlay_activity extends AppCompatActivity implements View.OnClickListener{
 
@@ -174,8 +179,28 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
         ChartData audioItem = AudioApplication.getInstance().getServiceInterface().getAudioItem();
         ((TextView)findViewById(R.id.play_title)).setText(audioItem.getTitle());
         ((TextView)findViewById(R.id.play_vocal)).setText(audioItem.getVocal());
+        if(audioItem.getType()){
+            ((TextView)findViewById(R.id.music_play_type)).setText("자작곡");
+            ((TextView)findViewById(R.id.music_play_type)).setTextColor(Color.parseColor("#ffffff"));
+            findViewById(R.id.music_play_type).setBackgroundResource(R.drawable.round_songtype_orig);
+            findViewById(R.id.music_play_cover_frame).setBackgroundResource(R.drawable.border_cover_orig);
+            ((ImageView)findViewById(R.id.music_play_cover_tri)).setImageResource(R.drawable.ic_triangle_original);
+        } else {
+            ((TextView)findViewById(R.id.music_play_type)).setText("커버곡");
+            ((TextView)findViewById(R.id.music_play_type)).setTextColor(Color.parseColor("#000000"));
+            findViewById(R.id.music_play_type).setBackgroundResource(R.drawable.round_songtype);
+            findViewById(R.id.music_play_cover_frame).setBackgroundResource(R.drawable.border_cover);
+            ((ImageView)findViewById(R.id.music_play_cover_tri)).setImageResource(R.drawable.ic_triangle_cover);
+        }
+
         txt_length.setText(secondsToString(AudioApplication.getInstance().getServiceInterface().getDuration() / 1000));
-        try{ Glide.with(getApplicationContext()).load(audioItem.getImg_path()).into(((ImageView)findViewById(R.id.music_play_cover)));}
+        try{
+            ImageView img = (ImageView)findViewById(R.id.music_play_cover_frame);
+            Glide.with(getApplicationContext()).load(audioItem.getImg_path()).into(img);
+            Glide.with(getApplicationContext()).load(audioItem.getImg_path())
+                    .apply(bitmapTransform(new BlurTransformation(15, 3)))
+                    .into(((ImageView)findViewById(R.id.music_play_background)));
+        }
         catch(Exception e){}
 
     }

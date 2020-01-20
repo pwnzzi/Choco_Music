@@ -145,23 +145,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        switch(view.getId()){
-            case R.id.layout_playing_bar:
-                Intent intent = new Intent(this, MusicPlay_activity.class);
-                startActivity(intent);
-                break;
-            case R.id.playing_bar_back:
-                AudioApplication.getInstance().getServiceInterface().rewind();
-                updateUI();
-                break;
-            case R.id.playing_bar_front:
-                AudioApplication.getInstance().getServiceInterface().forward();
-                updateUI();
-                break;
-            case R.id.playing_bar_play:
-                AudioApplication.getInstance().getServiceInterface().togglePlay();
-                updateUI();
-        }
+        try{
+            AudioApplication.getInstance().getServiceInterface().getAudioItem();
+            switch(view.getId()){
+                case R.id.layout_playing_bar:
+                    Intent intent = new Intent(this, MusicPlay_activity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.playing_bar_back:
+                    AudioApplication.getInstance().getServiceInterface().rewind();
+                    updateUI();
+                    break;
+                case R.id.playing_bar_front:
+                    AudioApplication.getInstance().getServiceInterface().forward();
+                    updateUI();
+                    break;
+                case R.id.playing_bar_play:
+                    AudioApplication.getInstance().getServiceInterface().togglePlay();
+                    updateUI();
+            }
+        } catch(Exception e){ }
     }
 
     private void registerBroadcast() {

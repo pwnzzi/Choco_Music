@@ -94,20 +94,31 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         }
     };
 
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+
+        chartMap = new HashMap<>();
+        datas = new ArrayList<>();
+        homeDatas= new ArrayList<>();
+
+        mAdapter = new HomeSongAdapter();
+
+        setup_retrofit();
+        init_retrofit();
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.home_fragment, null, false);
 
-       setup_retrofit();
        btn_tag();
        setup_view(view);
-       setup_data();
+       //init_retrofit();
        return view;
     }
-    private void setup_data(){
-        chartMap = new HashMap<>();
+    private void init_retrofit(){
         // 데이터베이스에 데이터 받아오기
         retrofitExService.getData2().enqueue(new Callback<ArrayList<VerticalData>>() {
             @Override
@@ -150,10 +161,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                             });
                         }
 
-                        mAdapter = new HomeSongAdapter();
-                        mAdapter.setData(datas);
-                        mVerticalView.setAdapter(mAdapter);
-
                     }
                 }
             }
@@ -193,6 +200,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                 .build();
         retrofitExService = retrofit.create(RetrofitExService.class);
     }
+
     @Override
     public void onClick(View view) {
         int btns = 0;
@@ -314,7 +322,19 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     }
     private void setup_view(View view){
         final ImageView imageView = view.findViewById(R.id.home_fragment_background);
-        datas = new ArrayList<>();
+
+        // setLayoutManager
+        mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
+        //RecyclerVier binding
+        mVerticalView = (RecyclerView) view.findViewById(R.id.vertivcal_list);
+        snapHelper.attachToRecyclerView(mVerticalView);
+        mVerticalView.addItemDecoration(new OffsetItemDecoration(getContext()));
+        mVerticalView.setLayoutManager(mLayoutManager);
+
+        mAdapter.setData(datas);
+        mVerticalView.setAdapter(mAdapter);
+
         // 취소, 완료 버튼
         cancelButton = view.findViewById(R.id.sheet_cancel);
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -340,15 +360,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             }
         });
         //init LayoutManager
-        homeDatas= new ArrayList<HomeData>();
-        mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
-        // setLayoutManager
-        //RecyclerVier binding
-        mVerticalView = (RecyclerView) view.findViewById(R.id.vertivcal_list);
-        snapHelper.attachToRecyclerView(mVerticalView);
-        mVerticalView.addItemDecoration(new OffsetItemDecoration(getContext()));
-        mVerticalView.setLayoutManager(mLayoutManager);
 
         layoutBottomSheet = view.findViewById(R.id.bottom_sheet);
         sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);

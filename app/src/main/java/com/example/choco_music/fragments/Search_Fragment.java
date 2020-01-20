@@ -73,6 +73,7 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
         Setup_Recyclerview(view);
         Setup_Searchview(view);
         return view;
+
     }
     private void Setup_Recyclerview(View view){
         genre= view.findViewById(R.id.song_search_fragment);
@@ -266,7 +267,7 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
                     if (musics != null) {
                         for (int i = 0; i < musics.size(); i++) {
 
-                            if (musics.get(i).getId() == Song_Number ){
+                            if (musics.get(i).getId() == Song_Number){
 
                                 String todaysong_title = musics.get(i).getTitle();
                                 String todaysong_vocal = musics.get(i).getVocal();

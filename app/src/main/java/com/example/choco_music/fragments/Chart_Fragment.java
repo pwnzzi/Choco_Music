@@ -1,5 +1,6 @@
 package com.example.choco_music.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -54,6 +55,21 @@ public class Chart_Fragment extends Fragment {
     private String img_path;
     private ArrayList<HomeData> homeDatas;
 
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+
+        homeDatas = new ArrayList<>();
+        OriginalMap = new HashMap<>();
+        CoverMap = new HashMap<>();
+        Original_Chart = new ArrayList<>();
+        Cover_Chart = new ArrayList<>();
+
+        OriginalAdapter = new ChartAdapter();
+        CoverAdapter = new ChartAdapter();
+
+        init_retrofit();
+    }
 
     @Nullable
     @Override
@@ -62,7 +78,7 @@ public class Chart_Fragment extends Fragment {
 
         init_btn(view);
         init_recyclerview(view);
-        init_retrofit();
+        //init_retrofit();
         return view;
     }
 
@@ -91,13 +107,30 @@ public class Chart_Fragment extends Fragment {
         });
     }
     public void init_recyclerview(View view){
-
         //자자곡, 커버곡 리사이클러뷰를 만들어준다.
 
         CoverSong_View = (RecyclerView)view.findViewById(R.id.CoverSong_list);
         OriginalSong_View=(RecyclerView)view.findViewById(R.id.OriginalSong_list);
         PagerSnapWithSpanCountHelper snapHelper = new PagerSnapWithSpanCountHelper(5);
         PagerSnapWithSpanCountHelper snapHelper2 = new PagerSnapWithSpanCountHelper(5);
+        Original_LayoutManager = new GridLayoutManager(getContext(), 5, GridLayoutManager.HORIZONTAL, false);
+        Cover_LayoutManager= new GridLayoutManager(getContext(), 5, GridLayoutManager.HORIZONTAL, false);
+
+        OriginalSong_View.setLayoutManager(Original_LayoutManager);
+        Original_LayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+        // set Data
+        OriginalAdapter.setData(Original_Chart);
+        // set Adapter
+        OriginalSong_View.setAdapter(OriginalAdapter);
+
+        CoverSong_View.setLayoutManager(Cover_LayoutManager);
+        Cover_LayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+        // set Data
+        CoverAdapter.setData(Cover_Chart);
+        // set Adapter
+        CoverSong_View.setAdapter(CoverAdapter);
 
         snapHelper.attachToRecyclerView(CoverSong_View);
         snapHelper2.attachToRecyclerView(OriginalSong_View);
@@ -127,12 +160,6 @@ public class Chart_Fragment extends Fragment {
 
 
     private void init_retrofit(){
-        homeDatas = new ArrayList<>();
-        OriginalMap = new HashMap<>();
-        CoverMap = new HashMap<>();
-
-        Original_LayoutManager = new GridLayoutManager(getContext(), 5, GridLayoutManager.HORIZONTAL, false);
-        Cover_LayoutManager= new GridLayoutManager(getContext(), 5, GridLayoutManager.HORIZONTAL, false);
         //서버 통신을 위한 레스트로핏 적용
         retrofit = new Retrofit.Builder()
                 .baseUrl(RetrofitExService.URL)
@@ -146,7 +173,6 @@ public class Chart_Fragment extends Fragment {
             public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
                 if (response.isSuccessful()) {
                     ArrayList<VerticalData> verticalChart = response.body();
-                    Original_Chart = new ArrayList<>();
 
                     for(VerticalData data: verticalChart){
                         Original_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true));
@@ -177,13 +203,6 @@ public class Chart_Fragment extends Fragment {
                             }
                         });
                     }
-                    OriginalSong_View.setLayoutManager(Original_LayoutManager);
-                    Original_LayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-                    OriginalAdapter = new ChartAdapter();
-                    // set Data
-                    OriginalAdapter.setData(Original_Chart);
-                    // set Adapter
-                    OriginalSong_View.setAdapter(OriginalAdapter);
                 }
             }
 
@@ -198,10 +217,9 @@ public class Chart_Fragment extends Fragment {
             public void onResponse(@NonNull Call<ArrayList<CoverData>> call, @NonNull Response<ArrayList<CoverData>> response) {
                 if (response.isSuccessful()) {
                     ArrayList<CoverData> coverChart = response.body();
-                    Cover_Chart = new ArrayList<>();
 
                     for(CoverData data: coverChart){
-                        Cover_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true));
+                        Cover_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), false));
                         CoverMap.put(data.getId(), Cover_Chart.get(Cover_Chart.size()-1));
                         //Log.d(data.getTitle(), data.getFileurl());
 
@@ -229,13 +247,6 @@ public class Chart_Fragment extends Fragment {
                             }
                         });
                     }
-                    CoverSong_View.setLayoutManager(Cover_LayoutManager);
-                    Cover_LayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-                    CoverAdapter = new ChartAdapter();
-                    // set Data
-                    CoverAdapter.setData(Cover_Chart);
-                    // set Adapter
-                    CoverSong_View.setAdapter(CoverAdapter);
                 }
             }
 
