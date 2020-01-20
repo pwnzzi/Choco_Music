@@ -16,7 +16,7 @@
             android:layout_marginLeft="20dp"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:id="@+id/music_icon"/>
+            android:id="@+id/cover_img"/>
 
         <LinearLayout
             android:layout_toRightOf="@+id/music_icon"

@@ -69,8 +69,10 @@ public class Playlist_Database_OpenHelper extends SQLiteOpenHelper {
 
             String title= cursor.getString(cursor.getColumnIndexOrThrow("title"));
             String vocal= cursor.getString(cursor.getColumnIndexOrThrow("vocal"));
+            String album_url = cursor.getString(cursor.getColumnIndexOrThrow("album_url"));
             music_playlist_data.setTItle(title);
             music_playlist_data.setVocal(vocal);
+            music_playlist_data.setAlbum_url(album_url);
             stringBuffer.append(music_playlist_data);
             music_playist.add(music_playlist_data);
 

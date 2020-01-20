@@ -4,6 +4,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 import com.example.choco_music.Holder.Playlist_ViewHolder;
 import com.example.choco_music.R;
 import com.example.choco_music.model.Music_Playlist_Data;
@@ -32,6 +34,8 @@ public class Playlist_Apdapter extends RecyclerView.Adapter<Playlist_ViewHolder>
 
         holder.vocal.setText(data.getVocal());
         holder.title.setText(data.getTitle());
+        try{ Glide.with(holder.itemView.getContext()).load(data.getAlbum_url()).into(holder.img);}
+        catch(Exception e){}
 
     }
 

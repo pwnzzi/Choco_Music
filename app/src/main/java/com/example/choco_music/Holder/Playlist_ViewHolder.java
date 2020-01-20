@@ -25,6 +25,7 @@ public class Playlist_ViewHolder extends RecyclerView.ViewHolder {
     public TextView title;
     public TextView vocal;
     public ImageView icon;
+    public ImageView img;
     private List<Music_Playlist_Data> playlist_data;
     private Playlist_Fragment playlist_fragment= new Playlist_Fragment();
 
@@ -35,6 +36,7 @@ public class Playlist_ViewHolder extends RecyclerView.ViewHolder {
         title = itemView.findViewById(R.id.chart_title);
         vocal = itemView.findViewById(R.id.chart_vocal);
         icon = itemView.findViewById(R.id.love_icon_playlist);
+        img= itemView.findViewById(R.id.cover_img);
 
 
         icon.setOnClickListener(new View.OnClickListener() {

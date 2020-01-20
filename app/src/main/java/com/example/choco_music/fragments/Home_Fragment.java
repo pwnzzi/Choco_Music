@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
@@ -38,6 +40,12 @@ import com.example.choco_music.model.ChartData;
 import com.example.choco_music.model.Playlist_Database_OpenHelper;
 import com.example.choco_music.model.VerticalData;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -77,6 +85,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     public String img_path ;
     private ArrayList<HomeData> homeDatas;
     Playlist_Database_OpenHelper playlist_database_openHelper;
+    Bitmap bmImg;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -304,6 +313,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         getActivity().unregisterReceiver(mBroadcastReceiver);
     }
     private void setup_view(View view){
+        final ImageView imageView = view.findViewById(R.id.home_fragment_background);
         datas = new ArrayList<>();
         // 취소, 완료 버튼
         cancelButton = view.findViewById(R.id.sheet_cancel);
@@ -386,6 +396,43 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                     View centerView = snapHelper.findSnapView(mLayoutManager);
                     position = mLayoutManager.getPosition(centerView);
                     Log.e("Snapped Item Position:","" + position);
+                   /////////////////////////////////////////////////////
+                    Thread mThread = new Thread() {
+                        public void run(){
+                            URL myFileUrl = null;
+                            try {
+                                if(position ==1 ){
+                                    myFileUrl = new URL("https://chocomusic.s3.ap-northeast-2.amazonaws.com/StaticFile/SongOwn/%EC%88%A8_6DAYLAYOFF.jpg");
+                                }else{
+                                    myFileUrl = new URL("https://chocomusic.s3.ap-northeast-2.amazonaws.com/StaticFile/NCS3_image.jpg");
+                                }
+
+                                HttpURLConnection conn= (HttpURLConnection)myFileUrl.openConnection();
+                                conn.setDoInput(true);
+                                conn.connect();
+
+                                InputStream is = conn.getInputStream();
+                                bmImg = BitmapFactory.decodeStream(is);
+
+                            } catch (MalformedURLException e) {
+                                e.printStackTrace();
+                            }catch (IOException e){
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                    };
+
+                    mThread.start();
+
+                    try{
+                        mThread.join();
+                        imageView.setImageBitmap(bmImg);
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+                 /////////////////////////////////////////////////////////////////////////////////////////
                 }
                 //별 선택시
                 for(int i=0; i!=5; ++i)
@@ -440,20 +487,20 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             @Override
             public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
                 if (response.isSuccessful()) {
-                    ArrayList<VerticalData> vertical = response.body();
+                    final ArrayList<VerticalData> vertical = response.body();
                     if (vertical != null) {
-                        for (int i = 0; i <vertical.size(); i++) {
+
                             //오늘의 곡 정보를 가져와서 데이터에 담는다.
-                            String title = vertical.get(i).getTitle();
-                            String vocal = vertical.get(i).getVocal();
-                            String genre = vertical.get(i).getGenre();
-                            datas.add(new ChartData(vertical.get(i).getTitle(), vertical.get(i).getVocal(),
-                                    vertical.get(i).getFileurl(), vertical.get(i).getGenre().equals("자작곡")));
-                            chartMap.put(vertical.get(i).getId(), datas.get(datas.size()-1));
+                            String title = vertical.get(pos).getTitle();
+                            String vocal = vertical.get(pos).getVocal();
+                            String genre = vertical.get(pos).getGenre();
+                            datas.add(new ChartData(vertical.get(pos).getTitle(), vertical.get(pos).getVocal(),
+                                    vertical.get(pos).getFileurl(), vertical.get(pos).getGenre().equals("자작곡")));
+                            chartMap.put(vertical.get(pos).getId(), datas.get(datas.size()-1));
 
-                            final VerticalData v = vertical.get(i);
+                           final int Song_Number =vertical.get(pos).getId();
 
-                            Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData(vertical.get(i).getId());
+                            Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData(Song_Number);
                             call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
                                 @Override
                                 public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
@@ -461,10 +508,13 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                                         albumDatas = response.body();
                                         if (albumDatas != null) {
                                             for (int i = 0; i < albumDatas.size(); i++) {
-                                                if(v.getAlbum() == albumDatas.get(i).getId()){
+                                                if(Song_Number == albumDatas.get(i).getId()){
                                                     //Log.d("da"+v.getId(), albumDatas.get(i).getImg_path());
-                                                    chartMap.get(v.getId()).setImg_path(albumDatas.get(i).getImg_path());
+                                              //      chartMap.get(v.getId()).setImg_path(albumDatas.get(i).getImg_path());
                                               //    mAdapter.notifyDataSetChanged();
+                                                    playlist_database_openHelper= new Playlist_Database_OpenHelper(view.getContext());
+                                                    playlist_database_openHelper.insertData(vertical.get(pos).getTitle(),vertical.get(pos).getVocal(),vertical.get(pos).getFileurl(), albumDatas.get(pos).getImg_path());
+
                                                 }
                                             }
                                         }
@@ -473,9 +523,10 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                                 @Override
                                 public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {}
                             });
-                        }
-                        playlist_database_openHelper= new Playlist_Database_OpenHelper(view.getContext());
-                        playlist_database_openHelper.insertData(  datas.get(pos).getTitle(),datas.get(pos).getVocal(),datas.get(pos).getFileurl(), "");
+
+
+                    /*    playlist_database_openHelper= new Playlist_Database_OpenHelper(view.getContext());
+                        playlist_database_openHelper.insertData(datas.get(pos).getTitle(),datas.get(pos).getVocal(),datas.get(pos).getFileurl(), "");*/
                     }
                 }
             }
