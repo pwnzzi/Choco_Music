@@ -12,9 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.choco_music.Interface.RetrofitExService;
 import com.example.choco_music.R;
 import com.example.choco_music.adapters.ChartAdapter;
+import com.example.choco_music.model.AlbumData;
+import com.example.choco_music.model.ChartData;
 import com.example.choco_music.model.VerticalData;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,11 +28,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Originalsong_chart extends AppCompatActivity {
 
     private RecyclerView  OriginalSong_View;
-    private ChartAdapter Original_Adapter;
+    private ChartAdapter OriginalAdapter;
     private LinearLayoutManager Original_LayoutManager;
     private Retrofit retrofit;
     private RetrofitExService retrofitExService;
-    private ArrayList<VerticalData> Original_datas;
+    private ArrayList<ChartData> Original_Chart;
+    private HashMap<Integer, ChartData> OriginalMap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,6 +45,7 @@ public class Originalsong_chart extends AppCompatActivity {
     }
     private void init_retrofit(){
         OriginalSong_View = (RecyclerView)findViewById(R.id.chart_list);
+        OriginalMap = new HashMap<>();
         //init LayoutManager
         Original_LayoutManager  = new LinearLayoutManager(this);
         //서버 통신을 위한 레스트로핏 적용
@@ -55,25 +60,45 @@ public class Originalsong_chart extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
                 if (response.isSuccessful()) {
-                    Original_datas = response.body();
+                    ArrayList<VerticalData> verticalChart = response.body();
+                    Original_Chart = new ArrayList<>();
 
-                    if (Original_datas != null) {
-                        for (int i = 0; i < Original_datas.size(); i++) {
-                            Log.d("data" + i, Original_datas.get(i).getTitle() + "");
-                            Log.d("data" + i, Original_datas.get(i).getVocal() + "");
-                        }
-                        Log.d("getData1 end", "======================================");
+                    for(VerticalData data: verticalChart){
+                        Original_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true));
+                        OriginalMap.put(data.getId(), Original_Chart.get(Original_Chart.size()-1));
+                        //Log.d(data.getTitle(), data.getFileurl());
+
+                        final VerticalData v = data;
+                        Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData(data.getId());
+                        call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
+                            @Override
+                            public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
+                                if (response.isSuccessful()) {
+                                    ArrayList<AlbumData> albumDatas = response.body();
+                                    if (albumDatas != null) {
+                                        for (int i = 0; i < albumDatas.size(); i++) {
+                                            if(v.getAlbum() == albumDatas.get(i).getId()){
+                                                //Log.d("da"+v.getId(), albumDatas.get(i).getImg_path());
+                                                OriginalMap.get(v.getId()).setImg_path(albumDatas.get(i).getImg_path());
+                                                OriginalAdapter.notifyDataSetChanged();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            @Override
+                            public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {
+                                t.printStackTrace();
+                            }
+                        });
                     }
-                    //     filerul_data.add(datas.get(i).getFilerul());
-                    // setLayoutManager
                     OriginalSong_View.setLayoutManager(Original_LayoutManager);
-                    Original_LayoutManager .setOrientation(LinearLayoutManager.VERTICAL); // 기본값이 VERTICAL
-                    // init Adapter
-                    Original_Adapter = new ChartAdapter();
+                    Original_LayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                    OriginalAdapter = new ChartAdapter();
                     // set Data
-                    //Original_Adapter.setData(Original_datas);
+                    OriginalAdapter.setData(Original_Chart);
                     // set Adapter
-                    OriginalSong_View.setAdapter(Original_Adapter);
+                    OriginalSong_View.setAdapter(OriginalAdapter);
                 }
             }
 

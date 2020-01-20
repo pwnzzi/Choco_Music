@@ -11,9 +11,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.choco_music.Interface.RetrofitExService;
 import com.example.choco_music.R;
+import com.example.choco_music.adapters.ChartAdapter;
 import com.example.choco_music.adapters.CoverAdapter;
+import com.example.choco_music.model.AlbumData;
+import com.example.choco_music.model.ChartData;
 import com.example.choco_music.model.CoverData;
+import com.example.choco_music.model.VerticalData;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -22,23 +29,25 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Coversong_chart extends AppCompatActivity {
 
-    private RecyclerView Cover_View;
-    private CoverAdapter Cover_Adapter;
+    private RecyclerView CoverSong_View;
+    private ChartAdapter CoverAdapter;
     private LinearLayoutManager Cover_LayoutManager;
     private Retrofit retrofit;
     RetrofitExService retrofitExService;
-    private ArrayList<CoverData> Cover_datas;
+    private ArrayList<ChartData> Cover_Chart;
+    private HashMap<Integer, ChartData> CoverMap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chart_list);
-       // init_retrofit();
+        init_retrofit();
 
     }
 
     private void init_retrofit(){
-   /*     Cover_View = (RecyclerView)findViewById(R.id.chart_list);
+        CoverSong_View = (RecyclerView)findViewById(R.id.chart_list);
+        CoverMap = new HashMap<>();
         //init LayoutManager
         Cover_LayoutManager  = new LinearLayoutManager(this);
         //서버 통신을 위한 레스트로핏 적용
@@ -49,35 +58,55 @@ public class Coversong_chart extends AppCompatActivity {
         retrofitExService = retrofit.create(RetrofitExService.class);
 
         // 데이터베이스에 데이터 받아오기
-        retrofitExService.getData_Cover().enqueue(new Callback<ArrayList<CoverData>>() {
+        retrofitExService.getData2().enqueue(new Callback<ArrayList<VerticalData>>() {
             @Override
-            public void onResponse(@NonNull Call<ArrayList<CoverData>> call, @NonNull Response<ArrayList<CoverData>> response) {
+            public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
                 if (response.isSuccessful()) {
-                    Cover_datas = response.body();
+                    ArrayList<VerticalData> verticalChart = response.body();
+                    Cover_Chart = new ArrayList<>();
 
-                    if (Cover_datas != null) {
-                        for (int i = 0; i < Cover_datas.size(); i++) {
-                            Log.d("data" + i, Cover_datas.get(i).getTitle() + "");
-                            Log.d("data" + i, Cover_datas.get(i).getVocal() + "");
-                        }
-                        Log.d("getData1 end", "======================================");
+                    for(VerticalData data: verticalChart){
+                        Cover_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true));
+                        CoverMap.put(data.getId(), Cover_Chart.get(Cover_Chart.size()-1));
+                        //Log.d(data.getTitle(), data.getFileurl());
+
+                        final VerticalData v = data;
+                        Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData(data.getId());
+                        call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
+                            @Override
+                            public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
+                                if (response.isSuccessful()) {
+                                    ArrayList<AlbumData> albumDatas = response.body();
+                                    if (albumDatas != null) {
+                                        for (int i = 0; i < albumDatas.size(); i++) {
+                                            if(v.getAlbum() == albumDatas.get(i).getId()){
+                                                //Log.d("da"+v.getId(), albumDatas.get(i).getImg_path());
+                                                CoverMap.get(v.getId()).setImg_path(albumDatas.get(i).getImg_path());
+                                                CoverAdapter.notifyDataSetChanged();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            @Override
+                            public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {
+                                t.printStackTrace();
+                            }
+                        });
                     }
-                    //     filerul_data.add(datas.get(i).getFilerul());
-                    // setLayoutManager
-                    Cover_View.setLayoutManager(Cover_LayoutManager);
-                    Cover_LayoutManager .setOrientation(LinearLayoutManager.VERTICAL); // 기본값이 VERTICAL
-                    // init Adapter
-                    Cover_Adapter = new CoverAdapter();
+                    CoverSong_View.setLayoutManager(Cover_LayoutManager);
+                    Cover_LayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                    CoverAdapter = new ChartAdapter();
                     // set Data
-                    Cover_Adapter.setData(Cover_datas);
+                    CoverAdapter.setData(Cover_Chart);
                     // set Adapter
-                    Cover_View.setAdapter(Cover_Adapter);
+                    CoverSong_View.setAdapter(CoverAdapter);
                 }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<CoverData>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
             }
-        });*/
+        });
     }
 }

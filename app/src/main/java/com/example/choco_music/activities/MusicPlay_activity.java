@@ -25,6 +25,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+import com.bumptech.glide.Glide;
 import com.example.choco_music.Audio.AudioAdapter;
 import com.example.choco_music.Audio.AudioApplication;
 import com.example.choco_music.Audio.BroadcastActions;
@@ -81,6 +82,9 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
         sb = findViewById(R.id.music_play_seekbar);
         txt_current = findViewById(R.id.music_play_current_txt);
         txt_length = findViewById(R.id.music_play_length_txt);
+        background = findViewById(R.id.music_play_frame);
+
+        //background.sethei
 
         sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -171,6 +175,8 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
         ((TextView)findViewById(R.id.play_title)).setText(audioItem.getTitle());
         ((TextView)findViewById(R.id.play_vocal)).setText(audioItem.getVocal());
         txt_length.setText(secondsToString(AudioApplication.getInstance().getServiceInterface().getDuration() / 1000));
+        try{ Glide.with(getApplicationContext()).load(audioItem.getImg_path()).into(((ImageView)findViewById(R.id.music_play_cover)));}
+        catch(Exception e){}
 
     }
 

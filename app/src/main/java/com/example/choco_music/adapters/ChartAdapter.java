@@ -38,7 +38,6 @@ public class ChartAdapter extends RecyclerView.Adapter<Chart_ViewHolder>  {
 
     @Override
     public void onBindViewHolder(@NonNull Chart_ViewHolder holder, int position) {
-
         ChartData data = chartDatas.get(position);
 
         holder.vocal.setText(data.getVocal());
