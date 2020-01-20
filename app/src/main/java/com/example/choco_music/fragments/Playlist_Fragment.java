@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.choco_music.R;
@@ -37,20 +39,22 @@ public class Playlist_Fragment extends Fragment {
     }
 
 
-    public void init_recyclerview(View view){
+    public void init_recyclerview(View view) {
 
         Play_list_View = view.findViewById(R.id.play_list);
         layoutManager = new LinearLayoutManager(getContext());
-      //  playlist_data = new ArrayList<Music_Playlist_Data>();
         openHelper = new Playlist_Database_OpenHelper(getActivity());
-        playlist_data =  openHelper.get_Music_list();
+        playlist_data = openHelper.get_Music_list();
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         Play_list_View.setLayoutManager(layoutManager);
         playlist_apdapter = new Playlist_Apdapter();
         playlist_apdapter.setData(playlist_data);
         Play_list_View.setAdapter(playlist_apdapter);
 
-        Play_list_View.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), Play_list_View,
+
+
+
+       /* Play_list_View.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), Play_list_View,
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
                         Intent intent = new Intent(getActivity(), MusicPlay_activity.class);
@@ -60,6 +64,6 @@ public class Playlist_Fragment extends Fragment {
                     }
                     @Override public void onLongItemClick(View view, int position) { }
                 })
-        );
+        );*/
     }
 }

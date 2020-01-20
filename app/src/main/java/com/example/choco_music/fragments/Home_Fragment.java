@@ -432,25 +432,59 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     }
 
     public void add_playlist (final int pos , final View view){
-
         setup_retrofit();
+        datas = new ArrayList<>();
+        chartMap = new HashMap<>();
+        // 데이터베이스에 데이터 받아오기
         retrofitExService.getData2().enqueue(new Callback<ArrayList<VerticalData>>() {
             @Override
             public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
                 if (response.isSuccessful()) {
                     ArrayList<VerticalData> vertical = response.body();
-                    Log.e("된다!!!",""+vertical.get(pos).getTitle());
+                    if (vertical != null) {
+                        for (int i = 0; i <vertical.size(); i++) {
+                            //오늘의 곡 정보를 가져와서 데이터에 담는다.
+                            String title = vertical.get(i).getTitle();
+                            String vocal = vertical.get(i).getVocal();
+                            String genre = vertical.get(i).getGenre();
+                            datas.add(new ChartData(vertical.get(i).getTitle(), vertical.get(i).getVocal(),
+                                    vertical.get(i).getFileurl(), vertical.get(i).getGenre().equals("자작곡")));
+                            chartMap.put(vertical.get(i).getId(), datas.get(datas.size()-1));
 
-                    playlist_database_openHelper= new Playlist_Database_OpenHelper(view.getContext());
-                    playlist_database_openHelper.insertData("너를위해","임재범","몰라","몰라");
+                            final VerticalData v = vertical.get(i);
+
+                            Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData(vertical.get(i).getId());
+                            call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
+                                @Override
+                                public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
+                                    if (response.isSuccessful()) {
+                                        albumDatas = response.body();
+                                        if (albumDatas != null) {
+                                            for (int i = 0; i < albumDatas.size(); i++) {
+                                                if(v.getAlbum() == albumDatas.get(i).getId()){
+                                                    //Log.d("da"+v.getId(), albumDatas.get(i).getImg_path());
+                                                    chartMap.get(v.getId()).setImg_path(albumDatas.get(i).getImg_path());
+                                              //    mAdapter.notifyDataSetChanged();
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                @Override
+                                public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {}
+                            });
+                        }
+                        playlist_database_openHelper= new Playlist_Database_OpenHelper(view.getContext());
+                        playlist_database_openHelper.insertData(  datas.get(pos).getTitle(),datas.get(pos).getVocal(),datas.get(pos).getFileurl(), "");
+                    }
                 }
             }
             @Override
             public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
             }
         });
-
     }
+
 }
 
 

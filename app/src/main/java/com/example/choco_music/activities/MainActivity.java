@@ -22,6 +22,7 @@ import com.example.choco_music.Audio.BroadcastActions;
 import com.example.choco_music.R;
 import com.example.choco_music.adapters.SwipeViewPager;
 import com.example.choco_music.adapters.ViewPagerAdpater;
+import com.example.choco_music.fragments.Playlist_Fragment;
 import com.google.android.material.tabs.TabLayout;
 
 import static com.example.choco_music.R.id.viewpager;
@@ -29,6 +30,7 @@ import static com.example.choco_music.R.id.viewpager;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     SwipeViewPager viewPager;
+    ViewPagerAdpater viewPagerAdpater;
     LinearLayout playing_bar;
     ImageView btn_front, btn_back, btn_play;
     SeekBar sb;
@@ -224,7 +226,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         outtoLeft.setInterpolator(new AccelerateInterpolator());
         return outtoLeft;
     }
-
-
 
 }

@@ -11,12 +11,16 @@ import com.example.choco_music.fragments.Home_Fragment;
 import com.example.choco_music.fragments.Playlist_Fragment;
 import com.example.choco_music.fragments.Search_Fragment;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ViewPagerAdpater extends FragmentPagerAdapter {
 
     Home_Fragment f1;
     Chart_Fragment f2;
     Search_Fragment f3;
     Playlist_Fragment f4;
+    private Map<Integer,String> mFragmentTags;
 
     public ViewPagerAdpater(FragmentManager fm) {
         super(fm);
@@ -28,7 +32,7 @@ public class ViewPagerAdpater extends FragmentPagerAdapter {
     }
 
     @Override
-    public Fragment getItem(int position) {
+    public  Fragment getItem(int position) {
 
         if(position==0)
             return f1;
@@ -45,4 +49,5 @@ public class ViewPagerAdpater extends FragmentPagerAdapter {
     public int getCount() {
         return 4;
     }
+
 }
