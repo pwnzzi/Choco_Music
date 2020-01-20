@@ -16,6 +16,7 @@ import android.widget.RemoteViews;
 
 import androidx.core.app.NotificationCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.choco_music.R;
 import com.example.choco_music.activities.TempActivity;
 import com.squareup.picasso.Picasso;
@@ -68,7 +69,7 @@ public class NotificationPlayer {
                 startMyOwnForeground();
             else{
                 mNotificationBuilder = new NotificationCompat.Builder(mService);
-                mNotificationBuilder.setSmallIcon(R.drawable.ic_back_icon)
+                mNotificationBuilder.setSmallIcon(R.mipmap.ic_launcher)
                         .setOngoing(true)
                         .setContentIntent(mMainPendingIntent)
                         .setContent(mRemoteViews);
@@ -158,7 +159,7 @@ public class NotificationPlayer {
 
             remoteViews.setTextViewText(R.id.ntf_title, mService.getAudioItem().getTitle());
             remoteViews.setTextViewText(R.id.ntf_vocal, mService.getAudioItem().getVocal());
-            Uri albumArtUri = null; // ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), mService.getAudioItem().mAlbumId);
+            //Uri albumArtUri = ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), mService.getAudioItem().getImg_path());
             //Picasso.with(mService).load(albumArtUri).error(R.drawable.elbum_img).into(remoteViews, R.id.img_albumart, NOTIFICATION_PLAYER_ID, notification);
         }
     }

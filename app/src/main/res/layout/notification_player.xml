@@ -25,6 +25,7 @@
             android:id="@+id/ntf_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/NotificationTitle"
             android:textColor="#fff"
             />
 
@@ -32,6 +33,7 @@
             android:id="@+id/ntf_vocal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/NotificationText"
             android:textColor="#707070"
             />
 
