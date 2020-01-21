@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.choco_music.Audio.AudioApplication;
 import com.example.choco_music.Interface.RetrofitExService;
 import com.example.choco_music.R;
+import com.example.choco_music.adapters.ChartAdapter;
 import com.example.choco_music.adapters.IntroduceSongAdapter;
 import com.example.choco_music.adapters.SearchAdapter;
 import com.example.choco_music.model.AlbumData;
@@ -62,7 +63,9 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
     private int songOwn, songCovered;
     private String img_path;
     private View view;
-    private HashMap<Integer, SearchData> SearchMap;
+    private HashMap<Integer, ChartData> SearchMap;
+    private ArrayList<ChartData> Original_Chart;
+    private ChartAdapter OriginalAdapter;
 
 
     @Nullable
@@ -78,6 +81,9 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
 
     }
     private void Setup_Recyclerview(View view){
+        Original_Chart = new ArrayList<>();
+        OriginalAdapter = new ChartAdapter();
+        SearchMap = new HashMap<>();
         genre= view.findViewById(R.id.song_search_fragment);
         todaysong_list= view.findViewById(R.id.todaysong_list);
         Search_datas = new ArrayList<SearchData>();
@@ -91,14 +97,12 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
         Search_View.setLayoutManager(mLayoutManager);
         TodaySong_view.setLayoutManager(tLayoutManager);
 
-        TodaySong_view.addOnItemTouchListener(new RecyclerItemClickListener(getContext(),  TodaySong_view,
+        Search_View.addOnItemTouchListener(new RecyclerItemClickListener(getContext(),  Search_View,
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
                         AudioApplication.getInstance().getServiceInterface().setPlayList(Original_Chart);
                         AudioApplication.getInstance().getServiceInterface().play(position);
-
                     }
-
                     @Override public void onLongItemClick(View view, int position) { }
                 })
         );
@@ -140,7 +144,7 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
 
     public void showEmptyFieldMessage() {
         genre.setVisibility(View.GONE);
-        Search_datas.clear();
+        Original_Chart.clear();
         Toast myToast = Toast.makeText(getActivity().getApplicationContext(),"검색어를 입력해주세요",Toast.LENGTH_SHORT);
         myToast.setGravity(Gravity.CENTER,0,0);
         myToast.show();
@@ -161,36 +165,35 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
         retrofitExService = retrofit.create(RetrofitExService.class);
         Call<ArrayList<VerticalData>> call = retrofitExService.getData_home(search_word,1);
         // 데이터베이스에 데이터 받아오기
-
         call.enqueue(new Callback<ArrayList<VerticalData>>() {
             @Override
             public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
                 if (response.isSuccessful()) {
                     musics = response.body();
-                    Search_datas.clear();
+                    Original_Chart.clear();
                     genre.setVisibility(View.GONE);
                     mAdapter = new SearchAdapter();
                     // 리스트의 모든 데이터를 검색한다.
                     for(VerticalData data: musics)
                     {
                         // arraylist의 모든 데이터에 입력받은 단어(charText)가 포함되어 있으면 true를 반환한다.
-                        if (data.getTitle().contains(search_word) )
+                        if (data.getTitle().contains(search_word))
                         {
-                            // 검색된 데이터를 리스트에 추가한다.
-                            String search_title = data.getTitle();
-                            String search_vocal = data.getVocal();
-                            String search_fileurl= data.getFileurl();
+                            Log.e("제목 자작곡",data.getVocal());
+                            Original_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true));
+                            SearchMap.put(data.getId(), Original_Chart.get(Original_Chart.size()-1));
                             int search_album= data.getAlbum();
-                            get_img_search_data(search_title,search_vocal,search_fileurl,search_album,search_word);
+                            int search_id= data.getId();
+                            get_Img(search_id,search_album,search_word,true);
                             }
-                        if (data.getVocal().contains(search_word) )
+                        if(data.getVocal().contains(search_word))
                         {
-                            // 검색된 데이터를 리스트에 추가한다.
-                            String search_title = data.getTitle();
-                            String search_vocal = data.getVocal();
-                            String search_fileurl= data.getFileurl();
+                            Log.e("보컬 자작곡",data.getVocal());
+                            Original_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true));
+                            SearchMap.put(data.getId(), Original_Chart.get(Original_Chart.size()-1));
                             int search_album= data.getAlbum();
-                            get_img_search_data(search_title,search_vocal,search_fileurl,search_album,search_word);
+                            int search_id= data.getId();
+                            get_Img(search_id,search_album,search_word,true);
                         }
                     }
                 }
@@ -201,33 +204,31 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
         });
 
         Call<ArrayList<CoverData>> call1 = retrofitExService.getData_Cover();
-
         call1.enqueue(new Callback<ArrayList<CoverData>>() {
             @Override
             public void onResponse(@NonNull Call<ArrayList<CoverData>> call, @NonNull Response<ArrayList<CoverData>> response) {
                 if (response.isSuccessful()) {
                     musics_cover = response.body();
                     // 리스트의 모든 데이터를 검색한다.
-                    for(CoverData data: musics_cover)
-                    {
-                        // arraylist의 모든 데이터에 입력받은 단어(charText)가 포함되어 있으면 true를 반환한다.
-                        if (data.getTitle().contains(search_word) )
+                    for(CoverData datas: musics_cover)
+                    {// arraylist의 모든 데이터에 입력받은 단어(charText)가 포함되어 있으면 true를 반환한다.
+                        if (datas.getTitle().contains(search_word) )
                         {
-                            // 검색된 데이터를 리스트에 추가한다.
-                            String search_title = data.getTitle();
-                            String search_vocal = data.getVocal();
-                            String search_fileurl= data.getFileurl();
-                            int search_album= data.getAlbum();
-                            get_img_search_data_cover(search_title,search_vocal,search_fileurl,search_album,search_word);
+                            Log.e("제목",datas.getTitle());
+                            Original_Chart.add(new ChartData(datas.getTitle(), datas.getVocal(), datas.getFileurl(), true));
+                            SearchMap.put(datas.getId(), Original_Chart.get(Original_Chart.size()-1));
+                            int search_album= datas.getAlbum();
+                            int search_id= datas.getId();
+                            get_Img(search_id,search_album,search_word,false);
                         }
-                        if (data.getVocal().contains(search_word) )
+                        if (datas.getVocal().contains(search_word) )
                         {
-                            // 검색된 데이터를 리스트에 추가한다.
-                            String search_title = data.getTitle();
-                            String search_vocal = data.getVocal();
-                            String search_fileurl= data.getFileurl();
-                            int search_album= data.getAlbum();
-                            get_img_search_data_cover(search_title,search_vocal,search_fileurl,search_album,search_word);
+                            Log.e("보컬",datas.getVocal());
+                            Original_Chart.add(new ChartData(datas.getTitle(), datas.getVocal(), datas.getFileurl(), true));
+                            SearchMap.put(datas.getId(), Original_Chart.get(Original_Chart.size()-1));
+                            int search_album= datas.getAlbum();
+                            int search_id= datas.getId();
+                            get_Img(search_id,search_album,search_word,false);
                         }
                     }
                 }
@@ -236,17 +237,76 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
             public void onFailure(Call<ArrayList<CoverData>> call, Throwable t) {
             }
         });
+        if(Original_Chart.isEmpty()){
+            showNotFoundMessage(search_word);
+            Original_Chart.clear();
+        }else{
+            Original_Chart.clear();
+            genre.setVisibility(View.VISIBLE);
+            TodaySong_view.setVisibility(View.GONE);
+            todaysong_list.setVisibility(View.GONE);
+            OriginalAdapter.setData(Original_Chart);
+            Search_View.setAdapter(OriginalAdapter);
+        }
+
     }
+    private void get_Img(final int id , final int album_number,final String search_word, boolean type){
+        if(type == true){
+            Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData(id);
+            call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
+                @Override
+                public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
+                    if (response.isSuccessful()) {
+                        ArrayList<AlbumData> albumDatas = response.body();
+                        if (albumDatas != null) {
+                            for (int i = 0; i < albumDatas.size(); i++) {
+                                if(album_number == albumDatas.get(i).getId()){
+                                    //Log.d("da"+v.getId(), albumDatas.get(i).getImg_path());
+                                    SearchMap.get(id).setImg_path(albumDatas.get(i).getImg_path());
+                                    OriginalAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        }
+                    }
+                }
+                @Override
+                public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+        }if( type == false){
+            Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData_cover(id);
+            call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
+                @Override
+                public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
+                    if (response.isSuccessful()) {
+                        ArrayList<AlbumData> albumDatas = response.body();
+                        if (albumDatas != null){
+                            for (int i = 0; i < albumDatas.size(); i++) {
+                                if(album_number == albumDatas.get(i).getId()){
+                                    //Log.d("da"+v.getId(), albumDatas.get(i).getImg_path());
+                                    SearchMap.get(id).setImg_path(albumDatas.get(i).getImg_path());
+                                    OriginalAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        }
+                    }
+                }
+                @Override
+                public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+        }
+    }
+
     private void Start_TodaySong_view(){
-
         Call<ArrayList<TodaySongData>> call_ = retrofitExService.getData_Song_Today();
-
         call_.enqueue(new Callback<ArrayList<TodaySongData>>()  {
             @Override
             public void onResponse(@NonNull Call<ArrayList<TodaySongData>> call, @NonNull Response<ArrayList<TodaySongData>> response) {
                 if (response.isSuccessful()) {
                     todaySongDatas= response.body();
-
                     if (todaySongDatas != null) {
                         for (int i = 0; i <todaySongDatas.size(); i++) {
                             Log.e("data" + i, todaySongDatas.get(i).get_songOwn() + "");
@@ -254,8 +314,6 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
                             //오늘의 곡 정보를 가져와서 데이터에 담는다.
                             songOwn = todaySongDatas.get(i).get_songOwn();
                             songCovered = todaySongDatas.get(i).get_songCovered();
-                            Log.e("data",""+songCovered);
-                            Log.e("data",""+songOwn);
                             get_musics_data(songOwn);
                         }
                     }
@@ -268,29 +326,19 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
         });
     }
     private void get_musics_data(final int Song_Number){
-
-
         Call<ArrayList<VerticalData>> call = retrofitExService.getData3(Song_Number);
-
         call.enqueue(new Callback<ArrayList<VerticalData>>()  {
             @Override
             public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
                 if (response.isSuccessful()) {
                     musics= response.body();
-
                     if (musics != null) {
                         for (int i = 0; i < musics.size(); i++) {
-
                             if (musics.get(i).getId() == Song_Number){
-
                                 String todaysong_title = musics.get(i).getTitle();
                                 String todaysong_vocal = musics.get(i).getVocal();
                                 String todaysong_comment = musics.get(i).getComment();
                                 int todaysong_album = musics.get(i).getAlbum();
-
-                                Log.e("data", "" +  todaysong_comment);
-                                Log.e("data", "" + todaysong_title);
-                                Log.e("data", "" + todaysong_vocal);
                                 get_img_data(todaysong_comment,todaysong_title,todaysong_vocal,todaysong_album);
                             }
                         }
@@ -306,22 +354,16 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
     private void get_img_data(final String comment , final String title ,final  String vocal ,final int Song_Number){
 
         Call<ArrayList<AlbumData>> call = retrofitExService.AlbumData(Song_Number);
-
         call.enqueue(new Callback<ArrayList<AlbumData>>()  {
             @Override
             public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
                 if (response.isSuccessful()) {
                     albumDatas = response.body();
-
                     if ( albumDatas!= null) {
                         for (int i = 0; i < albumDatas.size(); i++) {
-
                             if ( albumDatas.get(i).getId() == Song_Number ){
-
                                 img_path = albumDatas.get(i).getImg_path();
-
                                 Log.e("이미지 정보!!!!!!!!!!!!!", "" + img_path);
-
                                  introduceDatas.add(new IntroduceData(title, vocal,  comment,img_path ));
                             }
                         }
@@ -329,77 +371,6 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
                     tAdapter = new IntroduceSongAdapter();
                     tAdapter.setData(introduceDatas);
                     TodaySong_view.setAdapter(tAdapter);
-                }
-            }
-            @Override
-            public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {
-            }
-        });
-    }
-    private void get_img_search_data(final String title , final String vocal ,final String fileurl ,final int Song_Number,final String search_word){
-        Call<ArrayList<AlbumData>> call = retrofitExService.AlbumData(Song_Number);
-        call.enqueue(new Callback<ArrayList<AlbumData>>()  {
-            @Override
-            public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
-                if (response.isSuccessful()) {
-                    albumDatas = response.body();
-                    if ( albumDatas!= null) {
-                        for (int i = 0; i < albumDatas.size(); i++) {
-                            if ( albumDatas.get(i).getId() == Song_Number ){
-                                img_path = albumDatas.get(i).getImg_path();
-                                Log.e("이미지 정보!!!!!!!!!!!!!", "" + img_path);
-                                Search_datas.add(new SearchData(title,vocal,fileurl,img_path));
-                            }
-                        }
-                    }
-                    if(Search_datas.isEmpty()){
-                        showNotFoundMessage(search_word);
-                        Search_datas.clear();
-                    }else{
-                        genre.setVisibility(View.VISIBLE);
-                        TodaySong_view.setVisibility(View.GONE);
-                        todaysong_list.setVisibility(View.GONE);
-                    }
-
-                    mAdapter.setData(Search_datas);
-                    Search_View.setAdapter(mAdapter);
-                }
-            }
-            @Override
-            public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {
-            }
-        });
-    }
-    private void get_img_search_data_cover(final String title , final String vocal ,final String fileurl ,final int Song_Number,final String search_word){
-        Call<ArrayList<AlbumData>> call = retrofitExService.AlbumData_cover(Song_Number);
-        call.enqueue(new Callback<ArrayList<AlbumData>>()  {
-            @Override
-            public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
-                if (response.isSuccessful()) {
-                    albumDatas = response.body();
-                    if ( albumDatas!= null) {
-                        for (int i = 0; i < albumDatas.size(); i++) {
-                            if ( albumDatas.get(i).getId() == Song_Number ){
-                                img_path = albumDatas.get(i).getImg_path();
-                                Log.e("이미지 정보!!!!!!!!!!!!!", "" + img_path);
-                                Search_datas.add(new SearchData(title,vocal,fileurl,img_path));
-
-
-                            }
-                        }
-                    }
-
-                    if(Search_datas.isEmpty()){
-                        showNotFoundMessage(search_word);
-                        Search_datas.clear();
-                    }else{
-                        genre.setVisibility(View.VISIBLE);
-                        TodaySong_view.setVisibility(View.GONE);
-                        todaysong_list.setVisibility(View.GONE);
-                    }
-
-                    mAdapter.setData(Search_datas);
-                    Search_View.setAdapter(mAdapter);
                 }
             }
             @Override
