@@ -8,14 +8,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.choco_music.Holder.Playlist_ViewHolder;
 import com.example.choco_music.R;
+import com.example.choco_music.model.ChartData;
 import com.example.choco_music.model.Music_Playlist_Data;
 import java.util.List;
 
 public class Playlist_Apdapter extends RecyclerView.Adapter<Playlist_ViewHolder> {
 
-    private List<Music_Playlist_Data> music_playlist;
+   // private List<Music_Playlist_Data> music_playlist;
+    private List<ChartData> music_playlist;
 
-    public void setData(List<Music_Playlist_Data> list){
+    public void setData(List<ChartData> list){
         music_playlist = list;
     }
 
@@ -30,11 +32,11 @@ public class Playlist_Apdapter extends RecyclerView.Adapter<Playlist_ViewHolder>
     @Override
     public void onBindViewHolder(@NonNull Playlist_ViewHolder holder, int position) {
 
-        Music_Playlist_Data data = music_playlist.get(position);
+        ChartData data = music_playlist.get(position);
 
         holder.vocal.setText(data.getVocal());
         holder.title.setText(data.getTitle());
-        try{ Glide.with(holder.itemView.getContext()).load(data.getAlbum_url()).into(holder.img);}
+        try{ Glide.with(holder.itemView.getContext()).load(data.getImg_path()).into(holder.img);}
         catch(Exception e){}
 
     }

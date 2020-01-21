@@ -1,7 +1,9 @@
 package com.example.choco_music.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,11 +11,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.choco_music.Audio.AudioApplication;
 import com.example.choco_music.Interface.RetrofitExService;
 import com.example.choco_music.R;
 import com.example.choco_music.adapters.ChartAdapter;
 import com.example.choco_music.model.AlbumData;
 import com.example.choco_music.model.ChartData;
+import com.example.choco_music.model.RecyclerItemClickListener;
 import com.example.choco_music.model.VerticalData;
 
 import java.util.ArrayList;
@@ -40,14 +44,12 @@ public class Originalsong_chart extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chart_list);
 
+        setup_view();
         init_retrofit();
 
     }
     private void init_retrofit(){
-        OriginalSong_View = (RecyclerView)findViewById(R.id.chart_list);
-        OriginalMap = new HashMap<>();
-        //init LayoutManager
-        Original_LayoutManager  = new LinearLayoutManager(this);
+
         //서버 통신을 위한 레스트로핏 적용
         retrofit = new Retrofit.Builder()
                 .baseUrl(RetrofitExService.URL)
@@ -92,9 +94,7 @@ public class Originalsong_chart extends AppCompatActivity {
                             }
                         });
                     }
-                    OriginalSong_View.setLayoutManager(Original_LayoutManager);
-                    Original_LayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                    OriginalAdapter = new ChartAdapter();
+
                     // set Data
                     OriginalAdapter.setData(Original_Chart);
                     // set Adapter
@@ -106,6 +106,26 @@ public class Originalsong_chart extends AppCompatActivity {
             public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
             }
         });
+    }
+    public void setup_view(){
+
+        OriginalSong_View = (RecyclerView)findViewById(R.id.chart_list);
+        OriginalMap = new HashMap<>();
+        //init LayoutManager
+        Original_LayoutManager  = new LinearLayoutManager(this);
+
+        OriginalSong_View.setLayoutManager(Original_LayoutManager);
+        Original_LayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        OriginalAdapter = new ChartAdapter();
+
+        OriginalSong_View.addOnItemTouchListener(new RecyclerItemClickListener(this, OriginalSong_View,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                    }
+
+                    @Override public void onLongItemClick(View view, int position) { }
+                })
+        );
     }
 
 }

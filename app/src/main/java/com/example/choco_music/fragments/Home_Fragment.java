@@ -29,12 +29,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
+
+import com.bumptech.glide.Glide;
 import com.example.choco_music.Audio.AudioApplication;
 import com.example.choco_music.Audio.BroadcastActions;
+import com.example.choco_music.Holder.VerticalViewHolder;
 import com.example.choco_music.Interface.RetrofitExService;
 import com.example.choco_music.R;
 import com.example.choco_music.adapters.HomeSongAdapter;
 import com.example.choco_music.model.AlbumData;
+import com.example.choco_music.model.CoverData;
 import com.example.choco_music.model.HomeData;
 import com.example.choco_music.model.ChartData;
 import com.example.choco_music.model.Playlist_Database_OpenHelper;
@@ -54,6 +58,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
 public class Home_Fragment extends Fragment implements View.OnClickListener{
 
@@ -82,10 +88,9 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     private final SnapHelper snapHelper = new PagerSnapHelper();
     private ArrayList<AlbumData> albumDatas;
     private HashMap<Integer, ChartData> chartMap;
-    public String img_path ;
     private ArrayList<HomeData> homeDatas;
     Playlist_Database_OpenHelper playlist_database_openHelper;
-    Bitmap bmImg;
+    private ImageView img;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -93,7 +98,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             updateUI();
         }
     };
-
     @Override
     public void onAttach(Context context){
         super.onAttach(context);
@@ -101,21 +105,18 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         chartMap = new HashMap<>();
         datas = new ArrayList<>();
         homeDatas= new ArrayList<>();
-
         mAdapter = new HomeSongAdapter();
-
         setup_retrofit();
         init_retrofit();
     }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.home_fragment, null, false);
-
        btn_tag();
        setup_view(view);
-       //init_retrofit();
+
+
        return view;
     }
     private void init_retrofit(){
@@ -127,18 +128,10 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                     ArrayList<VerticalData> vertical = response.body();
                     if (vertical != null) {
                         for (int i = 0; i <vertical.size(); i++) {
-                            //오늘의 곡 정보를 가져와서 데이터에 담는다.
-                            String title = vertical.get(i).getTitle();
-                            String vocal = vertical.get(i).getVocal();
-                            String genre = vertical.get(i).getGenre();
-                            //Log.e("제목", title);
-                            //Log.e("가수", vocal);
                             datas.add(new ChartData(vertical.get(i).getTitle(), vertical.get(i).getVocal(),
                                     vertical.get(i).getFileurl(), vertical.get(i).getGenre().equals("자작곡")));
                             chartMap.put(vertical.get(i).getId(), datas.get(datas.size()-1));
-
                             final VerticalData v = vertical.get(i);
-
                             Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData(vertical.get(i).getId());
                             call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
                                 @Override
@@ -148,7 +141,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                                         if (albumDatas != null) {
                                             for (int i = 0; i < albumDatas.size(); i++) {
                                                 if(v.getAlbum() == albumDatas.get(i).getId()){
-                                                    //Log.d("da"+v.getId(), albumDatas.get(i).getImg_path());
                                                     chartMap.get(v.getId()).setImg_path(albumDatas.get(i).getImg_path());
                                                     mAdapter.notifyDataSetChanged();
                                                 }
@@ -160,7 +152,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                                 public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {}
                             });
                         }
-
                     }
                 }
             }
@@ -171,8 +162,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         registerBroadcast();
         // updateUI();
     }
-
-
     private void btn_tag() {
         btn_tags = new ArrayList<>();
         clicks = new ArrayList<>();
@@ -200,7 +189,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                 .build();
         retrofitExService = retrofit.create(RetrofitExService.class);
     }
-
     @Override
     public void onClick(View view) {
         int btns = 0;
@@ -263,16 +251,12 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     }
     // 평가화면 리사이클러뷰 여백 조정
     public class OffsetItemDecoration extends RecyclerView.ItemDecoration {
-
         private Context ctx;
-
         public OffsetItemDecoration(Context ctx) {
-
             this.ctx = ctx;
         }
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-
             super.getItemOffsets(outRect, view, parent, state);
             int offset = (int) (getScreenWidth() / (float) (2)) - view.getLayoutParams().width / 2;
             ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
@@ -321,20 +305,17 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         getActivity().unregisterReceiver(mBroadcastReceiver);
     }
     private void setup_view(View view){
-        final ImageView imageView = view.findViewById(R.id.home_fragment_background);
-
         // setLayoutManager
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
+
         //RecyclerVier binding
         mVerticalView = (RecyclerView) view.findViewById(R.id.vertivcal_list);
         snapHelper.attachToRecyclerView(mVerticalView);
         mVerticalView.addItemDecoration(new OffsetItemDecoration(getContext()));
         mVerticalView.setLayoutManager(mLayoutManager);
-
         mAdapter.setData(datas);
         mVerticalView.setAdapter(mAdapter);
-
         // 취소, 완료 버튼
         cancelButton = view.findViewById(R.id.sheet_cancel);
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -360,7 +341,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             }
         });
         //init LayoutManager
-
         layoutBottomSheet = view.findViewById(R.id.bottom_sheet);
         sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
         music_evaluate_btn = (Button) view.findViewById(R.id.music_evaluate_btn);
@@ -385,14 +365,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
             }
         });
-
-        // 홈 배경화면에 앨범 이미지 어둡게 세팅
-        background = view.findViewById(R.id.home_fragment_layout);
-       /* Drawable drawable = getResources().getDrawable(R.drawable.elbum_img);
-        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-        Blur blur = new Blur(getContext(), background, bitmap, 10, getActivity());
-        blur.run();*/
-
         // 리사이클러 뷰가 스크롤 될때 현재 위치를 받아오기 위해서 사용하는 코드
         mVerticalView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -407,43 +379,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                     View centerView = snapHelper.findSnapView(mLayoutManager);
                     position = mLayoutManager.getPosition(centerView);
                     Log.e("Snapped Item Position:","" + position);
-                   /////////////////////////////////////////////////////
-                    Thread mThread = new Thread() {
-                        public void run(){
-                            URL myFileUrl = null;
-                            try {
-                                if(position ==1 ){
-                                    myFileUrl = new URL("https://chocomusic.s3.ap-northeast-2.amazonaws.com/StaticFile/SongOwn/%EC%88%A8_6DAYLAYOFF.jpg");
-                                }else{
-                                    myFileUrl = new URL("https://chocomusic.s3.ap-northeast-2.amazonaws.com/StaticFile/NCS3_image.jpg");
-                                }
-
-                                HttpURLConnection conn= (HttpURLConnection)myFileUrl.openConnection();
-                                conn.setDoInput(true);
-                                conn.connect();
-
-                                InputStream is = conn.getInputStream();
-                                bmImg = BitmapFactory.decodeStream(is);
-
-                            } catch (MalformedURLException e) {
-                                e.printStackTrace();
-                            }catch (IOException e){
-                                e.printStackTrace();
-                            }
-
-                        }
-
-                    };
-
-                    mThread.start();
-
-                    try{
-                        mThread.join();
-                        imageView.setImageBitmap(bmImg);
-                    }catch (InterruptedException e){
-                        e.printStackTrace();
-                    }
-                 /////////////////////////////////////////////////////////////////////////////////////////
+                    setBackground(position);
                 }
                 //별 선택시
                 for(int i=0; i!=5; ++i)
@@ -510,7 +446,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                             chartMap.put(vertical.get(pos).getId(), datas.get(datas.size()-1));
 
                            final int Song_Number =vertical.get(pos).getId();
-
+                           Log.e("song number",""+ Song_Number);
                             Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData(Song_Number);
                             call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
                                 @Override
@@ -520,12 +456,11 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                                         if (albumDatas != null) {
                                             for (int i = 0; i < albumDatas.size(); i++) {
                                                 if(Song_Number == albumDatas.get(i).getId()){
-                                                    //Log.d("da"+v.getId(), albumDatas.get(i).getImg_path());
-                                              //      chartMap.get(v.getId()).setImg_path(albumDatas.get(i).getImg_path());
-                                              //    mAdapter.notifyDataSetChanged();
                                                     playlist_database_openHelper= new Playlist_Database_OpenHelper(view.getContext());
-                                                    playlist_database_openHelper.insertData(vertical.get(pos).getTitle(),vertical.get(pos).getVocal(),vertical.get(pos).getFileurl(), albumDatas.get(pos).getImg_path());
-
+                                                    playlist_database_openHelper.insertData(vertical.get(pos).getTitle(),vertical.get(pos).getVocal()
+                                                            ,vertical.get(pos).getFileurl(), albumDatas.get(pos).getImg_path(),vertical.get(pos).getGenre());
+                                                    Log.e("장르",vertical.get(pos).getGenre());
+                                                    Log.e("장르","자작곡");
                                                 }
                                             }
                                         }
@@ -534,10 +469,42 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                                 @Override
                                 public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {}
                             });
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
+            }
+        });
+    }
+    private void setBackground(final int pos){
+        img = view.findViewById(R.id.home_fragment_background);
+        retrofitExService.getData2().enqueue(new Callback<ArrayList<VerticalData>>() {
+            @Override
+            public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
+                if (response.isSuccessful()) {
+                    ArrayList<VerticalData> vertical = response.body();
+                    if (vertical != null) {
+                        final int album = vertical.get(pos).getAlbum();
 
-
-                    /*    playlist_database_openHelper= new Playlist_Database_OpenHelper(view.getContext());
-                        playlist_database_openHelper.insertData(datas.get(pos).getTitle(),datas.get(pos).getVocal(),datas.get(pos).getFileurl(), "");*/
+                        Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData(vertical.get(pos).getId());
+                        call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
+                            @Override
+                            public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
+                                if (response.isSuccessful()) {
+                                    albumDatas = response.body();
+                                    if (albumDatas != null) {
+                                        for (int i = 0; i < albumDatas.size(); i++) {
+                                            if(album == albumDatas.get(i).getId()){
+                                                Glide.with(getContext()).load(albumDatas.get(i).getImg_path()).into(img);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            @Override
+                            public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {}
+                        });
                     }
                 }
             }

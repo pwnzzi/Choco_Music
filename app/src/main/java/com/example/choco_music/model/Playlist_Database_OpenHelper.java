@@ -33,7 +33,7 @@ public class Playlist_Database_OpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         sql = "CREATE TABLE IF NOT EXISTS music ( _id INTEGER PRIMARY KEY AUTOINCREMENT,"+
-                "title TEXT, vocal TEXT, music_url TEXT, album_url TEXT);";
+                "title TEXT, vocal TEXT, music_url TEXT, album_url TEXT, type TEXT );";
         db.execSQL(sql);
     }
 
@@ -43,9 +43,9 @@ public class Playlist_Database_OpenHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertData(String title, String vocal, String music_url, String album_url){
+    public void insertData(String title, String vocal, String music_url, String album_url, String type){
         SQLiteDatabase db= getWritableDatabase();
-        db.execSQL("INSERT INTO music VALUES(null,'"+title+"','"+vocal+"','"+music_url+"','"+album_url+"')");
+        db.execSQL("INSERT INTO music VALUES(null,'"+title+"','"+vocal+"','"+music_url+"','"+album_url+"', '"+type+"')");
         db.close();
     }
 
@@ -55,24 +55,30 @@ public class Playlist_Database_OpenHelper extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM music WHERE title = '" + title + "'");
         db.close();
     }
+    public ArrayList<ChartData> get_Music_chart(){
 
-    public List<Music_Playlist_Data> get_Music_list(){
-
-        List<Music_Playlist_Data> music_playist = new ArrayList<>();
+        ArrayList<ChartData> music_playist = new ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery("select * from "+TABLE_NAME+" ; ",null);
         StringBuilder stringBuffer= new StringBuilder();
-        Music_Playlist_Data music_playlist_data = null;
+        ChartData music_playlist_data = null;
 
         while(cursor.moveToNext()){
-            music_playlist_data= new Music_Playlist_Data();
+            music_playlist_data= new ChartData();
 
             String title= cursor.getString(cursor.getColumnIndexOrThrow("title"));
             String vocal= cursor.getString(cursor.getColumnIndexOrThrow("vocal"));
             String album_url = cursor.getString(cursor.getColumnIndexOrThrow("album_url"));
-            music_playlist_data.setTItle(title);
+            String file_url = cursor.getString(cursor.getColumnIndexOrThrow("music_url"));
+            String type = cursor.getString(cursor.getColumnIndexOrThrow("type"));
+            if(type.equals("자작곡"))
+                music_playlist_data.setType(true);
+            else
+                music_playlist_data.setType(false);
+            music_playlist_data.setFileurl(file_url);
+            music_playlist_data.setTitle(title);
             music_playlist_data.setVocal(vocal);
-            music_playlist_data.setAlbum_url(album_url);
+            music_playlist_data.setImg_path(album_url);
             stringBuffer.append(music_playlist_data);
             music_playist.add(music_playlist_data);
 

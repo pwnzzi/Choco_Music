@@ -37,6 +37,7 @@ public class VerticalViewHolder extends RecyclerView.ViewHolder {
     public LinearLayout genre_layout;
     public ImageView img;
     public Home_Fragment home_fragment;
+    public int pos;
 
     public VerticalViewHolder(@NonNull final View itemView) {
         super(itemView);
@@ -57,7 +58,7 @@ public class VerticalViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View view) {
                 if(love == false) {
                     icon.setBackgroundResource(R.drawable.heart_selected);
-                    int pos = getAdapterPosition();
+                    pos = getAdapterPosition();
                     Log.e("현재 위치",""+ pos);
                     home_fragment.add_playlist(pos,itemView);
                     Toast myToast = Toast.makeText(itemView.getContext(),"초코뮤직님의 좋아요",Toast.LENGTH_SHORT);

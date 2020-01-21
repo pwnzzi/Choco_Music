@@ -52,12 +52,13 @@
 
     </LinearLayout>
 
-    <ImageView
+    <Button
+        android:gravity="center"
         android:id="@+id/love_icon_playlist"
         android:layout_marginRight="20dp"
         android:layout_weight="1"
-        android:src="@drawable/heart_selected"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:background="@drawable/heart_selected"
+        android:layout_width="50dp"
+        android:layout_height="50dp"/>
 
 </LinearLayout>

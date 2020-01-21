@@ -10,12 +10,16 @@ public class ChartData implements Serializable {
     private boolean type; // 자작곡이면 True
     private String img_path;
 
+    public ChartData(){
+    }
+
     public ChartData(String title, String vocal, String fileurl, boolean type){
         this.title = title;
         this.vocal = vocal;
         this.fileurl = fileurl;
         this.type = type;
     }
+    public void setType(boolean type){this.type = type;}
 
     public String getTitle(){
         return this.title;
@@ -40,4 +44,11 @@ public class ChartData implements Serializable {
     public void setImg_path(String img_path) {
         this.img_path = img_path;
     }
+
+    public void setFileurl(String fileurl){ this.fileurl = fileurl;}
+
+    public void setTitle(String title){this.title = title;}
+
+    public void setVocal(String title){this.vocal = title;}
+
 }

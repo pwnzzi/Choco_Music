@@ -152,7 +152,6 @@ public class Chart_Fragment extends Fragment {
                         AudioApplication.getInstance().getServiceInterface().setPlayList(Cover_Chart);
                         AudioApplication.getInstance().getServiceInterface().play(position);
                     }
-
                     @Override public void onLongItemClick(View view, int position) { }
                 })
         );

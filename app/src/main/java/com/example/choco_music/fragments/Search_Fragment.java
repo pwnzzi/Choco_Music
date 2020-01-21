@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.choco_music.Audio.AudioApplication;
 import com.example.choco_music.Interface.RetrofitExService;
 import com.example.choco_music.R;
 import com.example.choco_music.adapters.IntroduceSongAdapter;
@@ -27,6 +28,7 @@ import com.example.choco_music.model.AlbumData;
 import com.example.choco_music.model.ChartData;
 import com.example.choco_music.model.CoverData;
 import com.example.choco_music.model.IntroduceData;
+import com.example.choco_music.model.RecyclerItemClickListener;
 import com.example.choco_music.model.SearchData;
 import com.example.choco_music.model.TodaySongData;
 import com.example.choco_music.model.VerticalData;
@@ -88,6 +90,18 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
         tLayoutManager = new LinearLayoutManager(getContext());
         Search_View.setLayoutManager(mLayoutManager);
         TodaySong_view.setLayoutManager(tLayoutManager);
+
+        TodaySong_view.addOnItemTouchListener(new RecyclerItemClickListener(getContext(),  TodaySong_view,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        AudioApplication.getInstance().getServiceInterface().setPlayList(Original_Chart);
+                        AudioApplication.getInstance().getServiceInterface().play(position);
+
+                    }
+
+                    @Override public void onLongItemClick(View view, int position) { }
+                })
+        );
     }
     private void Setup_Retrofit2(){
         retrofit = new Retrofit.Builder()
@@ -289,7 +303,6 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
             }
         });
     }
-
     private void get_img_data(final String comment , final String title ,final  String vocal ,final int Song_Number){
 
         Call<ArrayList<AlbumData>> call = retrofitExService.AlbumData(Song_Number);
@@ -323,33 +336,22 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
             }
         });
     }
-
     private void get_img_search_data(final String title , final String vocal ,final String fileurl ,final int Song_Number,final String search_word){
-
         Call<ArrayList<AlbumData>> call = retrofitExService.AlbumData(Song_Number);
-
         call.enqueue(new Callback<ArrayList<AlbumData>>()  {
             @Override
             public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
                 if (response.isSuccessful()) {
                     albumDatas = response.body();
-
                     if ( albumDatas!= null) {
                         for (int i = 0; i < albumDatas.size(); i++) {
-
                             if ( albumDatas.get(i).getId() == Song_Number ){
-
                                 img_path = albumDatas.get(i).getImg_path();
-
                                 Log.e("이미지 정보!!!!!!!!!!!!!", "" + img_path);
-
                                 Search_datas.add(new SearchData(title,vocal,fileurl,img_path));
-
-
                             }
                         }
                     }
-
                     if(Search_datas.isEmpty()){
                         showNotFoundMessage(search_word);
                         Search_datas.clear();
@@ -369,24 +371,17 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
         });
     }
     private void get_img_search_data_cover(final String title , final String vocal ,final String fileurl ,final int Song_Number,final String search_word){
-
         Call<ArrayList<AlbumData>> call = retrofitExService.AlbumData_cover(Song_Number);
-
         call.enqueue(new Callback<ArrayList<AlbumData>>()  {
             @Override
             public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
                 if (response.isSuccessful()) {
                     albumDatas = response.body();
-
                     if ( albumDatas!= null) {
                         for (int i = 0; i < albumDatas.size(); i++) {
-
                             if ( albumDatas.get(i).getId() == Song_Number ){
-
                                 img_path = albumDatas.get(i).getImg_path();
-
                                 Log.e("이미지 정보!!!!!!!!!!!!!", "" + img_path);
-
                                 Search_datas.add(new SearchData(title,vocal,fileurl,img_path));
 
 
@@ -412,4 +407,5 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
             }
         });
     }
+
 }
