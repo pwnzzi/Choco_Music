@@ -20,6 +20,7 @@ import com.example.choco_music.model.RecyclerItemClickListener;
 import com.example.choco_music.model.VerticalData;
 
 import java.util.ArrayList;
+import java.util.EventListener;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,13 +37,14 @@ public class VerticalViewHolder extends RecyclerView.ViewHolder {
     public boolean layout=false;
     public LinearLayout genre_layout;
     public ImageView img;
-    public Home_Fragment home_fragment;
+    public Home_Fragment fragment;
     public int pos;
 
-    public VerticalViewHolder(@NonNull final View itemView) {
+    public VerticalViewHolder(@NonNull final View itemView, final Home_Fragment fragment) {
         super(itemView);
 
-        home_fragment = new Home_Fragment();
+        this.fragment = fragment;
+
         title = itemView.findViewById(R.id.title);
         vocal = itemView.findViewById(R.id.vocal);
         img= itemView.findViewById(R.id.vertical_icon);
@@ -60,7 +62,7 @@ public class VerticalViewHolder extends RecyclerView.ViewHolder {
                     icon.setBackgroundResource(R.drawable.heart_selected);
                     pos = getAdapterPosition();
                     Log.e("현재 위치",""+ pos);
-                    home_fragment.add_playlist(pos,itemView);
+                    fragment.add_playlist(pos,itemView);
                     Toast myToast = Toast.makeText(itemView.getContext(),"초코뮤직님의 좋아요",Toast.LENGTH_SHORT);
                     myToast.setGravity(Gravity.CENTER,0,0);
                     myToast.show();
@@ -72,21 +74,5 @@ public class VerticalViewHolder extends RecyclerView.ViewHolder {
                 love = !love;
             }
         });
-/*
-        border.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(layout == false) {
-                    icon.setVisibility(View.GONE);
-                    genre_layout.setVisibility(View.VISIBLE);
-                }
-                else{
-                    icon.setVisibility(View.VISIBLE);
-                    genre_layout.setVisibility(View.GONE);
-                }
-                layout = !layout;
-            }
-        });
-*/
     }
 }

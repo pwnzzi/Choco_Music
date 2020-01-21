@@ -73,9 +73,6 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
         runLayout = findViewById(R.id.linear_running_btn);
 
         background = findViewById(R.id.musicplay_activity_layout);
-        //Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-        //Blur blur = new Blur(this, background, bitmap, 10, this);
-        //blur.run();
 
         music_play_btn.setOnClickListener(this);
         findViewById(R.id.play_layout_list).setOnClickListener(this);
@@ -121,6 +118,7 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
 
             case R.id.play_layout_finish:
                 finish();
+                overridePendingTransition(R.anim.anim_slide_in_top,R.anim.anim_slide_out_bottom);
                 break;
 
             case R.id.music_play: // 음악 재생및 종료
@@ -216,6 +214,12 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
     protected void onDestroy() {
         super.onDestroy();
         unregisterBroadcast();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.anim_slide_in_top,R.anim.anim_slide_out_bottom);
     }
 
     private void unregisterBroadcast() {

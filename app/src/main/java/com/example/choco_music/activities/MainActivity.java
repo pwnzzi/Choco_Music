@@ -151,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 case R.id.layout_playing_bar:
                     Intent intent = new Intent(this, MusicPlay_activity.class);
                     startActivity(intent);
+                    overridePendingTransition(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top);
                     break;
                 case R.id.playing_bar_back:
                     AudioApplication.getInstance().getServiceInterface().rewind();

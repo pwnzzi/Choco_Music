@@ -126,6 +126,11 @@ public class Coversong_chart extends AppCompatActivity {
         CoverSong_View.addOnItemTouchListener(new RecyclerItemClickListener(this, CoverSong_View,
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
+                        AudioApplication.getInstance().getServiceInterface().setPlayList(Cover_Chart);
+                        AudioApplication.getInstance().getServiceInterface().play(position);
+                        Intent intent = new Intent(Coversong_chart.this, MusicPlay_activity.class);
+                        startActivity(intent);
+                        finish();
                     }
                     @Override public void onLongItemClick(View view, int position) { }
                 })

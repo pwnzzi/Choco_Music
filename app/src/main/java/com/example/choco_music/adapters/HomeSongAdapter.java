@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.example.choco_music.Holder.TodaySong_ViewHolder;
 import com.example.choco_music.Holder.VerticalViewHolder;
 import com.example.choco_music.R;
+import com.example.choco_music.fragments.Home_Fragment;
 import com.example.choco_music.model.ChartData;
 import com.example.choco_music.model.HomeData;
 import com.example.choco_music.model.IntroduceData;
@@ -25,6 +26,11 @@ public class HomeSongAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
     private ArrayList<ChartData> homeDatas;
     private View view;
     private int id;
+    private Home_Fragment fragment;
+
+    public HomeSongAdapter(Home_Fragment fragment){
+        this.fragment = fragment;
+    }
 
     public void setData(ArrayList<ChartData> list){homeDatas = list;}
 
@@ -33,7 +39,7 @@ public class HomeSongAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
     public VerticalViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.vertical_recycler_items,parent,false);
-        VerticalViewHolder holder = new VerticalViewHolder(view);
+        VerticalViewHolder holder = new VerticalViewHolder(view, fragment);
 
         return holder;
     }
