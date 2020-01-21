@@ -427,66 +427,17 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
     }
 
     public void add_playlist (final int pos , final View view){
-        String type;
-        Log.d("w",pos+"하");
-        if(datas.get(pos).getType())
-            type = "자작곡";
-        else
-            type = "커버곡";
-        playlist_database_openHelper= new Playlist_Database_OpenHelper(view.getContext());
-        playlist_database_openHelper.insertData(datas.get(pos).getTitle(), datas.get(pos).getVocal(),
-                datas.get(pos).getFileurl(), datas.get(pos).getImg_path(), type);
-        /*setup_retrofit();
-        datas = new ArrayList<>();
-        chartMap = new HashMap<>();
-        // 데이터베이스에 데이터 받아오기
-        retrofitExService.getData2().enqueue(new Callback<ArrayList<VerticalData>>() {
-            @Override
-            public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
-                if (response.isSuccessful()) {
-                    final ArrayList<VerticalData> vertical = response.body();
-                    if (vertical != null) {
-
-                            //오늘의 곡 정보를 가져와서 데이터에 담는다.
-                            String title = vertical.get(pos).getTitle();
-                            String vocal = vertical.get(pos).getVocal();
-                            String genre = vertical.get(pos).getGenre();
-                            datas.add(new ChartData(title, vocal,
-                                    vertical.get(pos).getFileurl(), genre.equals("자작곡")));
-                            chartMap.put(vertical.get(pos).getId(), datas.get(datas.size()-1));
-
-                           final int Song_Number =vertical.get(pos).getId();
-                           Log.e("song number",""+ Song_Number);
-                            Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData(Song_Number);
-                            call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
-                                @Override
-                                public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
-                                    if (response.isSuccessful()) {
-                                        albumDatas = response.body();
-                                        if (albumDatas != null) {
-                                            for (int i = 0; i < albumDatas.size(); i++) {
-                                                if(Song_Number == albumDatas.get(i).getId()){
-                                                    playlist_database_openHelper= new Playlist_Database_OpenHelper(view.getContext());
-                                                    playlist_database_openHelper.insertData(vertical.get(pos).getTitle(),vertical.get(pos).getVocal()
-                                                            ,vertical.get(pos).getFileurl(), albumDatas.get(pos).getImg_path(),vertical.get(pos).getGenre());
-                                                    Log.e("장르",vertical.get(pos).getGenre());
-                                                    Log.e("장르","자작곡");
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                @Override
-                                public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {
-                                }
-                            });
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
-            }
-        });*/
+        if(datas.get(pos).getImg_path() != null) {
+            String type;
+            Log.d("w",pos+"하");
+            if(datas.get(pos).getType())
+                type = "자작곡";
+            else
+                type = "커버곡";
+            playlist_database_openHelper= new Playlist_Database_OpenHelper(view.getContext());
+            playlist_database_openHelper.insertData(datas.get(pos).getTitle(), datas.get(pos).getVocal(),
+                    datas.get(pos).getFileurl(), datas.get(pos).getImg_path(), type);
+        }
     }
     private void setBackground(final int pos){
         img = view.findViewById(R.id.home_fragment_background);

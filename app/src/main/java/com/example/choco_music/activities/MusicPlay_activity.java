@@ -118,6 +118,7 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
 
             case R.id.play_layout_finish:
                 finish();
+                overridePendingTransition(R.anim.anim_slide_in_top,R.anim.anim_slide_out_bottom);
                 break;
 
             case R.id.music_play: // 음악 재생및 종료
@@ -213,6 +214,12 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
     protected void onDestroy() {
         super.onDestroy();
         unregisterBroadcast();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.anim_slide_in_top,R.anim.anim_slide_out_bottom);
     }
 
     private void unregisterBroadcast() {
