@@ -73,9 +73,6 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
         runLayout = findViewById(R.id.linear_running_btn);
 
         background = findViewById(R.id.musicplay_activity_layout);
-        //Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-        //Blur blur = new Blur(this, background, bitmap, 10, this);
-        //blur.run();
 
         music_play_btn.setOnClickListener(this);
         findViewById(R.id.play_layout_list).setOnClickListener(this);

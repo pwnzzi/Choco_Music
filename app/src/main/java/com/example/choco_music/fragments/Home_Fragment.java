@@ -61,7 +61,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
-public class Home_Fragment extends Fragment implements View.OnClickListener{
+public class Home_Fragment extends Fragment implements View.OnClickListener {
 
     private RecyclerView mVerticalView;
     private HomeSongAdapter mAdapter;
@@ -105,7 +105,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         chartMap = new HashMap<>();
         datas = new ArrayList<>();
         homeDatas= new ArrayList<>();
-        mAdapter = new HomeSongAdapter();
+        mAdapter = new HomeSongAdapter(this);
         setup_retrofit();
         init_retrofit();
     }
@@ -115,7 +115,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         view = inflater.inflate(R.layout.home_fragment, null, false);
        btn_tag();
        setup_view(view);
-
 
        return view;
     }
@@ -345,6 +344,8 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
         sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
         music_evaluate_btn = (Button) view.findViewById(R.id.music_evaluate_btn);
         music_play_btn = (ImageView) view.findViewById(R.id.home_fragment_play_btn);
+        if(datas != null)
+            setBackground(position);
 
         //음악 평가 클릭 이벤트
         music_evaluate_btn.setOnClickListener(new View.OnClickListener() {
@@ -412,7 +413,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                     } else {
                         if (!AudioApplication.getInstance().getServiceInterface().isPlaying()) {
                             AudioApplication.getInstance().getServiceInterface().play_home_fragment();
-                        }
+                    }
                     }
                     playPause = true;
                 } else {
@@ -426,7 +427,16 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
     }
 
     public void add_playlist (final int pos , final View view){
-        setup_retrofit();
+        String type;
+        Log.d("w",pos+"하");
+        if(datas.get(pos).getType())
+            type = "자작곡";
+        else
+            type = "커버곡";
+        playlist_database_openHelper= new Playlist_Database_OpenHelper(view.getContext());
+        playlist_database_openHelper.insertData(datas.get(pos).getTitle(), datas.get(pos).getVocal(),
+                datas.get(pos).getFileurl(), datas.get(pos).getImg_path(), type);
+        /*setup_retrofit();
         datas = new ArrayList<>();
         chartMap = new HashMap<>();
         // 데이터베이스에 데이터 받아오기
@@ -441,8 +451,8 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                             String title = vertical.get(pos).getTitle();
                             String vocal = vertical.get(pos).getVocal();
                             String genre = vertical.get(pos).getGenre();
-                            datas.add(new ChartData(vertical.get(pos).getTitle(), vertical.get(pos).getVocal(),
-                                    vertical.get(pos).getFileurl(), vertical.get(pos).getGenre().equals("자작곡")));
+                            datas.add(new ChartData(title, vocal,
+                                    vertical.get(pos).getFileurl(), genre.equals("자작곡")));
                             chartMap.put(vertical.get(pos).getId(), datas.get(datas.size()-1));
 
                            final int Song_Number =vertical.get(pos).getId();
@@ -467,7 +477,8 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
                                     }
                                 }
                                 @Override
-                                public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {}
+                                public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {
+                                }
                             });
                     }
                 }
@@ -475,7 +486,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener{
             @Override
             public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
             }
-        });
+        });*/
     }
     private void setBackground(final int pos){
         img = view.findViewById(R.id.home_fragment_background);

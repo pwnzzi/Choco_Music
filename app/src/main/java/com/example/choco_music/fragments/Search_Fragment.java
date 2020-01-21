@@ -94,7 +94,7 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
         TodaySong_view.addOnItemTouchListener(new RecyclerItemClickListener(getContext(),  TodaySong_view,
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
-                        AudioApplication.getInstance().getServiceInterface().setPlayList(Original_Chart);
+                        //AudioApplication.getInstance().getServiceInterface().setPlayList(Original_Chart);
                         AudioApplication.getInstance().getServiceInterface().play(position);
 
                     }
