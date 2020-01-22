@@ -1,9 +1,12 @@
 package com.example.choco_music.Holder;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +24,7 @@ public class Playlist_ViewHolder extends RecyclerView.ViewHolder {
 
     public TextView title;
     public TextView vocal;
-    public Button icon;
+    public ImageButton icon;
     public ImageView img;
     private List<ChartData> chartData;
 
@@ -34,21 +37,6 @@ public class Playlist_ViewHolder extends RecyclerView.ViewHolder {
         icon = itemView.findViewById(R.id.love_icon_playlist);
         img= itemView.findViewById(R.id.cover_img);
 
-
-        icon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                    Toast myToast = Toast.makeText(itemView.getContext(),"좋아요를 취소하였습니다.",Toast.LENGTH_SHORT);
-                    myToast.setGravity(Gravity.CENTER,0,0);
-                    myToast.show();
-                int pos = getAdapterPosition();
-                Playlist_Database_OpenHelper playlist_database_openHelper = new Playlist_Database_OpenHelper(itemView.getContext());
-                chartData = playlist_database_openHelper.get_Music_chart();
-                playlist_database_openHelper.deleteData(chartData.get(pos).getTitle());
-
-
-            }
-        });
 
     }
 }

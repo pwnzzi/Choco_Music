@@ -1,5 +1,7 @@
 package com.example.choco_music.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -61,21 +63,50 @@ public class Playlist_Fragment extends Fragment {
         Play_list_View.setAdapter(playlist_apdapter);
 
 
+
         Play_list_View.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), Play_list_View,
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
                         AudioApplication.getInstance().getServiceInterface().setPlayList(chartData);
                         AudioApplication.getInstance().getServiceInterface().play(position);
                     }
-                    @Override public void onLongItemClick(View view, int position) {
-                        Toast myToast = Toast.makeText(view.getContext(),"좋아요를 취소하였습니다.",Toast.LENGTH_SHORT);
-                        myToast.setGravity(Gravity.CENTER,0,0);
-                        myToast.show();
-                        Playlist_Database_OpenHelper playlist_database_openHelper = new Playlist_Database_OpenHelper(view.getContext());
+                    @Override public void onLongItemClick(final View view, final int position) {
+
+                       /* Playlist_Database_OpenHelper playlist_database_openHelper = new Playlist_Database_OpenHelper(view.getContext());
                         chartData = playlist_database_openHelper.get_Music_chart();
-                        playlist_database_openHelper.deleteData(chartData.get(position).getTitle());
+                        playlist_database_openHelper.deleteData(chartData.get(position).getTitle());*/
+
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                        final AlertDialog alertDialog ;
+                        builder.setTitle("좋아요를 취소 하시겠습니까?");
+                        builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast myToast = Toast.makeText(view.getContext(),"좋아요를 취소하였습니다.",Toast.LENGTH_SHORT);
+                                myToast.setGravity(Gravity.CENTER,0,0);
+                                myToast.show();
+                                Playlist_Database_OpenHelper playlist_database_openHelper = new Playlist_Database_OpenHelper(view.getContext());
+                                chartData = playlist_database_openHelper.get_Music_chart();
+                                playlist_database_openHelper.deleteData(chartData.get(position).getTitle());
+                                refresh();
+                            }
+                        });
+                        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+                        alertDialog = builder.create();
+                        alertDialog.show();
+
+
                     }
                 })
         );
+    }
+    private void refresh(){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
     }
 }

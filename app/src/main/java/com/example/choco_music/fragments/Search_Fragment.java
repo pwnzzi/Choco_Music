@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.choco_music.Audio.AudioApplication;
 import com.example.choco_music.Interface.RetrofitExService;
 import com.example.choco_music.R;
+import com.example.choco_music.activities.Coversong_chart;
 import com.example.choco_music.adapters.ChartAdapter;
 import com.example.choco_music.adapters.IntroduceSongAdapter;
 import com.example.choco_music.adapters.SearchAdapter;
@@ -64,7 +65,7 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
     private String img_path;
     private View view;
     private HashMap<Integer, ChartData> SearchMap;
-    private ArrayList<ChartData> Original_Chart;
+    private ArrayList<ChartData> Original_Chart, Cover_Chart;
     private ChartAdapter OriginalAdapter;
 
 
@@ -82,6 +83,7 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
     }
     private void Setup_Recyclerview(View view){
         Original_Chart = new ArrayList<>();
+        Cover_Chart = new ArrayList<>();
         OriginalAdapter = new ChartAdapter();
         SearchMap = new HashMap<>();
         genre= view.findViewById(R.id.song_search_fragment);
@@ -100,7 +102,7 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
         Search_View.addOnItemTouchListener(new RecyclerItemClickListener(getContext(),  Search_View,
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
-                        //AudioApplication.getInstance().getServiceInterface().setPlayList(Original_Chart);
+                        AudioApplication.getInstance().getServiceInterface().setPlayList(Original_Chart);
                         AudioApplication.getInstance().getServiceInterface().play(position);
                     }
                     @Override public void onLongItemClick(View view, int position) { }
@@ -156,7 +158,8 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
         myToast.show();
     }
     public void getMusic(final String search_word) {
-
+        int i;
+        Original_Chart.clear();
         //서버 통신을 위한 레스트로핏 적용
         retrofit = new Retrofit.Builder()
                 .baseUrl(RetrofitExService.URL)
@@ -170,8 +173,6 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
             public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
                 if (response.isSuccessful()) {
                     musics = response.body();
-                    Original_Chart.clear();
-                    genre.setVisibility(View.GONE);
                     mAdapter = new SearchAdapter();
                     // 리스트의 모든 데이터를 검색한다.
                     for(VerticalData data: musics)
@@ -215,7 +216,7 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
                         if (datas.getTitle().contains(search_word) )
                         {
                             Log.e("제목",datas.getTitle());
-                            Original_Chart.add(new ChartData(datas.getTitle(), datas.getVocal(), datas.getFileurl(), true));
+                            Original_Chart.add(new ChartData(datas.getTitle(), datas.getVocal(), datas.getFileurl(), false));
                             SearchMap.put(datas.getId(), Original_Chart.get(Original_Chart.size()-1));
                             int search_album= datas.getAlbum();
                             int search_id= datas.getId();
@@ -224,7 +225,7 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
                         if (datas.getVocal().contains(search_word) )
                         {
                             Log.e("보컬",datas.getVocal());
-                            Original_Chart.add(new ChartData(datas.getTitle(), datas.getVocal(), datas.getFileurl(), true));
+                            Original_Chart.add(new ChartData(datas.getTitle(), datas.getVocal(), datas.getFileurl(), false));
                             SearchMap.put(datas.getId(), Original_Chart.get(Original_Chart.size()-1));
                             int search_album= datas.getAlbum();
                             int search_id= datas.getId();
@@ -239,19 +240,20 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
         });
         if(Original_Chart.isEmpty()){
             showNotFoundMessage(search_word);
-            Original_Chart.clear();
+            genre.setVisibility(View.GONE);
         }else{
-            Original_Chart.clear();
             genre.setVisibility(View.VISIBLE);
             TodaySong_view.setVisibility(View.GONE);
             todaysong_list.setVisibility(View.GONE);
-            OriginalAdapter.setData(Original_Chart);
-            Search_View.setAdapter(OriginalAdapter);
         }
+        OriginalAdapter.setData(Original_Chart);
+        Search_View.setAdapter(OriginalAdapter);
+
+
 
     }
     private void get_Img(final int id , final int album_number,final String search_word, boolean type){
-        if(type == true){
+        if(type){
             Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData(id);
             call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
                 @Override
@@ -274,7 +276,7 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
                     t.printStackTrace();
                 }
             });
-        }if( type == false){
+        }if( !type){
             Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData_cover(id);
             call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
                 @Override
@@ -309,8 +311,6 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
                     todaySongDatas= response.body();
                     if (todaySongDatas != null) {
                         for (int i = 0; i <todaySongDatas.size(); i++) {
-                            Log.e("data" + i, todaySongDatas.get(i).get_songOwn() + "");
-                            Log.e("data" + i, todaySongDatas.get(i).get_songCovered() + "");
                             //오늘의 곡 정보를 가져와서 데이터에 담는다.
                             songOwn = todaySongDatas.get(i).get_songOwn();
                             songCovered = todaySongDatas.get(i).get_songCovered();
@@ -345,7 +345,6 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
                     }
                 }
             }
-
             @Override
             public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
             }

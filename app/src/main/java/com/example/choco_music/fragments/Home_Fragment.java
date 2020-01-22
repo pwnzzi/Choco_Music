@@ -20,6 +20,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -74,7 +75,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
     public MediaPlayer mediaPlayer;
     private ImageView music_play_btn;
     private View view;
-    private Button cancelButton, loveIcon;
+    private Button cancelButton;
     private ArrayList<ImageView> stars;
     private int currentStar = 5;
     private boolean playPause;
@@ -91,6 +92,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
     private ArrayList<HomeData> homeDatas;
     Playlist_Database_OpenHelper playlist_database_openHelper;
     private ImageView img;
+    private TextView wifi_not_connected;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -150,6 +152,10 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                                 @Override
                                 public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {}
                             });
+                        }
+                        //인터넷 연결이 안될시
+                        if(datas.isEmpty()){
+                            wifi_not_connected.setVisibility(View.VISIBLE);
                         }
                     }
                 }
@@ -304,6 +310,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         getActivity().unregisterReceiver(mBroadcastReceiver);
     }
     private void setup_view(View view){
+        wifi_not_connected = view.findViewById(R.id.wifi_not_connected);
         // setLayoutManager
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
@@ -315,6 +322,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         mVerticalView.setLayoutManager(mLayoutManager);
         mAdapter.setData(datas);
         mVerticalView.setAdapter(mAdapter);
+
         // 취소, 완료 버튼
         cancelButton = view.findViewById(R.id.sheet_cancel);
         cancelButton.setOnClickListener(new View.OnClickListener() {
