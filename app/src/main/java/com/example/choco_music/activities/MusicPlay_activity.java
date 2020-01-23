@@ -51,7 +51,6 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
     private FrameLayout background;
     private ImageView btn_shuffle, btn_repeat;
     private TextView txt_current, txt_length;
-    private int chart;
     SeekBar sb;
     boolean seekBarControl = true;
 
@@ -112,7 +111,7 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.play_layout_list: //커버곡 리스트 화면 불러오기
-                Intent intent = new Intent(getBaseContext(), Coversong_chart.class);
+                Intent intent = new Intent(getBaseContext(), ChartActivity.class);
                 startActivity(intent);
                 break;
 
@@ -146,10 +145,8 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
                 AudioApplication.getInstance().getServiceInterface().toggleRepeat();
                 updateUI();
                 break;
-
         }
     }
-
     private void updateUI() {
         if (AudioApplication.getInstance().getServiceInterface().isPlaying()) {
             music_play_btn.setImageResource(R.drawable.playing_btn);

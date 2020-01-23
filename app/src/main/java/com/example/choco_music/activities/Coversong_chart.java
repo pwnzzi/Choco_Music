@@ -69,12 +69,12 @@ public class Coversong_chart extends AppCompatActivity {
                     Cover_Chart = new ArrayList<>();
 
                     for(CoverData data: coverChart){
-                        Cover_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true));
+                        Cover_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true,2));
                         CoverMap.put(data.getId(), Cover_Chart.get(Cover_Chart.size()-1));
                         //Log.d(data.getTitle(), data.getFileurl());
 
                         final CoverData v = data;
-                        Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData_cover(data.getId());
+                        Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData_Cover(data.getId());
                         call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
                             @Override
                             public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {

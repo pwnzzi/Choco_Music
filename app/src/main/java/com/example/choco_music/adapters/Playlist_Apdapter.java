@@ -9,7 +9,6 @@ import com.bumptech.glide.Glide;
 import com.example.choco_music.Holder.Playlist_ViewHolder;
 import com.example.choco_music.R;
 import com.example.choco_music.model.ChartData;
-import com.example.choco_music.model.Music_Playlist_Data;
 import java.util.List;
 
 public class Playlist_Apdapter extends RecyclerView.Adapter<Playlist_ViewHolder> {

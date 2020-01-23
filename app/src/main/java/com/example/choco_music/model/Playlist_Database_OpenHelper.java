@@ -75,10 +75,12 @@ public class Playlist_Database_OpenHelper extends SQLiteOpenHelper {
                 music_playlist_data.setType(true);
             else
                 music_playlist_data.setType(false);
+
             music_playlist_data.setFileurl(file_url);
             music_playlist_data.setTitle(title);
             music_playlist_data.setVocal(vocal);
             music_playlist_data.setImg_path(album_url);
+            music_playlist_data.setType_number(3);
             stringBuffer.append(music_playlist_data);
             music_playist.add(music_playlist_data);
 

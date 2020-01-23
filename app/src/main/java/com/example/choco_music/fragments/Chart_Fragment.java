@@ -20,6 +20,7 @@ import com.example.choco_music.Audio.AudioApplication;
 import com.example.choco_music.Interface.RetrofitExService;
 import com.example.choco_music.R;
 import com.example.choco_music.activities.Coversong_chart;
+import com.example.choco_music.activities.MusicPlay_activity;
 import com.example.choco_music.activities.Originalsong_chart;
 import com.example.choco_music.adapters.ChartAdapter;
 import com.example.choco_music.adapters.PagerSnapWithSpanCountHelper;
@@ -108,7 +109,6 @@ public class Chart_Fragment extends Fragment {
     }
     public void init_recyclerview(View view){
         //자자곡, 커버곡 리사이클러뷰를 만들어준다.
-
         CoverSong_View = (RecyclerView)view.findViewById(R.id.CoverSong_list);
         OriginalSong_View=(RecyclerView)view.findViewById(R.id.OriginalSong_list);
         PagerSnapWithSpanCountHelper snapHelper = new PagerSnapWithSpanCountHelper(5);
@@ -167,19 +167,19 @@ public class Chart_Fragment extends Fragment {
         retrofitExService = retrofit.create(RetrofitExService.class);
 
         // 데이터베이스에 데이터 받아오기
-        retrofitExService.getData2().enqueue(new Callback<ArrayList<VerticalData>>() {
+        retrofitExService.getData_Original().enqueue(new Callback<ArrayList<VerticalData>>() {
             @Override
             public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
                 if (response.isSuccessful()) {
                     ArrayList<VerticalData> verticalChart = response.body();
 
                     for(VerticalData data: verticalChart){
-                        Original_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true));
+                        Original_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true,1));
                         OriginalMap.put(data.getId(), Original_Chart.get(Original_Chart.size()-1));
                         //Log.d(data.getTitle(), data.getFileurl());
 
                         final VerticalData v = data;
-                        Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData(data.getId());
+                        Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData_Original(data.getId());
                         call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
                             @Override
                             public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
@@ -218,12 +218,12 @@ public class Chart_Fragment extends Fragment {
                     ArrayList<CoverData> coverChart = response.body();
 
                     for(CoverData data: coverChart){
-                        Cover_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), false));
+                        Cover_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), false,2));
                         CoverMap.put(data.getId(), Cover_Chart.get(Cover_Chart.size()-1));
                         //Log.d(data.getTitle(), data.getFileurl());
 
                         final CoverData v = data;
-                        Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData_cover(data.getId());
+                        Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData_Cover(data.getId());
                         call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
                             @Override
                             public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {

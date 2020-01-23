@@ -58,7 +58,7 @@ public class Originalsong_chart extends AppCompatActivity {
         retrofitExService = retrofit.create(RetrofitExService.class);
 
         // 데이터베이스에 데이터 받아오기
-        retrofitExService.getData2().enqueue(new Callback<ArrayList<VerticalData>>() {
+        retrofitExService.getData_Original().enqueue(new Callback<ArrayList<VerticalData>>() {
             @Override
             public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
                 if (response.isSuccessful()) {
@@ -66,12 +66,12 @@ public class Originalsong_chart extends AppCompatActivity {
                     Original_Chart = new ArrayList<>();
 
                     for(VerticalData data: verticalChart){
-                        Original_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true));
+                        Original_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true,1));
                         OriginalMap.put(data.getId(), Original_Chart.get(Original_Chart.size()-1));
                         //Log.d(data.getTitle(), data.getFileurl());
 
                         final VerticalData v = data;
-                        Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData(data.getId());
+                        Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData_Original(data.getId());
                         call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
                             @Override
                             public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {

@@ -36,7 +36,5 @@ public class Playlist_ViewHolder extends RecyclerView.ViewHolder {
         vocal = itemView.findViewById(R.id.chart_vocal);
         icon = itemView.findViewById(R.id.love_icon_playlist);
         img= itemView.findViewById(R.id.cover_img);
-
-
     }
 }

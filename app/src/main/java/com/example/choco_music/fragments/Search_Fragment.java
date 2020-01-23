@@ -166,7 +166,7 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         retrofitExService = retrofit.create(RetrofitExService.class);
-        Call<ArrayList<VerticalData>> call = retrofitExService.getData_home(search_word,1);
+        Call<ArrayList<VerticalData>> call = retrofitExService.getData_Original();
         // 데이터베이스에 데이터 받아오기
         call.enqueue(new Callback<ArrayList<VerticalData>>() {
             @Override
@@ -181,7 +181,7 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
                         if (data.getTitle().contains(search_word))
                         {
                             Log.e("제목 자작곡",data.getVocal());
-                            Original_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true));
+                            Original_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true,1));
                             SearchMap.put(data.getId(), Original_Chart.get(Original_Chart.size()-1));
                             int search_album= data.getAlbum();
                             int search_id= data.getId();
@@ -190,7 +190,7 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
                         if(data.getVocal().contains(search_word))
                         {
                             Log.e("보컬 자작곡",data.getVocal());
-                            Original_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true));
+                            Original_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true,1));
                             SearchMap.put(data.getId(), Original_Chart.get(Original_Chart.size()-1));
                             int search_album= data.getAlbum();
                             int search_id= data.getId();
@@ -216,7 +216,7 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
                         if (datas.getTitle().contains(search_word) )
                         {
                             Log.e("제목",datas.getTitle());
-                            Original_Chart.add(new ChartData(datas.getTitle(), datas.getVocal(), datas.getFileurl(), false));
+                            Original_Chart.add(new ChartData(datas.getTitle(), datas.getVocal(), datas.getFileurl(), false,2));
                             SearchMap.put(datas.getId(), Original_Chart.get(Original_Chart.size()-1));
                             int search_album= datas.getAlbum();
                             int search_id= datas.getId();
@@ -225,7 +225,7 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
                         if (datas.getVocal().contains(search_word) )
                         {
                             Log.e("보컬",datas.getVocal());
-                            Original_Chart.add(new ChartData(datas.getTitle(), datas.getVocal(), datas.getFileurl(), false));
+                            Original_Chart.add(new ChartData(datas.getTitle(), datas.getVocal(), datas.getFileurl(), false,2));
                             SearchMap.put(datas.getId(), Original_Chart.get(Original_Chart.size()-1));
                             int search_album= datas.getAlbum();
                             int search_id= datas.getId();
@@ -248,13 +248,10 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
         }
         OriginalAdapter.setData(Original_Chart);
         Search_View.setAdapter(OriginalAdapter);
-
-
-
     }
     private void get_Img(final int id , final int album_number,final String search_word, boolean type){
         if(type){
-            Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData(id);
+            Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData_Original(id);
             call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
                 @Override
                 public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
@@ -277,7 +274,7 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
                 }
             });
         }if( !type){
-            Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData_cover(id);
+            Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData_Cover(id);
             call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
                 @Override
                 public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
@@ -326,7 +323,7 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
         });
     }
     private void get_musics_data(final int Song_Number){
-        Call<ArrayList<VerticalData>> call = retrofitExService.getData3(Song_Number);
+        Call<ArrayList<VerticalData>> call = retrofitExService.getData_Original();
         call.enqueue(new Callback<ArrayList<VerticalData>>()  {
             @Override
             public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
@@ -352,7 +349,7 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
     }
     private void get_img_data(final String comment , final String title ,final  String vocal ,final int Song_Number){
 
-        Call<ArrayList<AlbumData>> call = retrofitExService.AlbumData(Song_Number);
+        Call<ArrayList<AlbumData>> call = retrofitExService.AlbumData_Original(Song_Number);
         call.enqueue(new Callback<ArrayList<AlbumData>>()  {
             @Override
             public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {

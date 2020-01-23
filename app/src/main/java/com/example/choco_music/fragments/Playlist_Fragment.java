@@ -20,21 +20,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.choco_music.Audio.AudioApplication;
 import com.example.choco_music.R;
-import com.example.choco_music.activities.MusicPlay_activity;
-import com.example.choco_music.adapters.ChartAdapter;
 import com.example.choco_music.adapters.Playlist_Apdapter;
 import com.example.choco_music.model.ChartData;
-import com.example.choco_music.model.Music_Playlist_Data;
 import com.example.choco_music.model.Playlist_Database_OpenHelper;
 import com.example.choco_music.model.RecyclerItemClickListener;
-
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class Playlist_Fragment extends Fragment {
 
     private RecyclerView Play_list_View;
-    private List<Music_Playlist_Data> playlist_data;
     private ArrayList<ChartData> chartData;
     Playlist_Database_OpenHelper openHelper;
     private Playlist_Apdapter playlist_apdapter;
@@ -49,7 +44,6 @@ public class Playlist_Fragment extends Fragment {
         return view;
     }
 
-
     public void init_recyclerview(View view) {
 
         Play_list_View = view.findViewById(R.id.play_list);
@@ -62,8 +56,6 @@ public class Playlist_Fragment extends Fragment {
         playlist_apdapter.setData(chartData);
         Play_list_View.setAdapter(playlist_apdapter);
 
-
-
         Play_list_View.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), Play_list_View,
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
@@ -71,12 +63,6 @@ public class Playlist_Fragment extends Fragment {
                         AudioApplication.getInstance().getServiceInterface().play(position);
                     }
                     @Override public void onLongItemClick(final View view, final int position) {
-
-                       /* Playlist_Database_OpenHelper playlist_database_openHelper = new Playlist_Database_OpenHelper(view.getContext());
-                        chartData = playlist_database_openHelper.get_Music_chart();
-                        playlist_database_openHelper.deleteData(chartData.get(position).getTitle());*/
-
-
                         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                         final AlertDialog alertDialog ;
                         builder.setTitle("좋아요를 취소 하시겠습니까?");
@@ -99,8 +85,6 @@ public class Playlist_Fragment extends Fragment {
                         });
                         alertDialog = builder.create();
                         alertDialog.show();
-
-
                     }
                 })
         );

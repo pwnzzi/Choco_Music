@@ -43,6 +43,7 @@ import com.example.choco_music.model.CoverData;
 import com.example.choco_music.model.HomeData;
 import com.example.choco_music.model.ChartData;
 import com.example.choco_music.model.Playlist_Database_OpenHelper;
+import com.example.choco_music.model.Star_OpenHelper;
 import com.example.choco_music.model.VerticalData;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
@@ -122,7 +123,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
     }
     private void init_retrofit(){
         // 데이터베이스에 데이터 받아오기
-        retrofitExService.getData2().enqueue(new Callback<ArrayList<VerticalData>>() {
+        retrofitExService.getData_Original().enqueue(new Callback<ArrayList<VerticalData>>() {
             @Override
             public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
                 if (response.isSuccessful()) {
@@ -130,10 +131,10 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                     if (vertical != null) {
                         for (int i = 0; i <vertical.size(); i++) {
                             datas.add(new ChartData(vertical.get(i).getTitle(), vertical.get(i).getVocal(),
-                                    vertical.get(i).getFileurl(), vertical.get(i).getGenre().equals("자작곡")));
+                                    vertical.get(i).getFileurl(), vertical.get(i).getGenre().equals("자작곡"),1));
                             chartMap.put(vertical.get(i).getId(), datas.get(datas.size()-1));
                             final VerticalData v = vertical.get(i);
-                            Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData(vertical.get(i).getId());
+                            Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData_Original(vertical.get(i).getId());
                             call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
                                 @Override
                                 public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
@@ -345,21 +346,27 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                 myToast.setGravity(Gravity.CENTER,0,0);
                 myToast.show();
                 sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                Log.e("별 평점",""+ currentStar);
+                post_star_data(currentStar);
             }
         });
         //init LayoutManager
         layoutBottomSheet = view.findViewById(R.id.bottom_sheet);
         sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
-        music_evaluate_btn = (Button) view.findViewById(R.id.music_evaluate_btn);
         music_play_btn = (ImageView) view.findViewById(R.id.home_fragment_play_btn);
         if(datas != null)
             setBackground(position);
 
+
+        music_evaluate_btn = (Button) view.findViewById(R.id.music_evaluate_btn);
         //음악 평가 클릭 이벤트
         music_evaluate_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                Star_OpenHelper star_openHelper = new Star_OpenHelper(v.getContext());
+                boolean check_data = star_openHelper.check_star(position);
+                if(!check_data)
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             }
         });
         // bottom sheet dragable
@@ -391,8 +398,9 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                     setBackground(position);
                 }
                 //별 선택시
-                for(int i=0; i!=5; ++i)
+                for(int i=0; i!=5; ++i){
                     stars.get(i).setImageResource(R.drawable.star_selected);
+                }
                 currentStar = 5;
                 for(int i=0; i!=10; ++i) {
                     clicks.set(i, false);
@@ -449,7 +457,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
     }
     private void setBackground(final int pos){
         img = view.findViewById(R.id.home_fragment_background);
-        retrofitExService.getData2().enqueue(new Callback<ArrayList<VerticalData>>() {
+        retrofitExService.getData_Original().enqueue(new Callback<ArrayList<VerticalData>>() {
             @Override
             public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
                 if (response.isSuccessful()) {
@@ -457,7 +465,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                     if (vertical != null) {
                         final int album = vertical.get(pos).getAlbum();
 
-                        Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData(vertical.get(pos).getId());
+                        Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData_Original(vertical.get(pos).getId());
                         call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
                             @Override
                             public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
@@ -483,7 +491,42 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
             }
         });
     }
+    public void post_star_data(final int Star_Point){
+        retrofitExService.getData_Original().enqueue(new Callback<ArrayList<VerticalData>>() {
+            @Override
+            public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
+                if (response.isSuccessful()) {
+                    ArrayList<VerticalData> vertical = response.body();
+                    if (vertical != null) {
+                        HashMap<String,Object> input = new HashMap<>();
+                        input.put("id", vertical.get(position).getId());
+                        input.put("score",Star_Point);
+                        input.put("song",3);
 
+                        Star_OpenHelper star_openHelper = new Star_OpenHelper(view.getContext());
+                        star_openHelper.insertData(position);
+
+                        retrofitExService.postData(input).enqueue(new Callback<VerticalData>() {
+                            @Override
+                            public void onResponse(Call<VerticalData> call, Response<VerticalData> response) {
+                                if(response.isSuccessful()){
+                                    VerticalData body = response.body();
+                                    if(body != null){
+                                    }
+                                }
+                            }
+                            @Override
+                            public void onFailure(Call<VerticalData> call, Throwable t) {
+                            }
+                        });
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
+            }
+        });
+    }
 }
 
 

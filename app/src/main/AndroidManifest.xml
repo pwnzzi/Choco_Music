@@ -31,6 +31,7 @@
         <activity android:name=".activities.Coversong_chart" />
         <activity android:name=".activities.MusicPlay_activity" />
         <activity android:name=".activities.Originalsong_chart" />
+        <activity android:name=".activities.ChartActivity" />
         <activity
             android:name=".activities.LoadingActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
