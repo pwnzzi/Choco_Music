@@ -15,12 +15,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Layout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +37,7 @@ import com.example.choco_music.R;
 import com.example.choco_music.model.Blur;
 import com.example.choco_music.model.ChartData;
 import com.example.choco_music.model.CoverData;
+import com.example.choco_music.model.Playlist_Database_OpenHelper;
 import com.example.choco_music.model.VerticalData;
 import com.squareup.picasso.Picasso;
 
@@ -45,13 +49,14 @@ import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
 public class MusicPlay_activity extends AppCompatActivity implements View.OnClickListener{
 
-    private ImageView music_play_btn, replay_btn, shuffle_btn;
+    private ImageView music_play_btn;
     private Boolean isRunning = false;
     private View runLayout;
     private FrameLayout background;
     private ImageView btn_shuffle, btn_repeat;
     private TextView txt_current, txt_length;
     SeekBar sb;
+    private Button heart;
     boolean seekBarControl = true;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
@@ -70,7 +75,7 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
         btn_shuffle = findViewById(R.id.music_play_shuffle);
         btn_repeat = findViewById(R.id.music_play_replay);
         runLayout = findViewById(R.id.linear_running_btn);
-
+        heart = findViewById(R.id.heart_music_play_layout);
         background = findViewById(R.id.musicplay_activity_layout);
 
         music_play_btn.setOnClickListener(this);
@@ -100,6 +105,34 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 seekBarControl = false;
+            }
+        });
+        heart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChartData audioItem = AudioApplication.getInstance().getServiceInterface().getAudioItem();
+                Playlist_Database_OpenHelper playlist_database_openHelper= new Playlist_Database_OpenHelper(v.getContext());
+                if(audioItem.getImg_path() != null) {
+                    boolean db_check = playlist_database_openHelper.Play_list_Check( audioItem.getTitle(),  audioItem.getVocal(),
+                            audioItem.getFileurl(),  audioItem.getImg_path());
+                    if (db_check) {
+                        heart.setBackgroundResource(R.drawable.heart_selected);
+                        Toast myToast = Toast.makeText(v.getContext(), "초코뮤직님의 좋아요", Toast.LENGTH_SHORT);
+                        myToast.setGravity(Gravity.CENTER, 0, 0);
+                        myToast.show();
+                        String type;
+                        if ( audioItem.getType())
+                            type = "자작곡";
+                        else
+                            type = "커버곡";
+                        playlist_database_openHelper.insertData( audioItem.getTitle(),  audioItem.getVocal(),
+                                audioItem.getFileurl(),  audioItem.getImg_path(), type);
+                    } else {
+                        Toast myToast = Toast.makeText(v.getContext(), "이미 좋아요 하였습니다.", Toast.LENGTH_SHORT);
+                        myToast.setGravity(Gravity.CENTER, 0, 0);
+                        myToast.show();
+                    }
+                }
             }
         });
 

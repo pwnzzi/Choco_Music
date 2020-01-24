@@ -63,9 +63,6 @@ public class VerticalViewHolder extends RecyclerView.ViewHolder {
                     pos = getAdapterPosition();
                     Log.e("현재 위치",""+ pos);
                     fragment.add_playlist(pos,itemView);
-                    Toast myToast = Toast.makeText(itemView.getContext(),"초코뮤직님의 좋아요",Toast.LENGTH_SHORT);
-                    myToast.setGravity(Gravity.CENTER,0,0);
-                    myToast.show();
 
                 }
                 else{

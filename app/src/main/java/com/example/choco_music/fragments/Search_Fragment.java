@@ -25,13 +25,16 @@ import com.example.choco_music.R;
 import com.example.choco_music.activities.Coversong_chart;
 import com.example.choco_music.adapters.ChartAdapter;
 import com.example.choco_music.adapters.IntroduceSongAdapter;
+import com.example.choco_music.adapters.Playlist_Apdapter;
 import com.example.choco_music.adapters.SearchAdapter;
 import com.example.choco_music.model.AlbumData;
 import com.example.choco_music.model.ChartData;
 import com.example.choco_music.model.CoverData;
 import com.example.choco_music.model.IntroduceData;
+import com.example.choco_music.model.Playlist_Database_OpenHelper;
 import com.example.choco_music.model.RecyclerItemClickListener;
 import com.example.choco_music.model.SearchData;
+import com.example.choco_music.model.Search_OpenHelper;
 import com.example.choco_music.model.TodaySongData;
 import com.example.choco_music.model.VerticalData;
 import java.util.ArrayList;
@@ -67,6 +70,12 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
     private HashMap<Integer, ChartData> SearchMap;
     private ArrayList<ChartData> Original_Chart, Cover_Chart;
     private ChartAdapter OriginalAdapter;
+    private ArrayList<ChartData> search_list;
+    private RecyclerView Play_list_View;
+    private ArrayList<ChartData> chartData;
+    Search_OpenHelper openHelper;
+    private Playlist_Apdapter playlist_apdapter;
+    private LinearLayoutManager layoutManager;
 
 
     @Nullable
@@ -139,6 +148,8 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
         if (title.isEmpty()) {
             showEmptyFieldMessage();
         } else {
+            Search_OpenHelper search_openHelper = new Search_OpenHelper(getContext());
+          //  search_openHelper.deleteData();
             mLayoutManager.scrollToPosition(0);
             getMusic(title);
         }
@@ -158,7 +169,7 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
         myToast.show();
     }
     public void getMusic(final String search_word) {
-        int i;
+        final boolean check_data = false;
         Original_Chart.clear();
         //서버 통신을 위한 레스트로핏 적용
         retrofit = new Retrofit.Builder()
@@ -179,23 +190,9 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
                     {
                         // arraylist의 모든 데이터에 입력받은 단어(charText)가 포함되어 있으면 true를 반환한다.
                         if (data.getTitle().contains(search_word))
-                        {
-                            Log.e("제목 자작곡",data.getVocal());
-                            Original_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true,1));
-                            SearchMap.put(data.getId(), Original_Chart.get(Original_Chart.size()-1));
-                            int search_album= data.getAlbum();
-                            int search_id= data.getId();
-                            get_Img(search_id,search_album,search_word,true);
-                            }
+                            get_Img(data.getTitle(),data.getVocal(),data.getFileurl(),data.getAlbum(),true,data.getId());
                         if(data.getVocal().contains(search_word))
-                        {
-                            Log.e("보컬 자작곡",data.getVocal());
-                            Original_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true,1));
-                            SearchMap.put(data.getId(), Original_Chart.get(Original_Chart.size()-1));
-                            int search_album= data.getAlbum();
-                            int search_id= data.getId();
-                            get_Img(search_id,search_album,search_word,true);
-                        }
+                            get_Img(data.getTitle(),data.getVocal(),data.getFileurl(),data.getAlbum(),true,data.getId());
                     }
                 }
             }
@@ -214,23 +211,9 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
                     for(CoverData datas: musics_cover)
                     {// arraylist의 모든 데이터에 입력받은 단어(charText)가 포함되어 있으면 true를 반환한다.
                         if (datas.getTitle().contains(search_word) )
-                        {
-                            Log.e("제목",datas.getTitle());
-                            Original_Chart.add(new ChartData(datas.getTitle(), datas.getVocal(), datas.getFileurl(), false,2));
-                            SearchMap.put(datas.getId(), Original_Chart.get(Original_Chart.size()-1));
-                            int search_album= datas.getAlbum();
-                            int search_id= datas.getId();
-                            get_Img(search_id,search_album,search_word,false);
-                        }
+                            get_Img(datas.getTitle(),datas.getVocal(),datas.getFileurl(),datas.getAlbum(),false,datas.getId());
                         if (datas.getVocal().contains(search_word) )
-                        {
-                            Log.e("보컬",datas.getVocal());
-                            Original_Chart.add(new ChartData(datas.getTitle(), datas.getVocal(), datas.getFileurl(), false,2));
-                            SearchMap.put(datas.getId(), Original_Chart.get(Original_Chart.size()-1));
-                            int search_album= datas.getAlbum();
-                            int search_id= datas.getId();
-                            get_Img(search_id,search_album,search_word,false);
-                        }
+                            get_Img(datas.getTitle(),datas.getVocal(),datas.getFileurl(),datas.getAlbum(),false,datas.getId());
                     }
                 }
             }
@@ -238,7 +221,10 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
             public void onFailure(Call<ArrayList<CoverData>> call, Throwable t) {
             }
         });
-        if(Original_Chart.isEmpty()){
+//        search_list = search_openHelper.get_Music_saerch();
+        openHelper = new Search_OpenHelper(getActivity());
+        chartData = openHelper.get_Music_chart();
+        if(chartData.isEmpty()){
             showNotFoundMessage(search_word);
             genre.setVisibility(View.GONE);
         }else{
@@ -246,10 +232,12 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
             TodaySong_view.setVisibility(View.GONE);
             todaysong_list.setVisibility(View.GONE);
         }
-        OriginalAdapter.setData(Original_Chart);
+        OriginalAdapter.setData(chartData);
         Search_View.setAdapter(OriginalAdapter);
     }
-    private void get_Img(final int id , final int album_number,final String search_word, boolean type){
+    private void get_Img(final String title, final String vocal,final String file_url, final int album_number, final boolean type,final int id){
+
+        final Search_OpenHelper search_openHelper = new Search_OpenHelper(getContext());
         if(type){
             Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData_Original(id);
             call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
@@ -260,9 +248,8 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
                         if (albumDatas != null) {
                             for (int i = 0; i < albumDatas.size(); i++) {
                                 if(album_number == albumDatas.get(i).getId()){
-                                    //Log.d("da"+v.getId(), albumDatas.get(i).getImg_path());
-                                    SearchMap.get(id).setImg_path(albumDatas.get(i).getImg_path());
-                                    OriginalAdapter.notifyDataSetChanged();
+                                    Log.e("제목",title);
+                                    search_openHelper.insertData(title,vocal,file_url,albumDatas.get(i).getImg_path(),"자작곡");
                                 }
                             }
                         }
@@ -273,7 +260,7 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
                     t.printStackTrace();
                 }
             });
-        }if( !type){
+        }if(!type){
             Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData_Cover(id);
             call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
                 @Override
@@ -283,9 +270,8 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
                         if (albumDatas != null){
                             for (int i = 0; i < albumDatas.size(); i++) {
                                 if(album_number == albumDatas.get(i).getId()){
-                                    //Log.d("da"+v.getId(), albumDatas.get(i).getImg_path());
-                                    SearchMap.get(id).setImg_path(albumDatas.get(i).getImg_path());
-                                    OriginalAdapter.notifyDataSetChanged();
+                                    Log.e("제목",title);
+                                    search_openHelper.insertData(title,vocal,file_url,albumDatas.get(i).getImg_path(),"커버곡");
                                 }
                             }
                         }

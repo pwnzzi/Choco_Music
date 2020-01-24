@@ -18,6 +18,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.choco_music.R;
+import com.example.choco_music.activities.MusicPlay_activity;
 import com.example.choco_music.activities.TempActivity;
 import com.squareup.picasso.Picasso;
 
@@ -60,9 +61,9 @@ public class NotificationPlayer {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Intent mainActivity = new Intent(mService, TempActivity.class);
+       //     Intent mainActivity = new Intent(mService, TempActivity.class);
 
-            mMainPendingIntent = PendingIntent.getActivity(mService, 0, mainActivity, 0);
+   //         mMainPendingIntent = PendingIntent.getActivity(mService, 0, mainActivity, 0);
             mRemoteViews = createRemoteView(R.layout.notification_player);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)

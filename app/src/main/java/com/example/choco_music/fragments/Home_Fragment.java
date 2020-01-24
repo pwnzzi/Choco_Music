@@ -26,6 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -77,7 +78,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
     private ImageView music_play_btn;
     private View view;
     private Button cancelButton;
-    private ArrayList<ImageView> stars;
+    private ArrayList<ImageView> stars,stars_evaluate;
     private int currentStar = 5;
     private boolean playPause;
     private boolean initalStage = true;
@@ -93,6 +94,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
     private ArrayList<HomeData> homeDatas;
     Playlist_Database_OpenHelper playlist_database_openHelper;
     private ImageView img;
+    private LinearLayout stars_evaluate_layout;
     private TextView wifi_not_connected;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
@@ -154,17 +156,17 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                                 public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {}
                             });
                         }
-                        //인터넷 연결이 안될시
-                        if(datas.isEmpty()){
-                            wifi_not_connected.setVisibility(View.VISIBLE);
-                        }
                     }
+                }else{
+                    //인터넷 연결이 안될시
+                    wifi_not_connected.setVisibility(View.VISIBLE);
                 }
             }
             @Override
             public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
             }
         });
+
         registerBroadcast();
         // updateUI();
     }
@@ -341,13 +343,23 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmButton.setBackgroundResource(R.drawable.button_evaluate_homefragment);
-                Toast myToast = Toast.makeText(getActivity().getApplicationContext(),"평가가 완료 되었습니다.",Toast.LENGTH_SHORT);
-                myToast.setGravity(Gravity.CENTER,0,0);
-                myToast.show();
-                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                Log.e("별 평점",""+ currentStar);
-                post_star_data(currentStar);
+                Star_OpenHelper star_openHelper = new Star_OpenHelper(v.getContext());
+                int star_point = star_openHelper.check_star(position);
+                if(star_point==0){
+                    confirmButton.setBackgroundResource(R.drawable.button_evaluate_homefragment);
+                    Toast myToast = Toast.makeText(getActivity().getApplicationContext(),"평가가 완료 되었습니다.",Toast.LENGTH_SHORT);
+                    myToast.setGravity(Gravity.CENTER,0,0);
+                    myToast.show();
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    Log.e("별 평점",""+ currentStar);
+                    post_star_data(currentStar);
+                }else{
+                    Toast myToast = Toast.makeText(getActivity().getApplicationContext(),"이미 평가를 완료 하였습니다.",Toast.LENGTH_SHORT);
+                    myToast.setGravity(Gravity.CENTER,0,0);
+                    myToast.show();
+                }
+
+
             }
         });
         //init LayoutManager
@@ -356,17 +368,33 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         music_play_btn = (ImageView) view.findViewById(R.id.home_fragment_play_btn);
         if(datas != null)
             setBackground(position);
-
-
         music_evaluate_btn = (Button) view.findViewById(R.id.music_evaluate_btn);
+        stars_evaluate_layout = view.findViewById(R.id.stars_evaluate);
+        stars_evaluate = new ArrayList<>();
+        stars_evaluate.add((ImageView) view.findViewById(R.id.star_1_evaluate));
+        stars_evaluate.add((ImageView) view.findViewById(R.id.star_2_evaluate));
+        stars_evaluate.add((ImageView) view.findViewById(R.id.star_3_evaluate));
+        stars_evaluate.add((ImageView) view.findViewById(R.id.star_4_evaluate));
+        stars_evaluate.add((ImageView) view.findViewById(R.id.star_5_evaluate));
+
+        //평가가 되었는지 체크
+        Star_OpenHelper star_openHelper = new Star_OpenHelper(view.getContext());
+        int star_point = star_openHelper.check_star(position);
+        if(star_point!=0){
+            music_evaluate_btn.setVisibility(View.GONE);
+            stars_evaluate_layout.setVisibility(View.VISIBLE);
+            for(int i=0;i<5;i++){
+                stars_evaluate.get(i).setImageResource(R.drawable.star_unselected);
+            }
+            for(int i=0;i<star_point;i++){
+                stars_evaluate.get(i).setImageResource(R.drawable.star_selected);
+            }
+        }
         //음악 평가 클릭 이벤트
         music_evaluate_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Star_OpenHelper star_openHelper = new Star_OpenHelper(v.getContext());
-                boolean check_data = star_openHelper.check_star(position);
-                if(!check_data)
-                    sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             }
         });
         // bottom sheet dragable
@@ -386,6 +414,9 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+
+                music_evaluate_btn.setVisibility(View.VISIBLE);
+                stars_evaluate_layout.setVisibility(View.GONE);
                 //리사이 클러뷰 화면 전환시 play 버튼 다시 적용 하는 코드
                 initalStage = true;
                 music_play_btn.setImageResource(R.drawable.play_btn);
@@ -396,6 +427,20 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                     position = mLayoutManager.getPosition(centerView);
                     Log.e("Snapped Item Position:","" + position);
                     setBackground(position);
+                    Star_OpenHelper star_openHelper = new Star_OpenHelper(centerView.getContext());
+                    //별점데이터가 db에 있을경우
+                    int star_point = star_openHelper.check_star(position);
+                    if(star_point!=0){
+                        music_evaluate_btn.setVisibility(View.GONE);
+                        stars_evaluate_layout.setVisibility(View.VISIBLE);
+                        Log.e("점수",""+ star_point);
+                        for(int i=0;i<5;i++){
+                            stars_evaluate.get(i).setImageResource(R.drawable.star_unselected);
+                        }
+                        for(int i=0;i<star_point;i++){
+                            stars_evaluate.get(i).setImageResource(R.drawable.star_selected);
+                        }
+                    }
                 }
                 //별 선택시
                 for(int i=0; i!=5; ++i){
@@ -443,16 +488,29 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
     }
 
     public void add_playlist (final int pos , final View view){
+
+        playlist_database_openHelper= new Playlist_Database_OpenHelper(view.getContext());
         if(datas.get(pos).getImg_path() != null) {
-            String type;
-            Log.d("w",pos+"하");
-            if(datas.get(pos).getType())
-                type = "자작곡";
-            else
-                type = "커버곡";
-            playlist_database_openHelper= new Playlist_Database_OpenHelper(view.getContext());
-            playlist_database_openHelper.insertData(datas.get(pos).getTitle(), datas.get(pos).getVocal(),
-                    datas.get(pos).getFileurl(), datas.get(pos).getImg_path(), type);
+            boolean db_check =playlist_database_openHelper.Play_list_Check(datas.get(pos).getTitle(), datas.get(pos).getVocal(),
+                    datas.get(pos).getFileurl(), datas.get(pos).getImg_path());
+            if(db_check){
+                Toast myToast = Toast.makeText(view.getContext(),"초코뮤직님의 좋아요",Toast.LENGTH_SHORT);
+                myToast.setGravity(Gravity.CENTER,0,0);
+                myToast.show();
+                String type;
+                Log.d("w",pos+"하");
+                if(datas.get(pos).getType())
+                    type = "자작곡";
+                else
+                    type = "커버곡";
+                playlist_database_openHelper.insertData(datas.get(pos).getTitle(), datas.get(pos).getVocal(),
+                        datas.get(pos).getFileurl(), datas.get(pos).getImg_path(), type);
+            }else{
+                Toast myToast = Toast.makeText(view.getContext(),"이미 좋아요 하였습니다.",Toast.LENGTH_SHORT);
+                myToast.setGravity(Gravity.CENTER,0,0);
+                myToast.show();
+            }
+
         }
     }
     private void setBackground(final int pos){
@@ -499,12 +557,12 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                     ArrayList<VerticalData> vertical = response.body();
                     if (vertical != null) {
                         HashMap<String,Object> input = new HashMap<>();
-                        input.put("id", vertical.get(position).getId());
+                        input.put("id", position );
                         input.put("score",Star_Point);
-                        input.put("song",3);
+                        input.put("song",vertical.get(position).getId());
 
                         Star_OpenHelper star_openHelper = new Star_OpenHelper(view.getContext());
-                        star_openHelper.insertData(position);
+                        star_openHelper.insertData(position,Star_Point);
 
                         retrofitExService.postData(input).enqueue(new Callback<VerticalData>() {
                             @Override

@@ -112,6 +112,7 @@
                             />
 
                         <Button
+                            android:id="@+id/heart_music_play_layout"
                             android:layout_marginLeft="5dp"
                             android:layout_gravity="bottom"
                             android:layout_width="55dp"

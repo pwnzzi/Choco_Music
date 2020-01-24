@@ -29,9 +29,9 @@ public class Star_OpenHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertData(int position){
+    public void insertData(int position,int star_point){
         SQLiteDatabase db= getWritableDatabase();
-        db.execSQL("INSERT INTO star VALUES(null,'"+position+"')");
+        db.execSQL("INSERT INTO star VALUES(null,'"+position+"','"+star_point+"')");
         db.close();
     }
 
@@ -39,7 +39,7 @@ public class Star_OpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         sql = "CREATE TABLE IF NOT EXISTS star ( _id INTEGER PRIMARY KEY AUTOINCREMENT,"+
-                "position INTEGER );";
+                "position INTEGER, star_point INTEGER );";
         db.execSQL(sql);
     }
 
@@ -49,18 +49,18 @@ public class Star_OpenHelper extends SQLiteOpenHelper {
         onCreate(db);
 
     }
-    public boolean check_star(int postition){
-
-        boolean Check_data = false;
+    public int check_star(int postition){
+        int star_point = 0;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery("select * from "+TABLE_NAME+" ; ",null);
 
         while(cursor.moveToNext()){
             int position_db= cursor.getInt(cursor.getColumnIndexOrThrow("position"));
-            if(postition == position_db)
-                Check_data=true;
+            if(postition == position_db){
+                star_point = cursor.getInt(cursor.getColumnIndexOrThrow("star_point"));
+            }
         }
         cursor.close();
-        return Check_data;
+        return star_point;
     }
 }
