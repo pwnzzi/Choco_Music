@@ -29,9 +29,9 @@ public class Star_OpenHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertData(int position,int star_point){
+    public void insertData(int position,int star_point,String title, String vocal, String file_url){
         SQLiteDatabase db= getWritableDatabase();
-        db.execSQL("INSERT INTO star VALUES(null,'"+position+"','"+star_point+"')");
+        db.execSQL("INSERT INTO star VALUES(null,'"+position+"','"+star_point+"','"+title+"','"+vocal+"','"+file_url+"')");
         db.close();
     }
 
@@ -39,7 +39,7 @@ public class Star_OpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         sql = "CREATE TABLE IF NOT EXISTS star ( _id INTEGER PRIMARY KEY AUTOINCREMENT,"+
-                "position INTEGER, star_point INTEGER );";
+                "position INTEGER, star_point INTEGER , title TEXT, vocal TEXT, file_url TEXT);";
         db.execSQL(sql);
     }
 
@@ -49,14 +49,17 @@ public class Star_OpenHelper extends SQLiteOpenHelper {
         onCreate(db);
 
     }
-    public int check_star(int postition){
+    public int check_star(String title, String vocal, String file_url){
         int star_point = 0;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery("select * from "+TABLE_NAME+" ; ",null);
 
         while(cursor.moveToNext()){
-            int position_db= cursor.getInt(cursor.getColumnIndexOrThrow("position"));
-            if(postition == position_db){
+            String title_db = cursor.getString(cursor.getColumnIndexOrThrow("title"));
+            String vocal_db = cursor.getString(cursor.getColumnIndexOrThrow("vocal"));
+            String file_url_db = cursor.getString(cursor.getColumnIndexOrThrow("file_url"));
+
+            if(title.equals(title_db) && vocal.equals(vocal_db) && file_url.equals(file_url_db)){
                 star_point = cursor.getInt(cursor.getColumnIndexOrThrow("star_point"));
             }
         }

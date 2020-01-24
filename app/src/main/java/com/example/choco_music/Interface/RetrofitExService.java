@@ -37,7 +37,11 @@ public interface RetrofitExService {
 
     @FormUrlEncoded
     @POST("evaluation/score/own/")
-    Call<VerticalData> postData(@FieldMap HashMap<String, Object> param);
+    Call<VerticalData> postData_Original(@FieldMap HashMap<String, Object> param);
+
+    @FormUrlEncoded
+    @POST("evaluation/score/covered/")
+    Call<CoverData> postData_Cover(@FieldMap HashMap<String, Object> param);
 
 
 }

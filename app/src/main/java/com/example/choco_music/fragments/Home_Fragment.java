@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
+import androidx.versionedparcelable.VersionedParcel;
 
 import com.bumptech.glide.Glide;
 import com.example.choco_music.Audio.AudioApplication;
@@ -53,7 +54,10 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import retrofit2.Call;
@@ -96,6 +100,12 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
     private ImageView img;
     private LinearLayout stars_evaluate_layout;
     private TextView wifi_not_connected;
+    private Date d1, d2, d3;
+    private long Am,Pm,Nm;
+    private SimpleDateFormat f = new SimpleDateFormat("HH:mm:ss"); //어떤 형태로 시간을 가져올지 정한다.
+    private long now = System.currentTimeMillis();
+    private Date Ntime = new Date(now);
+    private boolean check_date = true;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -123,52 +133,110 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
 
        return view;
     }
-    private void init_retrofit(){
+    private void init_retrofit() {
+        try {
         // 데이터베이스에 데이터 받아오기
-        retrofitExService.getData_Original().enqueue(new Callback<ArrayList<VerticalData>>() {
-            @Override
-            public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
-                if (response.isSuccessful()) {
-                    ArrayList<VerticalData> vertical = response.body();
-                    if (vertical != null) {
-                        for (int i = 0; i <vertical.size(); i++) {
-                            datas.add(new ChartData(vertical.get(i).getTitle(), vertical.get(i).getVocal(),
-                                    vertical.get(i).getFileurl(), vertical.get(i).getGenre().equals("자작곡"),1));
-                            chartMap.put(vertical.get(i).getId(), datas.get(datas.size()-1));
-                            final VerticalData v = vertical.get(i);
-                            Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData_Original(vertical.get(i).getId());
-                            call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
-                                @Override
-                                public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
-                                    if (response.isSuccessful()) {
-                                        albumDatas = response.body();
-                                        if (albumDatas != null) {
-                                            for (int i = 0; i < albumDatas.size(); i++) {
-                                                if(v.getAlbum() == albumDatas.get(i).getId()){
-                                                    chartMap.get(v.getId()).setImg_path(albumDatas.get(i).getImg_path());
-                                                    mAdapter.notifyDataSetChanged();
+        d1 = f.parse("08:00:00"); // 기준 시간과 현재 시간을 파싱해준다.
+        d2 = f.parse("20:00:00");
+        d3 = f.parse(f.format(Ntime));
+        Am = d1.getTime(); // long 값에 파싱된 값을 넣어준다.
+        Pm = d2.getTime();
+        Nm = d3.getTime();
+
+            if(Am<Nm && Nm<Pm) { //8시~20시에 day 화면이 배경으로 뜨도록 한다.
+                check_date = true;
+                retrofitExService.getData_Original().enqueue(new Callback<ArrayList<VerticalData>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
+                        if (response.isSuccessful()) {
+                            ArrayList<VerticalData> vertical = response.body();
+                            if (vertical != null) {
+                                for (int i = 0; i <vertical.size(); i++) {
+                                    datas.add(new ChartData(vertical.get(i).getTitle(), vertical.get(i).getVocal(),
+                                            vertical.get(i).getFileurl(), vertical.get(i).getGenre().equals("자작곡"),1));
+                                    chartMap.put(vertical.get(i).getId(), datas.get(datas.size()-1));
+                                    final VerticalData v = vertical.get(i);
+                                    Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData_Original(vertical.get(i).getId());
+                                    call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
+                                        @Override
+                                        public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
+                                            if (response.isSuccessful()) {
+                                                albumDatas = response.body();
+                                                if (albumDatas != null) {
+                                                    for (int i = 0; i < albumDatas.size(); i++) {
+                                                        if(v.getAlbum() == albumDatas.get(i).getId()){
+                                                            chartMap.get(v.getId()).setImg_path(albumDatas.get(i).getImg_path());
+                                                            mAdapter.notifyDataSetChanged();
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
+                                        @Override
+                                        public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {}
+                                    });
                                 }
-                                @Override
-                                public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {}
-                            });
+                           }
+                        }else{
+                            //인터넷 연결이 안될시
+                            wifi_not_connected.setVisibility(View.VISIBLE);
                         }
                     }
-                }else{
-                    //인터넷 연결이 안될시
-                    wifi_not_connected.setVisibility(View.VISIBLE);
+                    @Override
+                    public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
+                    }
+                });
+                registerBroadcast();
                 }
+           else{
+                check_date = false;
+                Call<ArrayList<CoverData>> call1 = retrofitExService.getData_Cover();
+                call1.enqueue(new Callback<ArrayList<CoverData>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<ArrayList<CoverData>> call, @NonNull Response<ArrayList<CoverData>> response) {
+                        if (response.isSuccessful()) {
+                            ArrayList <CoverData> cover = response.body();
+                            // 리스트의 모든 데이터를 검색한다.
+                            if (cover  != null) {
+                                for (int i = 0; i <cover .size(); i++) {
+                                    datas.add(new ChartData(cover .get(i).getTitle(), cover .get(i).getVocal(),
+                                            cover .get(i).getFileurl(), false,2));
+                                    chartMap.put(cover .get(i).getId(), datas.get(datas.size()-1));
+                                    final CoverData v =cover .get(i);
+                                    Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData_Cover(cover.get(i).getId());
+                                    call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
+                                        @Override
+                                        public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
+                                            if (response.isSuccessful()) {
+                                                albumDatas = response.body();
+                                                if (albumDatas != null) {
+                                                    for (int i = 0; i < albumDatas.size(); i++) {
+                                                        if(v.getAlbum() == albumDatas.get(i).getId()){
+                                                            chartMap.get(v.getId()).setImg_path(albumDatas.get(i).getImg_path());
+                                                            mAdapter.notifyDataSetChanged();
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        @Override
+                                        public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {}
+                                    });
+                                }
+                            }
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<ArrayList<CoverData>> call, Throwable t) {
+                    }
+                });
+                registerBroadcast();
             }
-            @Override
-            public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
-            }
-        });
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        registerBroadcast();
-        // updateUI();
+
     }
     private void btn_tag() {
         btn_tags = new ArrayList<>();
@@ -343,7 +411,8 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Star_OpenHelper star_openHelper = new Star_OpenHelper(v.getContext());
+                isCheck_db1(v,position);
+            /*    Star_OpenHelper star_openHelper = new Star_OpenHelper(v.getContext());
                 int star_point = star_openHelper.check_star(position);
                 if(star_point==0){
                     confirmButton.setBackgroundResource(R.drawable.button_evaluate_homefragment);
@@ -357,9 +426,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                     Toast myToast = Toast.makeText(getActivity().getApplicationContext(),"이미 평가를 완료 하였습니다.",Toast.LENGTH_SHORT);
                     myToast.setGravity(Gravity.CENTER,0,0);
                     myToast.show();
-                }
-
-
+                }*/
             }
         });
         //init LayoutManager
@@ -378,8 +445,9 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         stars_evaluate.add((ImageView) view.findViewById(R.id.star_5_evaluate));
 
         //평가가 되었는지 체크
-        Star_OpenHelper star_openHelper = new Star_OpenHelper(view.getContext());
-        int star_point = star_openHelper.check_star(position);
+     //   Star_OpenHelper star_openHelper = new Star_OpenHelper(view.getContext());
+        isCheck_db(view,position);
+    /*    int star_point = star_openHelper.check_star(position);
         if(star_point!=0){
             music_evaluate_btn.setVisibility(View.GONE);
             stars_evaluate_layout.setVisibility(View.VISIBLE);
@@ -389,7 +457,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
             for(int i=0;i<star_point;i++){
                 stars_evaluate.get(i).setImageResource(R.drawable.star_selected);
             }
-        }
+        }*/
         //음악 평가 클릭 이벤트
         music_evaluate_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -429,7 +497,8 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                     setBackground(position);
                     Star_OpenHelper star_openHelper = new Star_OpenHelper(centerView.getContext());
                     //별점데이터가 db에 있을경우
-                    int star_point = star_openHelper.check_star(position);
+                    isCheck_db(centerView,position);
+                /*    int star_point = star_openHelper.check_star(centerView,position);
                     if(star_point!=0){
                         music_evaluate_btn.setVisibility(View.GONE);
                         stars_evaluate_layout.setVisibility(View.VISIBLE);
@@ -440,7 +509,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                         for(int i=0;i<star_point;i++){
                             stars_evaluate.get(i).setImageResource(R.drawable.star_selected);
                         }
-                    }
+                    }*/
                 }
                 //별 선택시
                 for(int i=0; i!=5; ++i){
@@ -486,7 +555,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
             }
         });
     }
-
     public void add_playlist (final int pos , final View view){
 
         playlist_database_openHelper= new Playlist_Database_OpenHelper(view.getContext());
@@ -498,7 +566,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                 myToast.setGravity(Gravity.CENTER,0,0);
                 myToast.show();
                 String type;
-                Log.d("w",pos+"하");
                 if(datas.get(pos).getType())
                     type = "자작곡";
                 else
@@ -510,80 +577,263 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                 myToast.setGravity(Gravity.CENTER,0,0);
                 myToast.show();
             }
-
         }
     }
     private void setBackground(final int pos){
         img = view.findViewById(R.id.home_fragment_background);
-        retrofitExService.getData_Original().enqueue(new Callback<ArrayList<VerticalData>>() {
-            @Override
-            public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
-                if (response.isSuccessful()) {
-                    ArrayList<VerticalData> vertical = response.body();
-                    if (vertical != null) {
-                        final int album = vertical.get(pos).getAlbum();
+        if(check_date){
+            retrofitExService.getData_Original().enqueue(new Callback<ArrayList<VerticalData>>() {
+                @Override
+                public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
+                    if (response.isSuccessful()) {
+                        ArrayList<VerticalData> vertical = response.body();
+                        if (vertical != null) {
+                            final int album = vertical.get(pos).getAlbum();
 
-                        Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData_Original(vertical.get(pos).getId());
-                        call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
-                            @Override
-                            public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
-                                if (response.isSuccessful()) {
-                                    albumDatas = response.body();
-                                    if (albumDatas != null) {
-                                        for (int i = 0; i < albumDatas.size(); i++) {
-                                            if(album == albumDatas.get(i).getId()){
-                                                Glide.with(getContext()).load(albumDatas.get(i).getImg_path()).into(img);
+                            Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData_Original(vertical.get(pos).getId());
+                            call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
+                                @Override
+                                public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
+                                    if (response.isSuccessful()) {
+                                        albumDatas = response.body();
+                                        if (albumDatas != null) {
+                                            for (int i = 0; i < albumDatas.size(); i++) {
+                                                if(album == albumDatas.get(i).getId()){
+                                                    Glide.with(getContext()).load(albumDatas.get(i).getImg_path()).into(img);
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
-                            @Override
-                            public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {}
-                        });
+                                @Override
+                                public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {}
+                            });
+                        }
                     }
                 }
-            }
-            @Override
-            public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
-            }
-        });
-    }
-    public void post_star_data(final int Star_Point){
-        retrofitExService.getData_Original().enqueue(new Callback<ArrayList<VerticalData>>() {
-            @Override
-            public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
-                if (response.isSuccessful()) {
-                    ArrayList<VerticalData> vertical = response.body();
-                    if (vertical != null) {
-                        HashMap<String,Object> input = new HashMap<>();
-                        input.put("id", position );
-                        input.put("score",Star_Point);
-                        input.put("song",vertical.get(position).getId());
+                @Override
+                public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
+                }
+            });
+        }else{
+            retrofitExService.getData_Cover().enqueue(new Callback<ArrayList<CoverData>>() {
+                @Override
+                public void onResponse(@NonNull Call<ArrayList<CoverData>> call, @NonNull Response<ArrayList<CoverData>> response) {
+                    if (response.isSuccessful()) {
+                        ArrayList<CoverData> cover = response.body();
+                        if (cover != null) {
+                            final int album = cover.get(pos).getAlbum();
 
-                        Star_OpenHelper star_openHelper = new Star_OpenHelper(view.getContext());
-                        star_openHelper.insertData(position,Star_Point);
-
-                        retrofitExService.postData(input).enqueue(new Callback<VerticalData>() {
-                            @Override
-                            public void onResponse(Call<VerticalData> call, Response<VerticalData> response) {
-                                if(response.isSuccessful()){
-                                    VerticalData body = response.body();
-                                    if(body != null){
+                            Call<ArrayList<AlbumData>> call2 = retrofitExService.AlbumData_Cover(cover.get(pos).getId());
+                            call2.enqueue(new Callback<ArrayList<AlbumData>>()  {
+                                @Override
+                                public void onResponse(@NonNull Call<ArrayList<AlbumData>> call, @NonNull Response<ArrayList<AlbumData>> response) {
+                                    if (response.isSuccessful()) {
+                                        albumDatas = response.body();
+                                        if (albumDatas != null) {
+                                            for (int i = 0; i < albumDatas.size(); i++) {
+                                                if(album == albumDatas.get(i).getId()){
+                                                    Glide.with(getContext()).load(albumDatas.get(i).getImg_path()).into(img);
+                                                }
+                                            }
+                                        }
                                     }
                                 }
-                            }
-                            @Override
-                            public void onFailure(Call<VerticalData> call, Throwable t) {
-                            }
-                        });
+                                @Override
+                                public void onFailure(Call<ArrayList<AlbumData>> call, Throwable t) {}
+                            });
+                        }
                     }
                 }
-            }
-            @Override
-            public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
-            }
-        });
+                @Override
+                public void onFailure(Call<ArrayList<CoverData>> call, Throwable t) {
+                }
+            });
+        }
+    }
+    public void post_star_data(final int Star_Point){
+        Log.e("세간체크",""+check_date);
+        if(check_date){
+            retrofitExService.getData_Original().enqueue(new Callback<ArrayList<VerticalData>>() {
+                @Override
+                public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
+                    if (response.isSuccessful()) {
+                        ArrayList<VerticalData> vertical = response.body();
+                        if (vertical != null) {
+                            HashMap<String,Object> input = new HashMap<>();
+                            input.put("score",Star_Point);
+                            input.put("song",vertical.get(position).getId());
+                            Star_OpenHelper star_openHelper = new Star_OpenHelper(view.getContext());
+                            star_openHelper.insertData(position,Star_Point,vertical.get(position).getTitle(),vertical.get(position).getVocal(),vertical.get(position).getFileurl());
+                            retrofitExService.postData_Original(input).enqueue(new Callback<VerticalData>() {
+                                @Override
+                                public void onResponse(Call<VerticalData> call, Response<VerticalData> response) {
+                                    if(response.isSuccessful()){
+                                        VerticalData body = response.body();
+                                        if(body != null){
+                                        }
+                                    }
+                                }
+                                @Override
+                                public void onFailure(Call<VerticalData> call, Throwable t) {
+                                }
+                            });
+                        }
+                    }
+                }
+                @Override
+                public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
+                }
+            });
+        }else{
+            retrofitExService.getData_Cover().enqueue(new Callback<ArrayList<CoverData>>() {
+                @Override
+                public void onResponse(@NonNull Call<ArrayList<CoverData>> call, @NonNull Response<ArrayList<CoverData>> response) {
+                    if (response.isSuccessful()) {
+                        ArrayList<CoverData> vertical = response.body();
+                        if (vertical != null) {
+                            HashMap<String,Object> input = new HashMap<>();
+                            input.put("score",Star_Point);
+                            input.put("song",vertical.get(position).getId());
+                            Log.e("커버",""+vertical.get(position).getTitle());
+                            Star_OpenHelper star_openHelper = new Star_OpenHelper(view.getContext());
+                            star_openHelper.insertData(position,Star_Point,vertical.get(position).getTitle(),vertical.get(position).getVocal(),vertical.get(position).getFileurl());
+                            retrofitExService.postData_Cover(input).enqueue(new Callback<CoverData>() {
+                                @Override
+                                public void onResponse(Call<CoverData> call, Response<CoverData> response) {
+                                    if(response.isSuccessful()){
+                                        CoverData body = response.body();
+                                        if(body != null){
+                                        }
+                                    }
+                                }
+                                @Override
+                                public void onFailure(Call<CoverData> call, Throwable t) {
+                                }
+                            });
+                        }
+                    }
+                }
+                @Override
+                public void onFailure(Call<ArrayList<CoverData>> call, Throwable t) {
+                }
+            });
+        }
+
+    }
+    public void isCheck_db(View view, final int pos){
+        Log.e("세간체크",""+check_date);
+        final Star_OpenHelper star_openHelper = new Star_OpenHelper(view.getContext());
+        if(check_date){
+            retrofitExService.getData_Original().enqueue(new Callback<ArrayList<VerticalData>>() {
+                @Override
+                public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
+                    if (response.isSuccessful()) {
+                        ArrayList<VerticalData> vertical = response.body();
+                        Log.e("제목",""+vertical.get(pos).getTitle());
+                        Log.e("제목",""+vertical.get(pos).getVocal());
+                        int star_point = star_openHelper.check_star(vertical.get(pos).getTitle(),vertical.get(pos).getVocal(),vertical.get(pos).getFileurl());
+                        if(star_point!=0){
+                            music_evaluate_btn.setVisibility(View.GONE);
+                            stars_evaluate_layout.setVisibility(View.VISIBLE);
+                            Log.e("점수",""+ star_point);
+                            for(int i=0;i<5;i++){
+                                stars_evaluate.get(i).setImageResource(R.drawable.star_unselected);
+                            }
+                            for(int i=0;i<star_point;i++){
+                                stars_evaluate.get(i).setImageResource(R.drawable.star_selected);
+                            }
+                        }
+                    }
+                }
+                @Override
+                public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
+                }
+            });
+        }else{
+            retrofitExService.getData_Cover().enqueue(new Callback<ArrayList<CoverData>>() {
+                @Override
+                public void onResponse(@NonNull Call<ArrayList<CoverData>> call, @NonNull Response<ArrayList<CoverData>> response) {
+                    if (response.isSuccessful()) {
+                        ArrayList<CoverData> cover = response.body();
+                        int star_point = star_openHelper.check_star(cover.get(pos).getTitle(),cover.get(pos).getVocal(),cover.get(pos).getFileurl());
+                        if(star_point!=0){
+                            music_evaluate_btn.setVisibility(View.GONE);
+                            stars_evaluate_layout.setVisibility(View.VISIBLE);
+                            Log.e("점수",""+ star_point);
+                            for(int i=0;i<5;i++){
+                                stars_evaluate.get(i).setImageResource(R.drawable.star_unselected);
+                            }
+                            for(int i=0;i<star_point;i++){
+                                stars_evaluate.get(i).setImageResource(R.drawable.star_selected);
+                            }
+                        }
+                    }
+                }
+                @Override
+                public void onFailure(Call<ArrayList<CoverData>> call, Throwable t) {
+                }
+            });
+
+        }
+    }
+    public void isCheck_db1(View view, final int pos){
+        Log.e("세간체크",""+check_date);
+        final Star_OpenHelper star_openHelper = new Star_OpenHelper(view.getContext());
+        if(check_date){
+            retrofitExService.getData_Original().enqueue(new Callback<ArrayList<VerticalData>>() {
+                @Override
+                public void onResponse(@NonNull Call<ArrayList<VerticalData>> call, @NonNull Response<ArrayList<VerticalData>> response) {
+                    if (response.isSuccessful()) {
+                        ArrayList<VerticalData> vertical = response.body();
+                        int star_point = star_openHelper.check_star(vertical.get(pos).getTitle(),vertical.get(pos).getVocal(),vertical.get(pos).getFileurl());
+                        if(star_point==0){
+                            confirmButton.setBackgroundResource(R.drawable.button_evaluate_homefragment);
+                            Toast myToast = Toast.makeText(getActivity().getApplicationContext(),"평가가 완료 되었습니다.",Toast.LENGTH_SHORT);
+                            myToast.setGravity(Gravity.CENTER,0,0);
+                            myToast.show();
+                            sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                            Log.e("별 평점",""+ currentStar);
+                            post_star_data(currentStar);
+                        }else{
+                            Toast myToast = Toast.makeText(getActivity().getApplicationContext(),"이미 평가를 완료 하였습니다.",Toast.LENGTH_SHORT);
+                            myToast.setGravity(Gravity.CENTER,0,0);
+                            myToast.show();
+                        }
+                    }
+                }
+                @Override
+                public void onFailure(Call<ArrayList<VerticalData>> call, Throwable t) {
+                }
+            });
+        }else{
+            retrofitExService.getData_Cover().enqueue(new Callback<ArrayList<CoverData>>() {
+                @Override
+                public void onResponse(@NonNull Call<ArrayList<CoverData>> call, @NonNull Response<ArrayList<CoverData>> response) {
+                    if (response.isSuccessful()) {
+                        ArrayList<CoverData> cover = response.body();
+                        int star_point = star_openHelper.check_star(cover.get(pos).getTitle(),cover.get(pos).getVocal(),cover.get(pos).getFileurl());
+                        if(star_point==0){
+                            confirmButton.setBackgroundResource(R.drawable.button_evaluate_homefragment);
+                            Toast myToast = Toast.makeText(getActivity().getApplicationContext(),"평가가 완료 되었습니다.",Toast.LENGTH_SHORT);
+                            myToast.setGravity(Gravity.CENTER,0,0);
+                            myToast.show();
+                            sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                            Log.e("별 평점",""+ currentStar);
+                            post_star_data(currentStar);
+                        }else{
+                            Toast myToast = Toast.makeText(getActivity().getApplicationContext(),"이미 평가를 완료 하였습니다.",Toast.LENGTH_SHORT);
+                            myToast.setGravity(Gravity.CENTER,0,0);
+                            myToast.show();
+                        }
+                    }
+                }
+                @Override
+                public void onFailure(Call<ArrayList<CoverData>> call, Throwable t) {
+                }
+            });
+
+        }
     }
 }
 

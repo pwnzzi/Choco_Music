@@ -1,23 +1,16 @@
 package com.example.choco_music.adapters;
 
 import android.graphics.Color;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
-import com.example.choco_music.Holder.TodaySong_ViewHolder;
 import com.example.choco_music.Holder.VerticalViewHolder;
 import com.example.choco_music.R;
 import com.example.choco_music.fragments.Home_Fragment;
 import com.example.choco_music.model.ChartData;
-import com.example.choco_music.model.HomeData;
-import com.example.choco_music.model.IntroduceData;
 
 import java.util.ArrayList;
 
@@ -65,6 +58,12 @@ public class HomeSongAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
             holder.genre.setTextColor(Color.rgb(255,255,255));
             holder.border.setBackgroundResource(R.drawable.border_cover_orig);
             holder.tri.setImageResource(R.drawable.ic_triangle_original);
+
+        }else{
+            holder.genre.setBackgroundResource(R.drawable.round_songtype);
+            holder.genre.setText("커버곡");
+            holder.border.setBackgroundResource(R.drawable.border_cover);
+            holder.tri.setImageResource(R.drawable.ic_triangle_cover);
         }
 
     }
