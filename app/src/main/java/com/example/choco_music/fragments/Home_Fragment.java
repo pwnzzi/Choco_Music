@@ -57,6 +57,7 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -106,6 +107,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
     private long now = System.currentTimeMillis();
     private Date Ntime = new Date(now);
     private boolean check_date = true;
+    private Thread th;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -123,6 +125,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         mAdapter = new HomeSongAdapter(this);
         setup_retrofit();
         init_retrofit();
+
     }
     @Nullable
     @Override
@@ -130,7 +133,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         view = inflater.inflate(R.layout.home_fragment, null, false);
        btn_tag();
        setup_view(view);
-
        return view;
     }
     private void init_retrofit() {
@@ -235,8 +237,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-
     }
     private void btn_tag() {
         btn_tags = new ArrayList<>();
@@ -380,7 +380,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
     private void unregisterBroadcast() {
         getActivity().unregisterReceiver(mBroadcastReceiver);
     }
-    private void setup_view(View view){
+    private void setup_view(final View view){
         wifi_not_connected = view.findViewById(R.id.wifi_not_connected);
         // setLayoutManager
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
@@ -412,21 +412,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 isCheck_db1(v,position);
-            /*    Star_OpenHelper star_openHelper = new Star_OpenHelper(v.getContext());
-                int star_point = star_openHelper.check_star(position);
-                if(star_point==0){
-                    confirmButton.setBackgroundResource(R.drawable.button_evaluate_homefragment);
-                    Toast myToast = Toast.makeText(getActivity().getApplicationContext(),"평가가 완료 되었습니다.",Toast.LENGTH_SHORT);
-                    myToast.setGravity(Gravity.CENTER,0,0);
-                    myToast.show();
-                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                    Log.e("별 평점",""+ currentStar);
-                    post_star_data(currentStar);
-                }else{
-                    Toast myToast = Toast.makeText(getActivity().getApplicationContext(),"이미 평가를 완료 하였습니다.",Toast.LENGTH_SHORT);
-                    myToast.setGravity(Gravity.CENTER,0,0);
-                    myToast.show();
-                }*/
             }
         });
         //init LayoutManager
@@ -444,20 +429,8 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         stars_evaluate.add((ImageView) view.findViewById(R.id.star_4_evaluate));
         stars_evaluate.add((ImageView) view.findViewById(R.id.star_5_evaluate));
 
-        //평가가 되었는지 체크
-     //   Star_OpenHelper star_openHelper = new Star_OpenHelper(view.getContext());
         isCheck_db(view,position);
-    /*    int star_point = star_openHelper.check_star(position);
-        if(star_point!=0){
-            music_evaluate_btn.setVisibility(View.GONE);
-            stars_evaluate_layout.setVisibility(View.VISIBLE);
-            for(int i=0;i<5;i++){
-                stars_evaluate.get(i).setImageResource(R.drawable.star_unselected);
-            }
-            for(int i=0;i<star_point;i++){
-                stars_evaluate.get(i).setImageResource(R.drawable.star_selected);
-            }
-        }*/
+
         //음악 평가 클릭 이벤트
         music_evaluate_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -495,21 +468,8 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                     position = mLayoutManager.getPosition(centerView);
                     Log.e("Snapped Item Position:","" + position);
                     setBackground(position);
-                    Star_OpenHelper star_openHelper = new Star_OpenHelper(centerView.getContext());
                     //별점데이터가 db에 있을경우
                     isCheck_db(centerView,position);
-                /*    int star_point = star_openHelper.check_star(centerView,position);
-                    if(star_point!=0){
-                        music_evaluate_btn.setVisibility(View.GONE);
-                        stars_evaluate_layout.setVisibility(View.VISIBLE);
-                        Log.e("점수",""+ star_point);
-                        for(int i=0;i<5;i++){
-                            stars_evaluate.get(i).setImageResource(R.drawable.star_unselected);
-                        }
-                        for(int i=0;i<star_point;i++){
-                            stars_evaluate.get(i).setImageResource(R.drawable.star_selected);
-                        }
-                    }*/
                 }
                 //별 선택시
                 for(int i=0; i!=5; ++i){
@@ -652,7 +612,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         }
     }
     public void post_star_data(final int Star_Point){
-        Log.e("세간체크",""+check_date);
+        Log.e("세간체크 in post",""+check_date);
         if(check_date){
             retrofitExService.getData_Original().enqueue(new Callback<ArrayList<VerticalData>>() {
                 @Override
@@ -722,7 +682,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
 
     }
     public void isCheck_db(View view, final int pos){
-        Log.e("세간체크",""+check_date);
+        Log.e("세간체크 in isCheck_db",""+check_date);
         final Star_OpenHelper star_openHelper = new Star_OpenHelper(view.getContext());
         if(check_date){
             retrofitExService.getData_Original().enqueue(new Callback<ArrayList<VerticalData>>() {
@@ -778,7 +738,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         }
     }
     public void isCheck_db1(View view, final int pos){
-        Log.e("세간체크",""+check_date);
+        Log.e("세간체크 in isCheck_db1",""+check_date);
         final Star_OpenHelper star_openHelper = new Star_OpenHelper(view.getContext());
         if(check_date){
             retrofitExService.getData_Original().enqueue(new Callback<ArrayList<VerticalData>>() {
@@ -832,7 +792,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                 public void onFailure(Call<ArrayList<CoverData>> call, Throwable t) {
                 }
             });
-
         }
     }
 }
