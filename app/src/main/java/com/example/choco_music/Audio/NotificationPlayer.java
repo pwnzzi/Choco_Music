@@ -160,8 +160,9 @@ public class NotificationPlayer {
 
             remoteViews.setTextViewText(R.id.ntf_title, mService.getAudioItem().getTitle());
             remoteViews.setTextViewText(R.id.ntf_vocal, mService.getAudioItem().getVocal());
-            //Uri albumArtUri = ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), mService.getAudioItem().getImg_path());
-            //Picasso.with(mService).load(albumArtUri).error(R.drawable.elbum_img).into(remoteViews, R.id.img_albumart, NOTIFICATION_PLAYER_ID, notification);
+
+         //   Uri albumArtUri = ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), mService.getAudioItem().getImg_path());
+          //  Picasso.with(mService).load(albumArtUri).error(R.drawable.elbum_img).into(remoteViews, R.id.img_albumart, NOTIFICATION_PLAYER_ID, notification);
         }
     }
 }

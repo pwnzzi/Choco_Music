@@ -38,6 +38,7 @@ public class AudioServiceInterface {
     }
 
     public void play(int position) {
+        pause();
         if (mService != null) {
             mService.play(position);
         }

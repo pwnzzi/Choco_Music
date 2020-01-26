@@ -150,7 +150,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             AudioApplication.getInstance().getServiceInterface().getAudioItem();
             switch(view.getId()){
                 case R.id.layout_playing_bar:
-                    Intent intent = new Intent(this, MusicPlay_activity.class);
+                    //Intent intent = new Intent(this, MusicPlay_activity.class);
+                    Intent intent = new Intent(this, MusicPlayActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     overridePendingTransition(R.anim.anim_slide_in_bottom,R.anim.anim_slide_out_top);
                     break;

@@ -69,7 +69,7 @@ public class Coversong_chart extends AppCompatActivity {
                     Cover_Chart = new ArrayList<>();
 
                     for(CoverData data: coverChart){
-                        Cover_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true,2));
+                        Cover_Chart.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), false,2));
                         CoverMap.put(data.getId(), Cover_Chart.get(Cover_Chart.size()-1));
                         //Log.d(data.getTitle(), data.getFileurl());
 
@@ -126,9 +126,10 @@ public class Coversong_chart extends AppCompatActivity {
         CoverSong_View.addOnItemTouchListener(new RecyclerItemClickListener(this, CoverSong_View,
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
+
                         AudioApplication.getInstance().getServiceInterface().setPlayList(Cover_Chart);
                         AudioApplication.getInstance().getServiceInterface().play(position);
-                        Intent intent = new Intent(Coversong_chart.this, MusicPlay_activity.class);
+                        Intent intent = new Intent(Coversong_chart.this, MusicPlayActivity.class);
                         startActivity(intent);
                         finish();
                     }

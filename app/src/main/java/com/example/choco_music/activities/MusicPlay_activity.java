@@ -71,13 +71,15 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.music_play_layout);
 
+        sb = findViewById(R.id.music_play_seekbar);
+        txt_current = findViewById(R.id.music_play_current_txt);
+        txt_length = findViewById(R.id.music_play_length_txt);
         music_play_btn = (ImageView)findViewById(R.id.music_play);
         btn_shuffle = findViewById(R.id.music_play_shuffle);
         btn_repeat = findViewById(R.id.music_play_replay);
         runLayout = findViewById(R.id.linear_running_btn);
         heart = findViewById(R.id.heart_music_play_layout);
         background = findViewById(R.id.musicplay_activity_layout);
-
         music_play_btn.setOnClickListener(this);
         findViewById(R.id.play_layout_list).setOnClickListener(this);
         findViewById(R.id.play_layout_finish).setOnClickListener(this);
@@ -85,12 +87,10 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
         findViewById(R.id.play_front).setOnClickListener(this);
         btn_repeat.setOnClickListener(this);
         btn_shuffle.setOnClickListener(this);
-        sb = findViewById(R.id.music_play_seekbar);
-        txt_current = findViewById(R.id.music_play_current_txt);
-        txt_length = findViewById(R.id.music_play_length_txt);
-        background = findViewById(R.id.music_play_frame);
 
+        background = findViewById(R.id.music_play_frame);
         //background.sethei
+        updateUI();
 
         sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -137,7 +137,7 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
         });
 
         registerBroadcast();
-        updateUI();
+
     }
 
     @Override
@@ -230,6 +230,7 @@ public class MusicPlay_activity extends AppCompatActivity implements View.OnClic
                     .into(((ImageView)findViewById(R.id.music_play_background)));
         }
         catch(Exception e){}
+
 
     }
 

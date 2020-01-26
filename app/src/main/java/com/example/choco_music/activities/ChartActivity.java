@@ -1,5 +1,6 @@
 package com.example.choco_music.activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -123,7 +124,7 @@ public class ChartActivity extends AppCompatActivity {
                         ChartData = new ArrayList<>();
 
                         for(CoverData data: coverChart){
-                            ChartData.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), true,2));
+                            ChartData.add(new ChartData(data.getTitle(), data.getVocal(), data.getFileurl(), false,2));
                             ChartMap.put(data.getId(), ChartData.get(ChartData.size()-1));
                             //Log.d(data.getTitle(), data.getFileurl());
 
@@ -185,9 +186,16 @@ public class ChartActivity extends AppCompatActivity {
         CoverSong_View.addOnItemTouchListener(new RecyclerItemClickListener(this, CoverSong_View,
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
-                        AudioApplication.getInstance().getServiceInterface().setPlayList(ChartData);
+                       /* AudioApplication.getInstance().getServiceInterface().setPlayList(ChartData);
                         AudioApplication.getInstance().getServiceInterface().play(position);
                         Intent intent = new Intent(ChartActivity.this, MusicPlay_activity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();*/
+                        AudioApplication.getInstance().getServiceInterface().setPlayList(ChartData);
+                        AudioApplication.getInstance().getServiceInterface().play(position);
+                        Intent intent = new Intent(ChartActivity.this, MusicPlayActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         finish();
                     }

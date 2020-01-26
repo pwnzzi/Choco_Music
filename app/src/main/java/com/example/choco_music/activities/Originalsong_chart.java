@@ -123,7 +123,7 @@ public class Originalsong_chart extends AppCompatActivity {
                     @Override public void onItemClick(View view, int position) {
                         AudioApplication.getInstance().getServiceInterface().setPlayList(Original_Chart);
                         AudioApplication.getInstance().getServiceInterface().play(position);
-                        Intent intent = new Intent(Originalsong_chart.this, MusicPlay_activity.class);
+                        Intent intent = new Intent(Originalsong_chart.this, MusicPlayActivity.class);
                         startActivity(intent);
                         finish();
                     }

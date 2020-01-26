@@ -122,6 +122,7 @@ public class AudioService extends Service {
     }
 
     public void play(int position) {
+
         queryAudioItem(position);
         stop();
         prepare();
