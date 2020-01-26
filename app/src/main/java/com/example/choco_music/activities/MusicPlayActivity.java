@@ -178,6 +178,7 @@ public class MusicPlayActivity extends AppCompatActivity  {
             play.requestLayout();
             play.setImageResource(R.drawable.playing_btn);
             sb.setMax(AudioApplication.getInstance().getServiceInterface().getDuration());
+            txt_length.setText(secondsToString(AudioApplication.getInstance().getServiceInterface().getDuration() / 1000));
             new SeekThread().start();
         } else {
             play.setImageResource(R.drawable.play_btn);
@@ -221,7 +222,15 @@ public class MusicPlayActivity extends AppCompatActivity  {
                     .into(((ImageView)findViewById(R.id.music_play_background_music)));
         }
         catch(Exception e){}
+
     }
+    private String secondsToString(int pTime) {
+        if(pTime >= 3600)
+            return String.format("%d:%02d:%02d", pTime / 3600, pTime / 60 % 60, pTime % 60);
+        else
+            return String.format("%d:%02d", pTime / 60 % 60, pTime % 60);
+    }
+
     class SeekThread extends Thread {
         @Override
         public void run() { // 쓰레드가 시작되면 콜백되는 메서드
