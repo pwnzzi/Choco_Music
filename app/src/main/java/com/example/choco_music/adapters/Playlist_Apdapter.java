@@ -1,4 +1,5 @@
 package com.example.choco_music.adapters;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,8 @@ public class Playlist_Apdapter extends RecyclerView.Adapter<Playlist_ViewHolder>
 
         holder.vocal.setText(data.getVocal());
         holder.title.setText(data.getTitle());
+        holder.title.setTextSize(TypedValue.COMPLEX_UNIT_SP,12f);
+        holder.vocal.setTextSize(TypedValue.COMPLEX_UNIT_SP,12f);
         try{ Glide.with(holder.itemView.getContext()).load(data.getImg_path()).into(holder.img);}
         catch(Exception e){}
 

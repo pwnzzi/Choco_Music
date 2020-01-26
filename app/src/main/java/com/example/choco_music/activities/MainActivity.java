@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if(tab.getPosition() == 0){
                     playing_bar.setVisibility(View.GONE);
-                } else {
+                }else{
                     playing_bar.setVisibility(View.VISIBLE);
                 }
             }
@@ -141,7 +142,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 seekBarControl = false;
             }
         });
-
+        if(AudioApplication.getInstance().getServiceInterface().getAudioItem()!=null){
+            txt_title.setText(AudioApplication.getInstance().getServiceInterface().getAudioItem().getTitle());
+            txt_vocal.setText(AudioApplication.getInstance().getServiceInterface().getAudioItem().getVocal());
+            txt_title.setTextSize(TypedValue.COMPLEX_UNIT_SP,12f);
+            txt_vocal.setTextSize(TypedValue.COMPLEX_UNIT_SP,12f);
+        }
     }
 
     @Override
@@ -196,10 +202,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             new SeekThread().start();
             txt_title.setText(AudioApplication.getInstance().getServiceInterface().getAudioItem().getTitle());
             txt_vocal.setText(AudioApplication.getInstance().getServiceInterface().getAudioItem().getVocal());
+            txt_title.setTextSize(TypedValue.COMPLEX_UNIT_SP,12f);
+            txt_vocal.setTextSize(TypedValue.COMPLEX_UNIT_SP,12f);
         } else {
             btn_play.setImageResource(R.drawable.play_btn);
         }
     }
+
 
     class SeekThread extends Thread {
         @Override
@@ -210,6 +219,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
+
     public Animation inFromRightAnimation()
     {
         Animation inFromRight = new TranslateAnimation(

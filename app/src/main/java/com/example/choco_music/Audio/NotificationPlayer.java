@@ -12,12 +12,14 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.util.TypedValue;
 import android.widget.RemoteViews;
 
 import androidx.core.app.NotificationCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.choco_music.R;
+import com.example.choco_music.activities.MusicPlayActivity;
 import com.example.choco_music.activities.MusicPlay_activity;
 import com.example.choco_music.activities.TempActivity;
 import com.squareup.picasso.Picasso;
@@ -61,9 +63,10 @@ public class NotificationPlayer {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-       //     Intent mainActivity = new Intent(mService, TempActivity.class);
-
-   //         mMainPendingIntent = PendingIntent.getActivity(mService, 0, mainActivity, 0);
+            if(mService.getAudioItem()!=null){
+                Intent mainActivity = new Intent(mService, MusicPlayActivity.class);
+                mMainPendingIntent = PendingIntent.getActivity(mService, 0, mainActivity, 0);
+            }
             mRemoteViews = createRemoteView(R.layout.notification_player);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -160,7 +163,8 @@ public class NotificationPlayer {
 
             remoteViews.setTextViewText(R.id.ntf_title, mService.getAudioItem().getTitle());
             remoteViews.setTextViewText(R.id.ntf_vocal, mService.getAudioItem().getVocal());
-
+            remoteViews.setTextViewTextSize(R.id.ntf_title,TypedValue.COMPLEX_UNIT_SP,12f);
+            remoteViews.setTextViewTextSize(R.id.ntf_vocal,TypedValue.COMPLEX_UNIT_SP,12f);
          //   Uri albumArtUri = ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), mService.getAudioItem().getImg_path());
           //  Picasso.with(mService).load(albumArtUri).error(R.drawable.elbum_img).into(remoteViews, R.id.img_albumart, NOTIFICATION_PLAYER_ID, notification);
         }
