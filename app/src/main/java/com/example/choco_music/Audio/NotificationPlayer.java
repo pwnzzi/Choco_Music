@@ -12,12 +12,14 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.util.Log;
 import android.util.TypedValue;
 import android.widget.RemoteViews;
 
 import androidx.core.app.NotificationCompat;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.AppWidgetTarget;
 import com.example.choco_music.R;
 import com.example.choco_music.activities.MusicPlayActivity;
 import com.example.choco_music.activities.MusicPlay_activity;
@@ -94,9 +96,9 @@ public class NotificationPlayer {
         private void startMyOwnForeground(){
             String NOTIFICATION_CHANNEL_ID = "com.example.choco_music";
             String channelName = "My Background Service";
-            NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
+            NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_LOW);
             chan.setLightColor(Color.BLUE);
-            chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+            chan.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
             NotificationManager manager = (NotificationManager) mService.getSystemService(Context.NOTIFICATION_SERVICE);
             assert manager != null;
             manager.createNotificationChannel(chan);
@@ -165,6 +167,10 @@ public class NotificationPlayer {
             remoteViews.setTextViewText(R.id.ntf_vocal, mService.getAudioItem().getVocal());
             remoteViews.setTextViewTextSize(R.id.ntf_title,TypedValue.COMPLEX_UNIT_SP,12f);
             remoteViews.setTextViewTextSize(R.id.ntf_vocal,TypedValue.COMPLEX_UNIT_SP,12f);
+
+            AppWidgetTarget target = new AppWidgetTarget(mService, R.id.img_albumart, remoteViews, NOTIFICATION_PLAYER_ID);
+            Glide.with(mService).asBitmap().centerCrop().load(mService.getAudioItem().getImg_path()).into(target);
+
          //   Uri albumArtUri = ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), mService.getAudioItem().getImg_path());
           //  Picasso.with(mService).load(albumArtUri).error(R.drawable.elbum_img).into(remoteViews, R.id.img_albumart, NOTIFICATION_PLAYER_ID, notification);
         }

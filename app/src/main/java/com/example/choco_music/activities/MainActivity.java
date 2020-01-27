@@ -2,12 +2,14 @@ package com.example.choco_music.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import android.transition.Fade;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.transition.Transition;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -51,8 +53,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
 
         // 스플래쉬 화면
         Intent intent = new Intent(this, LoadingActivity.class);
