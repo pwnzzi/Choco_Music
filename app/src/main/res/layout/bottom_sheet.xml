@@ -10,10 +10,16 @@
     app:behavior_hideable="true"
     app:behavior_peekHeight="56dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+    <SeekBar
+        android:id="@+id/playing_bar_seekbar_home_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#171717"
+        />
     <LinearLayout
         android:background="#171717"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="59dp"
         android:orientation="vertical"
         android:layout_gravity="center_vertical"
         >

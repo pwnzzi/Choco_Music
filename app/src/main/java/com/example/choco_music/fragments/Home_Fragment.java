@@ -20,6 +20,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -39,6 +40,7 @@ import com.example.choco_music.Audio.BroadcastActions;
 import com.example.choco_music.Holder.VerticalViewHolder;
 import com.example.choco_music.Interface.RetrofitExService;
 import com.example.choco_music.R;
+import com.example.choco_music.activities.MainActivity;
 import com.example.choco_music.adapters.HomeSongAdapter;
 import com.example.choco_music.model.AlbumData;
 import com.example.choco_music.model.CoverData;
@@ -107,7 +109,8 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
     private long now = System.currentTimeMillis();
     private Date Ntime = new Date(now);
     private boolean check_date = true;
-    private Thread th;
+    private SeekBar sb;
+    boolean seekBarControl = true;
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -362,6 +365,8 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
     private void updateUI() {
         if (AudioApplication.getInstance().getServiceInterface().isPlaying()) {
             music_play_btn.setImageResource(R.drawable.playing_btn);
+            sb.setMax(AudioApplication.getInstance().getServiceInterface().getDuration());
+            new SeekThread().start();
         } else {
             music_play_btn.setImageResource(R.drawable.play_btn);
         }
@@ -393,6 +398,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         mVerticalView.setLayoutManager(mLayoutManager);
         mAdapter.setData(datas);
         mVerticalView.setAdapter(mAdapter);
+        sb = view.findViewById(R.id.playing_bar_seekbar_home_fragment);
 
         // 취소, 완료 버튼
         cancelButton = view.findViewById(R.id.sheet_cancel);
@@ -430,6 +436,22 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         stars_evaluate.add((ImageView) view.findViewById(R.id.star_5_evaluate));
 
         isCheck_db(view,position);
+
+        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                seekBarControl = true;
+                AudioApplication.getInstance().getServiceInterface().seekTo(sb.getProgress());
+                updateUI();
+            }
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) { }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                seekBarControl = false;
+            }
+        });
 
         //음악 평가 클릭 이벤트
         music_evaluate_btn.setOnClickListener(new View.OnClickListener() {
@@ -473,7 +495,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                 }
                 //별 선택시
                 for(int i=0; i!=5; ++i){
-                    stars.get(i).setImageResource(R.drawable.star_selected);
+                    stars.get(i).setImageResource(R.drawable.star_unselected);
                 }
                 currentStar = 5;
                 for(int i=0; i!=10; ++i) {
@@ -500,6 +522,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                     if (initalStage) {
                         AudioApplication.getInstance().getServiceInterface().play(position);
                         initalStage =!initalStage;
+
                     } else {
                         if (!AudioApplication.getInstance().getServiceInterface().isPlaying()) {
                             AudioApplication.getInstance().getServiceInterface().play_home_fragment();
@@ -792,6 +815,15 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                 public void onFailure(Call<ArrayList<CoverData>> call, Throwable t) {
                 }
             });
+        }
+    }
+    class SeekThread extends Thread {
+        @Override
+        public void run() { // 쓰레드가 시작되면 콜백되는 메서드
+            // 씨크바 막대기 조금씩 움직이기 (노래 끝날 때까지 반복)
+            while(AudioApplication.getInstance().getServiceInterface().isPlaying() && seekBarControl) {
+                sb.setProgress(AudioApplication.getInstance().getServiceInterface().getCurrentPosition());
+            }
         }
     }
 }

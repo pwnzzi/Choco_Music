@@ -18,48 +18,44 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-
             <FrameLayout
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@drawable/chart_round_bar"
-                android:layout_marginBottom="10dp">
-
-
-
-                <LinearLayout
-
-                    android:layout_marginLeft="10dp"
-                    android:layout_gravity="center"
+                android:layout_height="wrap_content">
+                <FrameLayout
+                    android:layout_marginTop="6dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="25dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    >
-
-                    <TextView
-                        android:textColor="#adff00"
-                        style="@style/TextStyle6"
-                        android:textSize="17dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="커버곡"/>
-
-                    <TextView
-                        android:textSize="17dp"
-                        style="@style/TextStyle6"
-                        android:textColor="#ffffff"
-                        android:layout_marginLeft="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Top 100"/>
-
-
-                </LinearLayout>
-
-
+                    android:orientation="horizontal"
+                    android:background="@drawable/chart_round_bar"
+                    android:layout_marginBottom="10dp">
+                    <LinearLayout
+                        android:paddingTop="7dp"
+                        android:paddingBottom="8dp"
+                        android:layout_gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:paddingLeft="20dp"
+                            android:textColor="#adff00"
+                            style="@style/TextStyle6"
+                            android:textSize="17dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="커버곡"/>
+                        <TextView
+                            android:textSize="17dp"
+                            style="@style/TextStyle6"
+                            android:textColor="#ffffff"
+                            android:layout_marginLeft="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Top 100"/>
+                    </LinearLayout>
+                </FrameLayout>
                 <Button
+                    android:layout_marginRight="20dp"
                     android:layout_gravity="end"
                     android:id="@+id/cover_btn"
                     android:layout_weight="1"
@@ -67,8 +63,9 @@
                     android:layout_height="50dp"
                     android:background="@drawable/more_cover"/>
 
-
             </FrameLayout>
+
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
@@ -76,41 +73,48 @@
                 android:id="@+id/CoverSong_list" />
 
             <FrameLayout
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@drawable/chart_round_bar"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp">
-
-                <LinearLayout
-                    android:layout_marginLeft="10dp"
-                    android:layout_gravity="center"
+                android:layout_height="wrap_content">
+                <FrameLayout
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="26dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/chart_round_bar"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp">
+                    <LinearLayout
+                        android:paddingTop="7dp"
+                        android:paddingBottom="8dp"
+                        android:layout_gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                    <TextView
-                        android:textColor="#ff272f"
-                        style="@style/TextStyle6"
-                        android:textSize="17dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="자작곡"/>
+                        <TextView
+                            android:paddingLeft="20dp"
+                            android:textColor="#ff272f"
+                            style="@style/TextStyle6"
+                            android:textSize="17dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="자작곡"/>
 
-                    <TextView
-                        android:textSize="17dp"
-                        style="@style/TextStyle6"
-                        android:textColor="#ffffff"
-                        android:layout_marginLeft="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Top 100"/>
-                </LinearLayout>
+                        <TextView
+                            android:textSize="17dp"
+                            style="@style/TextStyle6"
+                            android:textColor="#ffffff"
+                            android:layout_marginLeft="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Top 100"/>
+                    </LinearLayout>
 
+                </FrameLayout>
 
                 <Button
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="20dp"
                     android:layout_gravity="end"
                     android:id="@+id/original_btn"
                     android:layout_weight="1"
@@ -118,6 +122,7 @@
                     android:layout_height="50dp"
                     android:background="@drawable/more_original"/>
             </FrameLayout>
+
 
 
             <androidx.recyclerview.widget.RecyclerView

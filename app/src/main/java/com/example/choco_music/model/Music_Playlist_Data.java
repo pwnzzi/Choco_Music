@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Music_Playlist_Data implements Serializable {
 
-    private String title;
+    /*private String title;
     private String vocal;
     private String music_url;
     private String album_url;
@@ -22,7 +22,7 @@ public class Music_Playlist_Data implements Serializable {
     public String getVocal(){
         return this.vocal;
     }
-
+*/
 
 
 }

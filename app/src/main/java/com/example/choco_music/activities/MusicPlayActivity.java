@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -66,6 +67,10 @@ public class MusicPlayActivity extends AppCompatActivity  {
         btn_shuffle = findViewById(R.id.music_play_shuffle_music);
         btn_repeat = findViewById(R.id.music_play_replay_music);
         finish_btn = findViewById(R.id.play_layout_finish_music_music);
+        play.getLayoutParams().height = 200;
+        play.getLayoutParams().width = 200;
+        play.requestLayout();
+        play.setImageResource(R.drawable.play_btn);
 
         finish_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,15 +206,20 @@ public class MusicPlayActivity extends AppCompatActivity  {
         }
         ((TextView)findViewById(R.id.play_title_music)).setText(audioItem.getTitle());
         ((TextView)findViewById(R.id.play_vocal_music)).setText(audioItem.getVocal());
+        ((TextView)findViewById(R.id.play_vocal_music)).setTextSize(TypedValue.COMPLEX_UNIT_SP,12f);
+        ((TextView)findViewById(R.id.play_title_music)).setTextSize(TypedValue.COMPLEX_UNIT_SP,14f);
+
         if(audioItem.getType()){
             ((TextView)findViewById(R.id.music_play_type_music)).setText("자작곡");
             ((TextView)findViewById(R.id.music_play_type_music)).setTextColor(Color.parseColor("#ffffff"));
+            ((TextView)findViewById(R.id.music_play_type_music)).setTextSize(TypedValue.COMPLEX_UNIT_SP,12f);
             findViewById(R.id.music_play_type_music).setBackgroundResource(R.drawable.round_songtype_orig);
             findViewById(R.id.music_play_cover_frame_music).setBackgroundResource(R.drawable.border_cover_orig);
             ((ImageView)findViewById(R.id.music_play_cover_tri_music)).setImageResource(R.drawable.ic_triangle_original);
         } else {
             ((TextView)findViewById(R.id.music_play_type_music)).setText("커버곡");
             ((TextView)findViewById(R.id.music_play_type_music)).setTextColor(Color.parseColor("#000000"));
+            ((TextView)findViewById(R.id.music_play_type_music)).setTextSize(TypedValue.COMPLEX_UNIT_SP,12f);
             findViewById(R.id.music_play_type_music).setBackgroundResource(R.drawable.round_songtype);
             findViewById(R.id.music_play_cover_frame_music).setBackgroundResource(R.drawable.border_cover);
             ((ImageView)findViewById(R.id.music_play_cover_tri_music)).setImageResource(R.drawable.ic_triangle_cover);

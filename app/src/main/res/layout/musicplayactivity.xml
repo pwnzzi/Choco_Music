@@ -60,8 +60,8 @@
                     android:id="@+id/music_play_type_music"
                     android:paddingRight="10dp"
                     android:paddingLeft="10dp"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="커버곡"
@@ -108,8 +108,8 @@
                             android:layout_gravity="center"
                             android:id="@+id/music_play_cover_frame_music"
                             android:adjustViewBounds="true"
-                            android:layout_width="200dp"
-                            android:layout_height="200dp"
+                            android:layout_width="225dp"
+                            android:layout_height="225dp"
                             android:padding="1dp"
                             android:scaleType="centerCrop"
                             android:cropToPadding="true"
@@ -120,8 +120,9 @@
                             android:id="@+id/heart_music_play_layout_music"
                             android:layout_marginLeft="5dp"
                             android:layout_gravity="bottom"
-                            android:layout_width="65dp"
-                            android:layout_height="65dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
                             android:background="@drawable/heart_unselected_album"/>
 
                         <ImageView
@@ -261,14 +262,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp">
 
-        <ImageView
-            android:paddingTop="15dp"
-            android:scaleType="centerCrop"
-            android:paddingBottom="5dp"
-            android:src="@drawable/adjust_btn"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
+
 
         <ImageView
 
@@ -281,7 +275,6 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:layout_weight="1"
-            android:layout_marginRight="5dp"
             android:layout_gravity="right"
             android:id="@+id/musiclist"
             android:layout_width="0dp"

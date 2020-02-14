@@ -1,6 +1,7 @@
 package com.example.choco_music.adapters;
 
 import android.graphics.Color;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +18,6 @@ import java.util.ArrayList;
 public class HomeSongAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
 
     private ArrayList<ChartData> homeDatas;
-    private View view;
-    private int id;
     private Home_Fragment fragment;
 
     public HomeSongAdapter(Home_Fragment fragment){
@@ -44,6 +43,8 @@ public class HomeSongAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
         ChartData data = homeDatas.get(position);
         holder.vocal.setText(data.getVocal());
         holder.title.setText(data.getTitle());
+        holder.title.setTextSize(TypedValue.COMPLEX_UNIT_SP,14f);
+        holder.vocal.setTextSize(TypedValue.COMPLEX_UNIT_SP,12f);
 
         //이미지를 글라이드를 이용해서 넣어준다.
 

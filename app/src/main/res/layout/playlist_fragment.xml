@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#171717"
-
     >
 
 
@@ -18,25 +17,23 @@
             android:orientation="horizontal"
             android:weightSum="10"
             android:background="@drawable/chart_round_bar"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="36dp"
             android:layout_marginBottom="10dp">
 
 
                 <LinearLayout
-                    android:paddingLeft="10dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:layout_marginLeft="10dp"
+                    android:paddingTop="7dp"
+                    android:paddingBottom="8dp"
                     android:layout_gravity="center"
                     android:layout_weight="10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
                         <TextView
+                            android:paddingLeft="20dp"
                             style="@style/TextStyle6"
                             android:textSize="17dp"
                             android:textColor="#ff9600"
-                            android:layout_marginLeft="10dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="초코뮤직"/>
@@ -59,6 +56,24 @@
                     android:id="@+id/play_list"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                        <Button
+                            android:text="좋아요"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                        <Button
+                            android:text="플레이 리스트"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                </LinearLayout>
         </ScrollView>
+
+
 
 </LinearLayout>

@@ -43,7 +43,7 @@ public class ChartAdapter extends RecyclerView.Adapter<Chart_ViewHolder>  {
 
         holder.vocal.setText(data.getVocal());
         holder.title.setText(data.getTitle());
-        holder.title.setTextSize(TypedValue.COMPLEX_UNIT_SP,12f);
+        holder.title.setTextSize(TypedValue.COMPLEX_UNIT_SP,14f);
         holder.vocal.setTextSize(TypedValue.COMPLEX_UNIT_SP,12f);
         try{ Glide.with(holder.itemView.getContext()).load(data.getImg_path()).into(holder.img);}
         catch(Exception e){}
