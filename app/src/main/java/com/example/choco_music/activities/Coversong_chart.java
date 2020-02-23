@@ -19,6 +19,7 @@ import com.example.choco_music.adapters.CoverAdapter;
 import com.example.choco_music.model.AlbumData;
 import com.example.choco_music.model.ChartData;
 import com.example.choco_music.model.CoverData;
+import com.example.choco_music.model.RecentPlaySongs_OpenHelper;
 import com.example.choco_music.model.RecyclerItemClickListener;
 import com.example.choco_music.model.VerticalData;
 
@@ -40,7 +41,7 @@ public class Coversong_chart extends AppCompatActivity {
     RetrofitExService retrofitExService;
     private ArrayList<ChartData> Cover_Chart;
     private HashMap<Integer, ChartData> CoverMap;
-
+    private RecentPlaySongs_OpenHelper recentPlaySongs_openHelper;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,7 +119,7 @@ public class Coversong_chart extends AppCompatActivity {
         CoverMap = new HashMap<>();
         //init LayoutManager
         Cover_LayoutManager  = new LinearLayoutManager(this);
-
+        recentPlaySongs_openHelper = new RecentPlaySongs_OpenHelper(this);
         CoverSong_View.setLayoutManager(Cover_LayoutManager);
         Cover_LayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         CoverAdapter = new ChartAdapter();
@@ -129,6 +130,22 @@ public class Coversong_chart extends AppCompatActivity {
 
                         AudioApplication.getInstance().getServiceInterface().setPlayList(Cover_Chart);
                         AudioApplication.getInstance().getServiceInterface().play(position);
+                        //최근 들은 곡 리스트에 추가 한다.
+                        if(Cover_Chart.get(position).getImg_path() != null) {
+                            boolean db_check = recentPlaySongs_openHelper.recent_list_Check(Cover_Chart.get(position).getTitle(), Cover_Chart.get(position).getVocal(),
+                                    Cover_Chart.get(position).getFileurl(), Cover_Chart.get(position).getImg_path());
+                            if(db_check){
+                                String type;
+                                if(Cover_Chart.get(position).getType())
+                                    type = "자작곡";
+                                else
+                                    type = "커버곡";
+                                recentPlaySongs_openHelper.insertData(Cover_Chart.get(position).getTitle(), Cover_Chart.get(position).getVocal(),
+                                        Cover_Chart.get(position).getFileurl(), Cover_Chart.get(position).getImg_path(), type);
+                                if(recentPlaySongs_openHelper.get_recent_music().size()>6)
+                                    recentPlaySongs_openHelper.deleteData(1);
+                            }
+                        }
                         Intent intent = new Intent(Coversong_chart.this, MusicPlayActivity.class);
                         startActivity(intent);
                         finish();

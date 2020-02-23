@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "689977384423",
+    "firebase_url": "https://chocomusic-10bf7.firebaseio.com",
+    "project_id": "chocomusic-10bf7",
+    "storage_bucket": "chocomusic-10bf7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:689977384423:android:365e66b9eb1112bd8bf142",
+        "android_client_info": {
+          "package_name": "com.choco_music.choco_music"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "689977384423-ps0r24f4i6cg0vqdnk73r4o9aqo6pn44.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.choco_music.choco_music",
+            "certificate_hash": "47eb6a706ab5ed67769a5eca340d8fadf1cb553e"
+          }
+        },
+        {
+          "client_id": "689977384423-anht5s80mau0s5c95t6f1miurkjlougr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAj33y6W41wWri2Y4SBtlYOIC7p_XntfJM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "689977384423-anht5s80mau0s5c95t6f1miurkjlougr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

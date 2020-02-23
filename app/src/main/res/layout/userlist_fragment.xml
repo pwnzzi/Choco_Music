@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:id="@+id/userlist_fragment_layout"
+    android:layout_height="match_parent" android:background="#171717">
+
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:background="@drawable/round_white"
+            android:layout_marginLeft="30dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"/>
+        <TextView
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#fe9500"
+            android:text="초코뮤직"
+            android:textSize="18sp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginBottom="10dp"
+        android:background="#69848484"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_marginLeft="30dp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="최근 들은 곡"
+                android:textColor="#ffffff"
+                android:textSize="15sp"/>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_centerInParent="true"
+            android:background="#ffffff"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center"
+            android:id="@+id/recent_music_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/like_list"
+        android:paddingLeft="30dp"
+        android:layout_marginBottom="10dp"
+        android:background="#69848484"
+        android:textColor="#ffffff"
+        android:gravity="left"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:text="좋아요"/>
+    <Button
+        android:id="@+id/play_list"
+        android:paddingLeft="30dp"
+        android:layout_marginBottom="10dp"
+        android:background="#69848484"
+        android:textColor="#ffffff"
+        android:textSize="15sp"
+        android:gravity="left"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="플레이 리스트"/>
+    <Button
+        android:id="@+id/belongings_list"
+        android:paddingLeft="30dp"
+        android:layout_marginBottom="10dp"
+        android:background="#69848484"
+        android:textColor="#ffffff"
+        android:textSize="15sp"
+        android:gravity="left"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="수집품"/>
+
+    <Button
+        android:id="@+id/following_follower_list"
+        android:paddingLeft="30dp"
+        android:layout_marginBottom="10dp"
+        android:background="#69848484"
+        android:textColor="#ffffff"
+        android:textSize="15sp"
+        android:gravity="left"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="채널 팔로잉 팔로워"/>
+
+</LinearLayout>
+</ScrollView>
+</LinearLayout>

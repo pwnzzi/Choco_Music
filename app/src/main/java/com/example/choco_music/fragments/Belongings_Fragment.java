@@ -8,16 +8,16 @@ import android.widget.Button;
 
 import com.example.choco_music.R;
 
-public class Playlist_Fragment extends androidx.fragment.app.Fragment {
+public class Belongings_Fragment extends androidx.fragment.app.Fragment {
 
     Button back_btn;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.playlist_fragment, container, false);
+        View view = inflater.inflate(R.layout.belongings_fragment, container, false);
 
-        back_btn = view.findViewById(R.id.back_playlist_fragment);
+        back_btn = view.findViewById(R.id.back_belonging_fragment);
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

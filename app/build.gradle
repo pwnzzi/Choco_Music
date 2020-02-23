@@ -38,6 +38,14 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     implementation 'jp.wasabeef:glide-transformations:4.0.0'
     implementation 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.3.0'
+    //로그인
+    implementation group: project.KAKAO_SDK_GROUP, name: 'usermgmt', version: project.KAKAO_SDK_VERSION // 카카오톡 SDK 추가
 
+    implementation 'com.google.firebase:firebase-analytics:17.2.2' // 파이어베이스 앱 분석
+    implementation 'com.google.firebase:firebase-core:17.2.2' // 파이어베이서 코어
+    implementation 'com.google.firebase:firebase-auth:19.1.0' // 파이어베이서 인증
+    implementation 'com.firebaseui:firebase-ui-auth:4.2.1' // 파이어베이스 인증2
 
+    implementation files('libs/naveridlogin_android_sdk_4.2.5.aar')  //네이버 sdk 추가
 }
+apply plugin: 'com.google.gms.google-services'

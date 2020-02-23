@@ -23,7 +23,6 @@ public class Star_OpenHelper extends SQLiteOpenHelper {
         super(context, DATABASE, null, DATABASE_VERSION);
         this.context = context;
     }
-
     @Override
     public void onOpen(SQLiteDatabase db) {
         onCreate(db);
@@ -34,20 +33,16 @@ public class Star_OpenHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO star VALUES(null,'"+position+"','"+star_point+"','"+title+"','"+vocal+"','"+file_url+"')");
         db.close();
     }
-
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         sql = "CREATE TABLE IF NOT EXISTS star ( _id INTEGER PRIMARY KEY AUTOINCREMENT,"+
                 "position INTEGER, star_point INTEGER , title TEXT, vocal TEXT, file_url TEXT);";
         db.execSQL(sql);
     }
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
-
     }
     public int check_star(String title, String vocal, String file_url){
         int star_point = 0;

@@ -164,7 +164,12 @@ public class AudioService extends Service {
     }
 
     public ChartData getAudioItem() {
-        return mAudioDatas.get(mCurrentPosition);
+        try {
+            return mAudioDatas.get(mCurrentPosition);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println(e);
+            return null;
+        }
     }
 
 

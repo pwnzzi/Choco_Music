@@ -1,14 +1,11 @@
 package com.example.choco_music.Interface;
 
 import com.example.choco_music.model.AlbumData;
-import com.example.choco_music.model.ChartData;
 import com.example.choco_music.model.CoverData;
 import com.example.choco_music.model.TodaySongData;
 import com.example.choco_music.model.VerticalData;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import retrofit2.Call;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
@@ -42,6 +39,4 @@ public interface RetrofitExService {
     @FormUrlEncoded
     @POST("evaluation/score/covered/")
     Call<CoverData> postData_Cover(@FieldMap HashMap<String, Object> param);
-
-
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="#171717"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="로그인"
+        android:textColor="#fe9500"
+        android:gravity="center"
+        android:textSize="30sp"/>
+
+    <Button
+        android:background="#f7E600"
+        android:layout_marginBottom="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/kakao_login_btn"
+        android:textSize="17sp"
+        android:text="카카오 계정으로 로그인" />
+
+    <com.google.android.gms.common.SignInButton
+        android:layout_marginBottom="20dp"
+        android:id="@+id/btn_login_google"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+
+    <Button
+        android:background="#1EC800"
+        android:layout_marginBottom="20dp"
+        android:id="@+id/btn_login_naver"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="#ffffff"
+        android:textSize="17sp"
+        android:text="네이버 계정으로 로그인"
+        />
+
+
+</LinearLayout>

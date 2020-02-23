@@ -28,6 +28,8 @@ import com.example.choco_music.model.AlbumData;
 import com.example.choco_music.model.ChartData;
 import com.example.choco_music.model.CoverData;
 import com.example.choco_music.model.HomeData;
+import com.example.choco_music.model.Playlist_Database_OpenHelper;
+import com.example.choco_music.model.RecentPlaySongs_OpenHelper;
 import com.example.choco_music.model.RecyclerItemClickListener;
 import com.example.choco_music.model.VerticalData;
 
@@ -55,6 +57,7 @@ public class Chart_Fragment extends Fragment {
     private HashMap<Integer, ChartData> CoverMap;
     private String img_path;
     private ArrayList<HomeData> homeDatas;
+    private RecentPlaySongs_OpenHelper recentPlaySongs_openHelper;
 
     @Override
     public void onAttach(Context context){
@@ -135,11 +138,29 @@ public class Chart_Fragment extends Fragment {
         snapHelper.attachToRecyclerView(CoverSong_View);
         snapHelper2.attachToRecyclerView(OriginalSong_View);
 
+        recentPlaySongs_openHelper = new RecentPlaySongs_OpenHelper(view.getContext());
         OriginalSong_View.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), OriginalSong_View,
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
                         AudioApplication.getInstance().getServiceInterface().setPlayList(Original_Chart);
                         AudioApplication.getInstance().getServiceInterface().play(position);
+                        //최근 들은 곡 리스트에 추가 한다.
+                        if(Original_Chart.get(position).getImg_path() != null) {
+                            boolean db_check = recentPlaySongs_openHelper.recent_list_Check(Original_Chart.get(position).getTitle(), Original_Chart.get(position).getVocal(),
+                                    Original_Chart.get(position).getFileurl(), Original_Chart.get(position).getImg_path());
+                            if(db_check){
+                                String type;
+                                if(Original_Chart.get(position).getType())
+                                    type = "자작곡";
+                                else
+                                    type = "커버곡";
+                                recentPlaySongs_openHelper.insertData(Original_Chart.get(position).getTitle(), Original_Chart.get(position).getVocal(),
+                                        Original_Chart.get(position).getFileurl(), Original_Chart.get(position).getImg_path(), type);
+                                if(recentPlaySongs_openHelper.get_recent_music().size()>6)
+                                    recentPlaySongs_openHelper.deleteData(1);
+                                }
+                            }
+
                     }
 
                     @Override public void onLongItemClick(View view, int position) { }
@@ -151,6 +172,22 @@ public class Chart_Fragment extends Fragment {
                     @Override public void onItemClick(View view, int position) {
                         AudioApplication.getInstance().getServiceInterface().setPlayList(Cover_Chart);
                         AudioApplication.getInstance().getServiceInterface().play(position);
+                        //최근 들은 곡 리스트에 추가 한다.
+                        if(Cover_Chart.get(position).getImg_path() != null) {
+                            boolean db_check = recentPlaySongs_openHelper.recent_list_Check(Cover_Chart.get(position).getTitle(), Cover_Chart.get(position).getVocal(),
+                                    Cover_Chart.get(position).getFileurl(), Cover_Chart.get(position).getImg_path());
+                            if(db_check){
+                                String type;
+                                if(Cover_Chart.get(position).getType())
+                                    type = "자작곡";
+                                else
+                                    type = "커버곡";
+                                recentPlaySongs_openHelper.insertData(Cover_Chart.get(position).getTitle(), Cover_Chart.get(position).getVocal(),
+                                        Cover_Chart.get(position).getFileurl(), Cover_Chart.get(position).getImg_path(), type);
+                                if(recentPlaySongs_openHelper.get_recent_music().size()>6)
+                                    recentPlaySongs_openHelper.deleteData(1);
+                            }
+                        }
                     }
                     @Override public void onLongItemClick(View view, int position) { }
                 })

@@ -47,6 +47,7 @@ import com.example.choco_music.model.CoverData;
 import com.example.choco_music.model.HomeData;
 import com.example.choco_music.model.ChartData;
 import com.example.choco_music.model.Playlist_Database_OpenHelper;
+import com.example.choco_music.model.RecentPlaySongs_OpenHelper;
 import com.example.choco_music.model.Star_OpenHelper;
 import com.example.choco_music.model.VerticalData;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -99,7 +100,8 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
     private ArrayList<AlbumData> albumDatas;
     private HashMap<Integer, ChartData> chartMap;
     private ArrayList<HomeData> homeDatas;
-    Playlist_Database_OpenHelper playlist_database_openHelper;
+    private Playlist_Database_OpenHelper playlist_database_openHelper;
+    private RecentPlaySongs_OpenHelper recentPlaySongs_openHelper;
     private ImageView img;
     private LinearLayout stars_evaluate_layout;
     private TextView wifi_not_connected;
@@ -386,6 +388,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         getActivity().unregisterReceiver(mBroadcastReceiver);
     }
     private void setup_view(final View view){
+        recentPlaySongs_openHelper = new RecentPlaySongs_OpenHelper(view.getContext());
         wifi_not_connected = view.findViewById(R.id.wifi_not_connected);
         // setLayoutManager
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
@@ -522,6 +525,21 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                     if (initalStage) {
                         AudioApplication.getInstance().getServiceInterface().play(position);
                         initalStage =!initalStage;
+                        if(datas.get(position).getImg_path() != null) {
+                            boolean db_check = recentPlaySongs_openHelper.recent_list_Check(datas.get(position).getTitle(), datas.get(position).getVocal(),
+                                    datas.get(position).getFileurl(), datas.get(position).getImg_path());
+                            if(db_check){
+                                String type;
+                                if(datas.get(position).getType())
+                                    type = "자작곡";
+                                else
+                                    type = "커버곡";
+                                recentPlaySongs_openHelper.insertData(datas.get(position).getTitle(),datas.get(position).getVocal(),
+                                        datas.get(position).getFileurl(), datas.get(position).getImg_path(), type);
+                                if(recentPlaySongs_openHelper.get_recent_music().size()>6)
+                                    recentPlaySongs_openHelper.deleteData(1);
+                            }
+                        }
 
                     } else {
                         if (!AudioApplication.getInstance().getServiceInterface().isPlaying()) {
@@ -542,7 +560,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
 
         playlist_database_openHelper= new Playlist_Database_OpenHelper(view.getContext());
         if(datas.get(pos).getImg_path() != null) {
-            boolean db_check =playlist_database_openHelper.Play_list_Check(datas.get(pos).getTitle(), datas.get(pos).getVocal(),
+            boolean db_check = playlist_database_openHelper.Play_list_Check(datas.get(pos).getTitle(), datas.get(pos).getVocal(),
                     datas.get(pos).getFileurl(), datas.get(pos).getImg_path());
             if(db_check){
                 Toast myToast = Toast.makeText(view.getContext(),"초코뮤직님의 좋아요",Toast.LENGTH_SHORT);

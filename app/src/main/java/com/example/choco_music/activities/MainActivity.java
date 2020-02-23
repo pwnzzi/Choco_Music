@@ -2,15 +2,13 @@ package com.example.choco_music.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-import android.transition.Fade;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.transition.Transition;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -23,10 +21,10 @@ import android.widget.TextView;
 
 import com.example.choco_music.Audio.AudioApplication;
 import com.example.choco_music.Audio.BroadcastActions;
+import com.example.choco_music.Login.GlobalApplication;
 import com.example.choco_music.R;
 import com.example.choco_music.adapters.SwipeViewPager;
 import com.example.choco_music.adapters.ViewPagerAdpater;
-import com.example.choco_music.fragments.Playlist_Fragment;
 import com.google.android.material.tabs.TabLayout;
 
 import static com.example.choco_music.R.id.viewpager;
@@ -184,6 +182,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         registerReceiver(mBroadcastReceiver, filter);
     }
 
+    //카카오톡은 프래그먼트가 아닌 메인엑티비티에 결과 값을 구현해야함
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //카카오톡 로그인 인증을 요청 했을 때 결과 값을 되돌려 받는곳
+        if (com.kakao.auth.Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     protected void onDestroy() {

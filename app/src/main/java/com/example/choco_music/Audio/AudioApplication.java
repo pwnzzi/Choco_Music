@@ -2,6 +2,8 @@ package com.example.choco_music.Audio;
 
 import android.app.Application;
 
+import com.example.choco_music.Login.GlobalApplication;
+
 public class AudioApplication extends Application {
     private static AudioApplication mInstance;
     private AudioServiceInterface mInterface;

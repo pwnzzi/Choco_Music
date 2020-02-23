@@ -24,7 +24,7 @@
                 android:layout_height="match_parent">
 
                 <Button
-                    android:id="@+id/back_playlist_fragment"
+                    android:id="@+id/back_belonging_fragment"
                     android:text="back"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"/>
@@ -44,9 +44,8 @@
                     android:textColor="#ffffff"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="님의 플레이리스트"/>
+                    android:text="님의 수집품"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-
 </LinearLayout>
