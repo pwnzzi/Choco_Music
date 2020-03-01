@@ -11,6 +11,7 @@
         android:layout_height="match_parent"
         android:weightSum="1"
         android:orientation="vertical">
+        <include layout="@layout/main_bar" />
 
         <com.example.choco_music.adapters.SwipeViewPager
             android:layout_weight="1"

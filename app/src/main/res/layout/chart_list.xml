@@ -5,6 +5,9 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
+        android:scrollbarSize="3dp"
+        android:scrollbarThumbVertical="@color/fui_buttonShadow"
+        android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/chart_list"

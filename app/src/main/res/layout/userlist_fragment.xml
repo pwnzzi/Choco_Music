@@ -6,6 +6,8 @@
 
 
 <ScrollView
+    android:scrollbarSize="3dip"
+    android:scrollbarThumbVertical="@color/fui_buttonShadow"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -22,6 +24,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:id="@+id/profile_setting"
             android:background="@drawable/round_white"
             android:layout_marginLeft="30dp"
             android:layout_width="80dp"

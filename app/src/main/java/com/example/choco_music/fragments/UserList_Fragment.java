@@ -1,13 +1,18 @@
 package com.example.choco_music.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.choco_music.R;
+import com.example.choco_music.activities.Originalsong_chart;
+import com.example.choco_music.activities.ProfileActivity;
 import com.example.choco_music.adapters.Recent_Music_Adpater;
 import com.example.choco_music.model.ChartData;
 import com.example.choco_music.model.RecentPlaySongs_OpenHelper;
@@ -22,6 +27,7 @@ public class UserList_Fragment extends androidx.fragment.app.Fragment {
     private Recent_Music_Adpater recent_music_apdapter;
     private LinearLayoutManager layoutManager;
     private Button likelist_fragment_btn, following_fragment_btn, belongings_fragment,playlist_fragment_btn;
+    private ImageView profile_setting_btn;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -32,6 +38,7 @@ public class UserList_Fragment extends androidx.fragment.app.Fragment {
         return view;
     }
     private void init_btn(View view){
+        profile_setting_btn = view.findViewById(R.id.profile_setting);
         playlist_fragment_btn = view.findViewById(R.id.play_list);
         likelist_fragment_btn = view.findViewById(R.id.like_list);
         following_fragment_btn = view.findViewById(R.id.following_follower_list);
@@ -58,6 +65,13 @@ public class UserList_Fragment extends androidx.fragment.app.Fragment {
             @Override
             public void onClick(View v) {
                 getFragmentManager().beginTransaction().setCustomAnimations(R.anim.anim_slide_in_right,R.anim.anim_slide_out_left).replace(R.id.user_fragment_layout,new Playlist_Fragment()).commit();
+            }
+        });
+        profile_setting_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                startActivity(intent);
             }
         });
     }

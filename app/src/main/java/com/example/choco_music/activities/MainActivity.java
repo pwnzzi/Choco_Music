@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     LinearLayout playing_bar;
     ImageView btn_front, btn_back, btn_play;
     SeekBar sb;
+    private Button upload_btn;
     boolean seekBarControl = true;
     TextView txt_title, txt_vocal;
     private FragmentManager fragmentManager;
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_back = findViewById(R.id.playing_bar_back);
         btn_front = findViewById(R.id.playing_bar_front);
         btn_play = findViewById(R.id.playing_bar_play);
+        upload_btn = findViewById(R.id.upload_cover_song);
 
         txt_title = findViewById(R.id.playing_bar_title);
         txt_vocal = findViewById(R.id.playing_bar_vocal);
@@ -84,6 +87,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_play.setOnClickListener(this);
         btn_front.setOnClickListener(this);
         playing_bar.setOnClickListener(this);
+        upload_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), UploadActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
 
         //탭래이아웃
         final View view1= getLayoutInflater().inflate(R.layout.customtab,null);

@@ -111,17 +111,17 @@ public class Search_Fragment extends Fragment implements View.OnClickListener {
                         AudioApplication.getInstance().getServiceInterface().setPlayList(Original_Chart);
                         AudioApplication.getInstance().getServiceInterface().play(position);
                         //최근 들은 곡 리스트에 추가 한다.
-                        if(Cover_Chart.get(position).getImg_path() != null) {
-                            boolean db_check = recentPlaySongs_openHelper.recent_list_Check(Cover_Chart.get(position).getTitle(), Cover_Chart.get(position).getVocal(),
-                                    Cover_Chart.get(position).getFileurl(), Cover_Chart.get(position).getImg_path());
+                        if(Original_Chart.get(position).getImg_path() != null) {
+                            boolean db_check = recentPlaySongs_openHelper.recent_list_Check(Original_Chart.get(position).getTitle(), Original_Chart.get(position).getVocal(),
+                                    Original_Chart.get(position).getFileurl(), Original_Chart.get(position).getImg_path());
                             if(db_check){
                                 String type;
-                                if(Cover_Chart.get(position).getType())
+                                if(Original_Chart.get(position).getType())
                                     type = "자작곡";
                                 else
                                     type = "커버곡";
-                                recentPlaySongs_openHelper.insertData(Cover_Chart.get(position).getTitle(), Cover_Chart.get(position).getVocal(),
-                                        Cover_Chart.get(position).getFileurl(), Cover_Chart.get(position).getImg_path(), type);
+                                recentPlaySongs_openHelper.insertData(Original_Chart.get(position).getTitle(), Original_Chart.get(position).getVocal(),
+                                        Original_Chart.get(position).getFileurl(), Original_Chart.get(position).getImg_path(), type);
                                 if(recentPlaySongs_openHelper.get_recent_music().size()>6)
                                     recentPlaySongs_openHelper.deleteData(1);
                             }

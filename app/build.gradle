@@ -47,5 +47,6 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:4.2.1' // 파이어베이스 인증2
 
     implementation files('libs/naveridlogin_android_sdk_4.2.5.aar')  //네이버 sdk 추가
+    implementation "gun0912.ted:tedpermission:2.1.0"// 앨범 접근 혀용
 }
 apply plugin: 'com.google.gms.google-services'

@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -33,7 +34,6 @@
             android:windowSoftInputMode="stateHidden|adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -45,10 +45,16 @@
         <!-- [naveroauthlogin][end] -->
 
         <activity android:name=".activities.Coversong_chart" />
+        <activity android:name=".activities.AlbumTitleActivity" />
+        <activity android:name=".activities.UploadActivity" />
         <activity android:name=".activities.MusicPlay_activity" />
+        <activity android:name=".activities.ProfileActivity" />
         <activity android:name=".activities.Originalsong_chart" />
         <activity android:name=".activities.ChartActivity" />
         <activity android:name=".activities.MusicPlayActivity"/>
+        <activity android:name=".activities.AlbumImgActivity"/>
+        <activity android:name=".activities.SongSettingActivity"/>
+
         <activity
             android:name=".activities.LoadingActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />

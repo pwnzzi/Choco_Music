@@ -77,15 +77,14 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
     private RecyclerView mVerticalView;
     private HomeSongAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-    private LinearLayout layoutBottomSheet;
+    private LinearLayout layoutBottomSheet,evaluation_layout1,evaluation_layout2,evaluation_layout3;
     private CoordinatorLayout background;
     private ArrayList<Button> btn_tags;
-    private Button music_evaluate_btn, confirmButton;
+    private Button music_evaluate_btn, confirmButton, cancelButton,confirmButton2,cancelButton2,confirmButton3,cancelButton3,detailEvaluationButton,detailEvaluationButton2;
     private ArrayList<Boolean> clicks;
     public MediaPlayer mediaPlayer;
     private ImageView music_play_btn;
     private View view;
-    private Button cancelButton;
     private ArrayList<ImageView> stars,stars_evaluate;
     private int currentStar = 5;
     private boolean playPause;
@@ -136,7 +135,6 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.home_fragment, null, false);
-       btn_tag();
        setup_view(view);
        return view;
     }
@@ -243,25 +241,7 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
             e.printStackTrace();
         }
     }
-    private void btn_tag() {
-        btn_tags = new ArrayList<>();
-        clicks = new ArrayList<>();
-        btn_tags.add((Button) view.findViewById(R.id.btn_tag_1));
-        btn_tags.add((Button) view.findViewById(R.id.btn_tag_2));
-        btn_tags.add((Button) view.findViewById(R.id.btn_tag_3));
-        btn_tags.add((Button) view.findViewById(R.id.btn_tag_4));
-        btn_tags.add((Button) view.findViewById(R.id.btn_tag_5));
-        btn_tags.add((Button) view.findViewById(R.id.btn_tag_6));
-        btn_tags.add((Button) view.findViewById(R.id.btn_tag_7));
-        btn_tags.add((Button) view.findViewById(R.id.btn_tag_8));
-        btn_tags.add((Button) view.findViewById(R.id.btn_tag_9));
-        btn_tags.add((Button) view.findViewById(R.id.btn_tag_10));
 
-        for (int i = 0; i != 10; ++i) {
-            btn_tags.get(i).setOnClickListener(this);
-            clicks.add(false);
-        }
-    }
     private void setup_retrofit(){
         //서버 통신을 위한 레스트로핏 적용
         retrofit = new Retrofit.Builder()
@@ -284,26 +264,12 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                 currentStar = 4; break;
             case R.id.star_5:
                 currentStar = 5; break;
-            case R.id.btn_tag_1:
-                btns = 1; break;
-            case R.id.btn_tag_2:
-                btns = 2; break;
-            case R.id.btn_tag_3:
-                btns = 3; break;
-            case R.id.btn_tag_4:
-                btns = 4; break;
-            case R.id.btn_tag_5:
-                btns = 5; break;
-            case R.id.btn_tag_6:
-                btns = 6; break;
-            case R.id.btn_tag_7:
-                btns = 7; break;
-            case R.id.btn_tag_8:
-                btns = 8; break;
-            case R.id.btn_tag_9:
-                btns = 9; break;
-            case R.id.btn_tag_10:
-                btns = 10; break;
+            case R.id.detail_evaluation_btn:
+                evaluation_layout1.setVisibility(View.GONE);
+                evaluation_layout2.setVisibility(View.VISIBLE); break;
+            case R.id.sheet_cancel_2:
+                evaluation_layout1.setVisibility(View.VISIBLE);
+                evaluation_layout2.setVisibility(View.GONE); break;
         }
         if(btns != 0){
             btns--;
@@ -393,6 +359,23 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
         // setLayoutManager
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
+
+        evaluation_layout1 = view.findViewById(R.id.evaluation_layout_1);
+        evaluation_layout2 = view.findViewById(R.id.evaluation_layout_2);
+        evaluation_layout3 = view.findViewById(R.id.evaluation_layout_3);
+        cancelButton2 = view.findViewById(R.id.sheet_cancel_2);
+        cancelButton3 = view.findViewById(R.id.sheet_cancel_3);
+        confirmButton2 = view.findViewById(R.id.sheet_confirm_2);
+        confirmButton3 = view.findViewById(R.id.sheet_confirm_3);
+        detailEvaluationButton = view.findViewById(R.id.detail_evaluation_btn);
+        detailEvaluationButton2 = view.findViewById(R.id.detail_evaluation_btn2);
+
+        cancelButton2.setOnClickListener(this);
+        cancelButton3.setOnClickListener(this);
+        confirmButton2.setOnClickListener(this);
+        confirmButton3.setOnClickListener(this);
+        detailEvaluationButton.setOnClickListener(this);
+        detailEvaluationButton2.setOnClickListener(this);
 
         //RecyclerVier binding
         mVerticalView = (RecyclerView) view.findViewById(R.id.vertivcal_list);
@@ -487,6 +470,9 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                 initalStage = true;
                 music_play_btn.setImageResource(R.drawable.play_btn);
                 playPause = false;
+                evaluation_layout1.setVisibility(View.VISIBLE);
+                evaluation_layout2.setVisibility(View.GONE);
+                evaluation_layout3.setVisibility(View.GONE);
                 // 현재 포지션 값을 받아 오는 코드
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     View centerView = snapHelper.findSnapView(mLayoutManager);
@@ -501,10 +487,10 @@ public class Home_Fragment extends Fragment implements View.OnClickListener {
                     stars.get(i).setImageResource(R.drawable.star_unselected);
                 }
                 currentStar = 5;
-                for(int i=0; i!=10; ++i) {
+              /*  for(int i=0; i!=10; ++i) {
                     clicks.set(i, false);
                     btn_tags.get(i).setBackgroundResource(R.drawable.button_border);
-                }
+                }*/
             }
         });
         // 별

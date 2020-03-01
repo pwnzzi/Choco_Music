@@ -1,6 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
+    android:background="#171717"
     android:layout_height="match_parent">
 
+
+    <LinearLayout
+        android:gravity="center"
+        android:background="#69848484"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:weightSum="10"
+        android:layout_marginBottom="10dp">
+        <TextView
+            android:layout_gravity="center"
+            android:paddingLeft="20dp"
+            style="@style/TextStyle6"
+            android:textSize="17dp"
+            android:textColor="#ff9600"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="초코뮤직"/>
+
+        <TextView
+            android:layout_gravity="center"
+            android:textSize="17dp"
+            style="@style/TextStyle6"
+            android:textColor="#ffffff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="님의 프로필을 완성해주세요"/>
+    </LinearLayout>
+        <ImageView
+            android:id="@+id/profile_img"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:background="@mipmap/ic_launcher"
+            android:layout_width="150dp"
+            android:layout_height="150dp"/>
+        <Button
+            android:id="@+id/profile_img_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="앨범에서 이미지 불러오기"
+            android:layout_gravity="center"/>
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:weightSum="2"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:paddingLeft="20dp"
+                android:textSize="15sp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:textColor="#ffffff"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="닉네임"/>
+            <EditText
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="#ffffff"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:weightSum="2"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:paddingLeft="20dp"
+                android:textSize="15sp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:textColor="#ffffff"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="성별"/>
+            <EditText
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="#ffffff"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:weightSum="2"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:paddingLeft="20dp"
+                android:textSize="15sp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:textColor="#ffffff"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="생년월일"/>
+            <EditText
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="#ffffff"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:weightSum="2"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:paddingLeft="20dp"
+                android:textSize="15sp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:textColor="#ffffff"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="이메일 주소"/>
+            <EditText
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="#ffffff"/>
+
+        </LinearLayout>
+    <LinearLayout
+        android:layout_marginBottom="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/cancel_profile_setting"
+            style="@style/TextStyle02"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/button_border"
+            android:foreground="?attr/selectableItemBackground"
+            android:text="취소"
+            android:textSize="20dp"
+            android:layout_marginRight="20dp"
+            android:textColor="#ffffff" />
+
+        <Button
+            style="@style/TextStyle02"
+            android:textSize="20dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/button_border"
+            android:foreground="?attr/selectableItemBackground"
+            android:text="완료"
+            android:textColor="#ffffff" />
+    </LinearLayout>
 </LinearLayout>

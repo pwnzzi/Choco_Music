@@ -4,7 +4,7 @@
     xmlns:Android="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="450dp"
     android:background="#1e1e1e"
     android:id="@+id/bottom_sheet"
     app:behavior_hideable="true"
@@ -37,298 +37,747 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:layout_marginTop="30dp"
+            android:visibility="gone"
+            android:id="@+id/evaluation_layout_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <Button
-                android:layout_gravity="center"
-                android:layout_width="2dp"
-                android:layout_height="2dp"
-                android:background="@drawable/round"
-                />
-
-
-
-            <TextView
-                android:layout_marginLeft="10dp"
-                android:textSize="15dp"
-                android:textColor="#fe9500"
-                style="@style/TextStyle02"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="해시태그" />
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_gravity="center"
+                    android:layout_width="2dp"
+                    android:layout_height="2dp"
+                    android:background="@drawable/round"
+                    />
+
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#fe9500"
+                    android:textSize="15dp"
+                    style="@style/TextStyle02"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="보컬" />
+
+                <Button
+                    android:layout_gravity="center"
+                    android:layout_width="2dp"
+                    android:layout_height="2dp"
+                    android:background="@drawable/round"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+            </LinearLayout>
 
             <Button
-                android:layout_gravity="center"
-                android:layout_width="2dp"
-                android:layout_height="2dp"
-                android:background="@drawable/round"
-                />
+                android:id="@+id/detail_evaluation_btn2"
+                style="@style/TextStyle02"
+                android:textSize="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_border"
+                android:foreground="?attr/selectableItemBackground"
+                android:text="보컬 세부평가 해보기"
+                android:textColor="#ffffff" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_gravity="center"
+                    android:layout_width="2dp"
+                    android:layout_height="2dp"
+                    android:background="@drawable/round"
+                    />
+
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#fe9500"
+                    android:textSize="15dp"
+                    style="@style/TextStyle02"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="곡의 완성도" />
+
+                <Button
+                    android:layout_gravity="center"
+                    android:layout_width="2dp"
+                    android:layout_height="2dp"
+                    android:background="@drawable/round"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_gravity="center"
+                    android:layout_width="2dp"
+                    android:layout_height="2dp"
+                    android:background="@drawable/round"
+                    />
+
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#fe9500"
+                    android:textSize="15dp"
+                    style="@style/TextStyle02"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="가사" />
+
+                <Button
+                    android:layout_gravity="center"
+                    android:layout_width="2dp"
+                    android:layout_height="2dp"
+                    android:background="@drawable/round"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginBottom="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+
+                <Button
+                    android:id="@+id/sheet_cancel_3"
+                    style="@style/TextStyle02"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_border"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text="취소"
+                    android:textSize="20dp"
+                    android:layout_marginRight="20dp"
+
+                    android:textColor="#ffffff" />
+
+                <Button
+                    android:id="@+id/sheet_confirm_3"
+                    style="@style/TextStyle02"
+                    android:textSize="20dp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_border"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text="완료"
+                    android:textColor="#ffffff" />
+            </LinearLayout>
 
         </LinearLayout>
-
-
 
         <LinearLayout
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
+            android:visibility="gone"
+            android:id="@+id/evaluation_layout_2"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <Button
-                android:id="@+id/btn_tag_1"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/button_border"
-                android:textSize="15dp"
-                style="@style/TextStyle02"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="#감미로운"/>
-
-            <Button
-                android:id="@+id/btn_tag_2"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/button_border"
-                android:textSize="15dp"
-                style="@style/TextStyle02"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="#은유적인"/>
-
-            <Button
-                android:id="@+id/btn_tag_3"
-                android:background="@drawable/button_border"
-                android:textSize="15dp"
-                style="@style/TextStyle02"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="#어쿠스틱"/>
+            android:layout_height="wrap_content">
 
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_gravity="center"
+                    android:layout_width="2dp"
+                    android:layout_height="2dp"
+                    android:background="@drawable/round"
+                    />
+
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#fe9500"
+                    android:textSize="15dp"
+                    style="@style/TextStyle02"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="음정" />
+
+                <Button
+                    android:layout_gravity="center"
+                    android:layout_width="2dp"
+                    android:layout_height="2dp"
+                    android:background="@drawable/round"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_gravity="center"
+                    android:layout_width="2dp"
+                    android:layout_height="2dp"
+                    android:background="@drawable/round"
+                    />
+
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#fe9500"
+                    android:textSize="15dp"
+                    style="@style/TextStyle02"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="박자" />
+
+                <Button
+                    android:layout_gravity="center"
+                    android:layout_width="2dp"
+                    android:layout_height="2dp"
+                    android:background="@drawable/round"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_gravity="center"
+                    android:layout_width="2dp"
+                    android:layout_height="2dp"
+                    android:background="@drawable/round"
+                    />
+
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#fe9500"
+                    android:textSize="15dp"
+                    style="@style/TextStyle02"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="리듬" />
+
+                <Button
+                    android:layout_gravity="center"
+                    android:layout_width="2dp"
+                    android:layout_height="2dp"
+                    android:background="@drawable/round"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_gravity="center"
+                    android:layout_width="2dp"
+                    android:layout_height="2dp"
+                    android:background="@drawable/round"
+                    />
+
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#fe9500"
+                    android:textSize="15dp"
+                    style="@style/TextStyle02"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="음색" />
+
+                <Button
+                    android:layout_gravity="center"
+                    android:layout_width="2dp"
+                    android:layout_height="2dp"
+                    android:background="@drawable/round"
+                    />
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/star_unselected"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+
+                <Button
+                    android:id="@+id/sheet_cancel_2"
+                    style="@style/TextStyle02"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_border"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text="취소"
+                    android:textSize="20dp"
+                    android:layout_marginRight="20dp"
+
+                    android:textColor="#ffffff" />
+
+                <Button
+                    android:id="@+id/sheet_confirm_2"
+                    style="@style/TextStyle02"
+                    android:textSize="20dp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_border"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text="완료"
+                    android:textColor="#ffffff" />
+            </LinearLayout>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:weightSum="4"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <Button
-                android:id="@+id/btn_tag_4"
-                android:layout_weight="1"
+            <LinearLayout
+                android:id="@+id/evaluation_layout_1"
+                android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/button_border"
-                android:textSize="15dp"
-                style="@style/TextStyle02"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="#잔잔한"/>
-
-            <Button
-                android:id="@+id/btn_tag_5"
-                android:layout_weight="1"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/button_border"
-                android:textSize="15dp"
-                style="@style/TextStyle02"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="#가을"/>
-
-            <Button
-                android:id="@+id/btn_tag_6"
-                android:layout_weight="1"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/button_border"
-                android:textSize="15dp"
-                style="@style/TextStyle02"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="#조용한"/>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
 
-            <Button
-                android:id="@+id/btn_tag_7"
-                android:layout_weight="1"
-                android:background="@drawable/button_border"
-                android:textSize="15dp"
-                style="@style/TextStyle02"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="#느린"/>
+                <LinearLayout
+                    android:layout_marginTop="30dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:layout_gravity="center"
+                        android:layout_width="2dp"
+                        android:layout_height="2dp"
+                        android:background="@drawable/round"
+                        />
+
+                    <TextView
+                        android:layout_marginLeft="10dp"
+                        android:textColor="#fe9500"
+                        android:textSize="15dp"
+                        style="@style/TextStyle02"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="평점" />
+
+                    <Button
+                        android:layout_gravity="center"
+                        android:layout_width="2dp"
+                        android:layout_height="2dp"
+                        android:background="@drawable/round"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/star_1"
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/star_unselected"/>
+
+                    <ImageView
+                        android:id="@+id/star_2"
+                        android:layout_marginLeft="15dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/star_unselected"/>
+
+                    <ImageView
+                        android:id="@+id/star_3"
+                        android:layout_marginLeft="15dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/star_unselected"/>
+
+                    <ImageView
+                        android:id="@+id/star_4"
+                        android:layout_marginLeft="15dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/star_unselected"/>
+
+                    <ImageView
+                        android:id="@+id/star_5"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/star_unselected"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:textColor="#fe9500"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="한줄평을 입력해 주세요"/>
+                <EditText
+                    android:layout_marginTop="10dp"
+                    android:background="#ffffff"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"/>
+
+                <Button
+                    android:id="@+id/detail_evaluation_btn"
+                    style="@style/TextStyle02"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/button_border"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text="세부평가 해보기"
+                    android:textSize="20dp"
+                    android:textColor="#ffffff" />
 
 
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:orientation="horizontal"
-            >
-
-            <Button
-                android:id="@+id/btn_tag_8"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/button_border"
-                android:textSize="15dp"
-                style="@style/TextStyle02"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="#담백한"/>
-
-            <Button
-                android:id="@+id/btn_tag_9"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/button_border"
-                android:textSize="15dp"
-                style="@style/TextStyle02"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="#감성적인"/>
-
-            <Button
-                android:id="@+id/btn_tag_10"
-                android:background="@drawable/button_border"
-                android:textSize="15dp"
-                style="@style/TextStyle02"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="#미디엄템포"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_marginTop="30dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:layout_gravity="center"
-                android:layout_width="2dp"
-                android:layout_height="2dp"
-                android:background="@drawable/round"
-                />
-
-        <TextView
-            android:layout_marginLeft="10dp"
-            android:textColor="#fe9500"
-            android:textSize="15dp"
-            style="@style/TextStyle02"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="평점" />
-
-            <Button
-                android:layout_gravity="center"
-                android:layout_width="2dp"
-                android:layout_height="2dp"
-                android:background="@drawable/round"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/star_1"
-                android:layout_marginLeft="10dp"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/star_unselected"/>
-
-            <ImageView
-                android:id="@+id/star_2"
-                android:layout_marginLeft="15dp"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/star_unselected"/>
-
-            <ImageView
-                android:id="@+id/star_3"
-                android:layout_marginLeft="15dp"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/star_unselected"/>
-
-            <ImageView
-                android:id="@+id/star_4"
-                android:layout_marginLeft="15dp"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/star_unselected"/>
-
-            <ImageView
-                android:id="@+id/star_5"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="20dp"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/star_unselected"/>
-
-        </LinearLayout>
-
-    <LinearLayout
-        android:layout_marginBottom="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="2">
+                <LinearLayout
+                    android:layout_marginBottom="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
 
-        <Button
-            android:id="@+id/sheet_cancel"
-            style="@style/TextStyle02"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/button_border"
-            android:foreground="?attr/selectableItemBackground"
-            android:text="취소"
-            android:textSize="20dp"
-            android:layout_marginRight="20dp"
+                    <Button
+                        android:id="@+id/sheet_cancel"
+                        style="@style/TextStyle02"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:background="@drawable/button_border"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:text="취소"
+                        android:textSize="20dp"
+                        android:layout_marginRight="20dp"
 
-            android:textColor="#ffffff" />
+                        android:textColor="#ffffff" />
 
-        <Button
-            android:id="@+id/sheet_confirm"
-            style="@style/TextStyle02"
-            android:textSize="20dp"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/button_border"
-            android:foreground="?attr/selectableItemBackground"
-            android:text="완료"
-            android:textColor="#ffffff" />
-        </LinearLayout>
-    </LinearLayout>
+                    <Button
+                        android:id="@+id/sheet_confirm"
+                        style="@style/TextStyle02"
+                        android:textSize="20dp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:background="@drawable/button_border"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:text="완료"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+            </LinearLayout>
+
+    </FrameLayout>
 </LinearLayout>

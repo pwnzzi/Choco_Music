@@ -9,6 +9,8 @@
 
 
     <ScrollView
+        android:scrollbarSize="3dip"
+        android:scrollbarThumbVertical="@color/fui_buttonShadow"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
